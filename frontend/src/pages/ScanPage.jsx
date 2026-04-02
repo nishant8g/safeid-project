@@ -133,30 +133,44 @@ export default function ScanPage() {
     );
   }
 
-  // ──── SENT ────
+  // ──── SENT (PREPARED FOR NATIVE PUSH) ────
   if (step === 'sent') {
     return (
       <div className="scan-page">
         <div className="success-page" style={{ flexDirection: 'column', padding: '2rem' }}>
-          <div className="success-icon animate-scale-in">✅</div>
-          <h2 style={{ marginBottom: '0.5rem' }}>Help is on the way!</h2>
-          <p className="text-muted" style={{ marginBottom: '1.5rem', maxWidth: '400px' }}>
-            Emergency alerts have been sent to {alertResult?.contacts_notified || 0} contacts via SMS and WhatsApp.
+          <div className="success-icon animate-scale-in" style={{ backgroundColor: '#f59e0b' }}>📱</div>
+          <h2 style={{ marginBottom: '0.5rem' }}>Alert Generated!</h2>
+          <p className="text-muted" style={{ marginBottom: '1.5rem', maxWidth: '400px', textAlign: 'center' }}>
+            Tap the buttons below to instantly send the emergency message from your own phone.
           </p>
 
-          {alertResult?.sos_message && (
-            <div className="glass-card" style={{
-              maxWidth: '500px', width: '100%', textAlign: 'left',
-              marginBottom: '1.5rem',
-            }}>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                📨 Message sent:
-              </p>
-              <p style={{ fontSize: '0.9rem', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
-                {alertResult.sos_message}
-              </p>
-            </div>
-          )}
+          <div className="glass-card" style={{ width: '100%', maxWidth: '500px', marginBottom: '1.5rem', textAlign: 'left' }}>
+            <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem', color: 'white' }}>Send Emergency Alerts</h3>
+            
+            {alertResult?.contacts_list?.map((contact, idx) => {
+              // Clean phone number for URI
+              const cleanPhone = contact.phone.replace(/[^0-9+]/g, '');
+              const waPhone = contact.phone.replace(/[^0-9]/g, '');
+              const encodedMsg = encodeURIComponent(alertResult.sos_message);
+
+              return (
+                <div key={idx} style={{ marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                  <p style={{ margin: '0 0 0.5rem 0', fontWeight: 'bold' }}>To: {contact.name} ({contact.phone})</p>
+                  <div className="flex" style={{ gap: '0.5rem' }}>
+                    <a href={`https://wa.me/${waPhone}?text=${encodedMsg}`} 
+                       target="_blank" rel="noopener noreferrer" 
+                       className="btn flex-1" style={{ backgroundColor: '#25D366', color: 'white', border: 'none' }}>
+                      💬 WhatsApp
+                    </a>
+                    <a href={`sms:${cleanPhone}?body=${encodedMsg}`} 
+                       className="btn flex-1" style={{ backgroundColor: '#3b82f6', color: 'white', border: 'none' }}>
+                      ✉️ SMS
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
           <div className="flex" style={{ gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
             <a href="tel:112" className="btn btn-danger btn-lg">

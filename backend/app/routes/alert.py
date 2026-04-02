@@ -148,7 +148,7 @@ from ..models.medical import MedicalInfo
 from ..models.contact import EmergencyContact
 from ..models.alert import AlertLog
 from ..schemas.alert import AlertTrigger, AlertResponse
-from ..services.alert_service import send_alerts_to_contacts
+
 from ..services.ai_service import generate_sos_message
 from ..services.location_service import reverse_geocode, get_google_maps_link
 
@@ -213,8 +213,8 @@ async def trigger_alert(data: AlertTrigger, db: Session = Depends(get_db)):
     if data.message_override:
         sos_message += f"\n\n🎤 Rescuer Note: \"{data.message_override}\""
 
-    # 7. Send alerts to all contacts (Now proceeds even if AI fails)
-    results = send_alerts_to_contacts(contacts, sos_message)
+    # 7. Skips Twilio backend sending to allow Native 100% Free SOS on frontend
+    contact_list = [{"name": c.name, "phone": c.phone} for c in contacts]
 
     # 8. Log the alert in the database
     alert_log = AlertLog(
@@ -225,18 +225,19 @@ async def trigger_alert(data: AlertTrigger, db: Session = Depends(get_db)):
         address=address,
         severity=data.severity,
         message_sent=sos_message,
-        contacts_notified=[{"name": c.name, "phone": c.phone} for c in contacts],
+        contacts_notified=contact_list,
     )
     db.add(alert_log)
     db.commit()
     db.refresh(alert_log)
 
     return AlertResponse(
-        status="sent",
-        message="Emergency alerts have been sent to all contacts",
+        status="prepared",
+        message="Emergency alerts prepared for native client push",
         alert_id=alert_log.id,
         contacts_notified=len(contacts),
         sos_message=sos_message,
+        contacts_list=contact_list,
     )
 
 

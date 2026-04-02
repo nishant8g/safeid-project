@@ -13,12 +13,17 @@ class AlertTrigger(BaseModel):
     message_override: Optional[str] = None
 
 
+class ContactInfo(BaseModel):
+    name: str
+    phone: str
+
 class AlertResponse(BaseModel):
     status: str
     message: str
     alert_id: str
     contacts_notified: int
     sos_message: str
+    contacts_list: List[ContactInfo] = []
 
 
 class AIMessageRequest(BaseModel):
