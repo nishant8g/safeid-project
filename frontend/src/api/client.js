@@ -19,7 +19,7 @@ const api = axios.create({
 
 // Request interceptor — attach JWT token
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('safeid_token');
+  const token = sessionStorage.getItem('safeid_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -31,8 +31,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('safeid_token');
-      localStorage.removeItem('safeid_user');
+      sessionStorage.removeItem('safeid_token');
+      sessionStorage.removeItem('safeid_user');
       // Don't redirect on scan pages
       if (!window.location.pathname.startsWith('/scan')) {
         window.location.href = '/login';
