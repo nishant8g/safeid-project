@@ -42,7 +42,7 @@ def generate_qr(
 
         db.commit()
     except Exception as e:
-        return {"status": "error", "detail": f"Server crash: {str(e)}"}
+        raise HTTPException(status_code=500, detail=f"Server crash: {str(e)}")
 
     return {
         "status": "generated",

@@ -77,7 +77,7 @@ export default function QRPage() {
             {/* QR Code Image */}
             <div className="qr-frame">
               <img
-                src={qrAPI.getImageUrl(user.id)}
+                src={`${qrAPI.getImageUrl(user.id)}?t=${Date.now()}`}
                 alt="SafeID QR Code"
                 style={{ width: '250px', height: '250px' }}
                 id="qr-image"
