@@ -19,27 +19,30 @@ def generate_qr(
     db: Session = Depends(get_db),
 ):
     """Generate a QR code for the current user."""
-    # Check if QR already exists
-    existing = db.query(QRCodeRecord).filter(QRCodeRecord.user_id == current_user.id).first()
+    try:
+        # Check if QR already exists
+        existing = db.query(QRCodeRecord).filter(QRCodeRecord.user_id == current_user.id).first()
 
-    # Generate new QR
-    qr_data = generate_qr_code(current_user.id)
+        # Generate new QR
+        qr_data = generate_qr_code(current_user.id)
 
-    if existing:
-        existing.scan_url = qr_data["scan_url"]
-        existing.image_path = qr_data["image_path"]
-        existing.sms_fallback_code = qr_data["sms_fallback_code"]
-        existing.is_active = True
-    else:
-        qr_record = QRCodeRecord(
-            user_id=current_user.id,
-            scan_url=qr_data["scan_url"],
-            image_path=qr_data["image_path"],
-            sms_fallback_code=qr_data["sms_fallback_code"],
-        )
-        db.add(qr_record)
+        if existing:
+            existing.scan_url = qr_data["scan_url"]
+            existing.image_path = qr_data["image_path"]
+            existing.sms_fallback_code = qr_data["sms_fallback_code"]
+            existing.is_active = True
+        else:
+            qr_record = QRCodeRecord(
+                user_id=current_user.id,
+                scan_url=qr_data["scan_url"],
+                image_path=qr_data["image_path"],
+                sms_fallback_code=qr_data["sms_fallback_code"],
+            )
+            db.add(qr_record)
 
-    db.commit()
+        db.commit()
+    except Exception as e:
+        return {"status": "error", "detail": f"Server crash: {str(e)}"}
 
     return {
         "status": "generated",
