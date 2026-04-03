@@ -16,6 +16,7 @@ import Contacts from './pages/Contacts';
 import QRPage from './pages/QRPage';
 import ScanPage from './pages/ScanPage';
 import History from './pages/History';
+import NFCPortal from './pages/NFCPortal';
 
 export default function App() {
   return (
@@ -43,6 +44,9 @@ export default function App() {
           } />
           <Route path="/qr" element={
             <ProtectedRoute><QRPage /></ProtectedRoute>
+          } />
+          <Route path="/nfc" element={
+            <ProtectedRoute><NFCPortal /></ProtectedRoute>
           } />
           <Route path="/history" element={
             <ProtectedRoute><History /></ProtectedRoute>

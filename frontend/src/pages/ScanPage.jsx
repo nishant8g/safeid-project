@@ -18,9 +18,21 @@ import ConfirmSlider from '../components/ConfirmSlider';
 import VoiceInput from '../components/VoiceInput';
 import SeverityBadge from '../components/SeverityBadge';
 
+// Phase 1: Simple Localized Translation Dictionary
+const translations = {
+  en: { scanProfile: 'Scanned Emergency Profile', blood: 'Blood Group', donor: 'Organ Donor', allergies: 'Allergies', conditions: 'Medical Conditions', medications: 'Medications', notes: 'Notes', notify: 'NOTIFY FAMILY', call: 'Call' },
+  fr: { scanProfile: "Profil d'urgence", blood: 'Groupe Sanguin', donor: 'Donneur', allergies: 'Allergies', conditions: 'Maladies', medications: 'Médicaments', notes: 'Notes', notify: 'ALERTER LA FAMILLE', call: 'Appeler' },
+  es: { scanProfile: 'Perfil de Emergencia', blood: 'Sanguíneo', donor: 'Donante', allergies: 'Alergias', conditions: 'Condiciones', medications: 'Medicamentos', notes: 'Notas', notify: 'AVISAR FAMILIA', call: 'Llamar' },
+  hi: { scanProfile: 'आपातकालीन प्रोफ़ाइल', blood: 'रक्त समूह', donor: 'अंग दाता', allergies: 'एलर्जी', conditions: 'चिकित्सा स्थिति', medications: 'दवाएं', notes: 'नोट्स', notify: 'परिवार को सूचित करें', call: 'कॉल करें' }
+};
+
 export default function ScanPage() {
   const { userId } = useParams();
   const navigate = useNavigate();
+
+  // Detect user language (fallback to English)
+  const userLang = (navigator.language || navigator.userLanguage).substring(0, 2);
+  const t = translations[userLang] || translations['en'];
 
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -196,7 +208,7 @@ export default function ScanPage() {
           <h1 style={{ fontSize: '1.8rem', marginBottom: '0.25rem' }}>
             {userData.full_name}
           </h1>
-          <p className="text-muted">Scanned Emergency Profile</p>
+          <p className="text-muted">{t.scanProfile}</p>
         </div>
 
         {error && <div className="alert alert-error">{error}</div>}
@@ -205,13 +217,13 @@ export default function ScanPage() {
         <div className="glass-card emergency animate-slide-up" style={{ marginBottom: '1rem' }}>
           <div className="medical-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
             <div className="medical-item highlight">
-              <div className="item-label">🩸 Blood Group</div>
+              <div className="item-label">🩸 {t.blood}</div>
               <div className="item-value" style={{ fontSize: '1.5rem', color: 'var(--accent-red)' }}>
                 {userData.blood_group || '—'}
               </div>
             </div>
             <div className="medical-item">
-              <div className="item-label">💊 Organ Donor</div>
+              <div className="item-label">💊 {t.donor}</div>
               <div className="item-value">
                 {userData.organ_donor ? '✅ Yes' : '❌ No'}
               </div>
@@ -220,7 +232,7 @@ export default function ScanPage() {
 
           {userData.allergies && (
             <div className="medical-item" style={{ marginTop: '0.75rem' }}>
-              <div className="item-label">⚠️ Allergies</div>
+              <div className="item-label">⚠️ {t.allergies}</div>
               <div className="item-value" style={{ fontSize: '1rem', color: '#f87171' }}>
                 {userData.allergies}
               </div>
@@ -229,7 +241,7 @@ export default function ScanPage() {
 
           {userData.conditions && (
             <div className="medical-item" style={{ marginTop: '0.75rem' }}>
-              <div className="item-label">🏥 Medical Conditions</div>
+              <div className="item-label">🏥 {t.conditions}</div>
               <div className="item-value" style={{ fontSize: '1rem' }}>
                 {userData.conditions}
               </div>
@@ -238,7 +250,7 @@ export default function ScanPage() {
 
           {userData.medications && (
             <div className="medical-item" style={{ marginTop: '0.75rem' }}>
-              <div className="item-label">💊 Medications</div>
+              <div className="item-label">💊 {t.medications}</div>
               <div className="item-value" style={{ fontSize: '0.95rem' }}>
                 {userData.medications}
               </div>
@@ -247,7 +259,7 @@ export default function ScanPage() {
 
           {userData.special_notes && (
             <div className="medical-item" style={{ marginTop: '0.75rem' }}>
-              <div className="item-label">📝 Notes</div>
+              <div className="item-label">📝 {t.notes}</div>
               <div className="item-value" style={{ fontSize: '0.95rem' }}>
                 {userData.special_notes}
               </div>
@@ -264,7 +276,7 @@ export default function ScanPage() {
               onClick={handleEmergencyClick}
               id="notify-family-btn"
             >
-              🚨 NOTIFY FAMILY
+              🚨 {t.notify}
             </button>
 
             {/* Voice Input */}

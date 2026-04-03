@@ -42,6 +42,9 @@ export default function Navbar() {
               <Link to="/qr" className={isActive('/qr')} onClick={() => setMobileOpen(false)}>
                 📱 QR Code
               </Link>
+              <Link to="/nfc" className={isActive('/nfc')} onClick={() => setMobileOpen(false)}>
+                📡 NFC Tag
+              </Link>
               <Link to="/history" className={isActive('/history')} onClick={() => setMobileOpen(false)}>
                 📋 History
               </Link>
