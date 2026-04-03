@@ -22,8 +22,8 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  const login = async (email, password, firebase_token) => {
-    const res = await authAPI.login({ email, password, firebase_token });
+  const login = async (firebase_token) => {
+    const res = await authAPI.login({ email: "google-auth", password: "google-auth", firebase_token });
     const { access_token, user: userData } = res.data;
     sessionStorage.setItem('safeid_token', access_token);
     sessionStorage.setItem('safeid_user', JSON.stringify(userData));
@@ -33,13 +33,8 @@ export function AuthProvider({ children }) {
   };
 
   const register = async (full_name, email, phone, password, firebase_token) => {
-    const res = await authAPI.register({ full_name, email, phone, password, firebase_token });
-    const { access_token, user: userData } = res.data;
-    sessionStorage.setItem('safeid_token', access_token);
-    sessionStorage.setItem('safeid_user', JSON.stringify(userData));
-    setToken(access_token);
-    setUser(userData);
-    return userData;
+    // Left as legacy strictly for safe backend API compatibility, though Google Auth skips it entirely natively.
+    return login(firebase_token);
   };
 
   const logout = () => {
