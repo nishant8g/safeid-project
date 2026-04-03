@@ -64,6 +64,10 @@ def get_qr_image_path(user_id: str) -> str:
     """Get the file path for a user's QR code image."""
     filename = f"safeid_{user_id}.png"
     filepath = QR_DIR / filename
+    if not filepath.exists():
+        # Auto-regenerate on the fly if the Render ephemeral disk was wiped
+        generate_qr_code(user_id)
+
     if filepath.exists():
         return str(filepath)
     return None
