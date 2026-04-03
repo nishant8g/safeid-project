@@ -11,7 +11,7 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const { login } = useAuth(); // login handles both registration and login seamlessly
+  const { login, register } = useAuth();
   const navigate = useNavigate();
 
   const handleGoogleSignIn = async () => {
@@ -25,8 +25,8 @@ export default function Register() {
       // 2. Extract mathematical JWT to prove identity to the backend
       const firebaseToken = await userCredential.user.getIdToken();
 
-      // 3. Authenticate with SafeID API (auto-creates Postgres user if needed)
-      await login(firebaseToken);
+      // 3. Authenticate with SafeID API (Strict Registration)
+      await register(firebaseToken);
       
       navigate('/dashboard');
     } catch (err) {

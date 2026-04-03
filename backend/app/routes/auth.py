@@ -13,53 +13,53 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/login", response_model=TokenResponse)
 def login(data: UserLogin, db: Session = Depends(get_db)):
-    """Login and Auto-Register via Google OAuth Firebase JWT."""
-    # 1. Verify the Google Firebase JWT Mathematically
+    """Strict Login via Google OAuth. Checks if user exists."""
     try:
         from google.oauth2 import id_token
         from google.auth.transport import requests
-        
-        decoded_token = id_token.verify_firebase_token(
-            data.firebase_token, 
-            requests.Request(), 
-            audience="safeid-auth"
-        )
-            
+        decoded_token = id_token.verify_firebase_token(data.firebase_token, requests.Request(), audience="safeid-auth")
         verified_email = decoded_token.get("email")
-        verified_name = decoded_token.get("name", "SafeID User")
-        
-        if not verified_email:
-            raise HTTPException(status_code=400, detail="Google Account does not have an attached email.")
-            
     except Exception as e:
-        if isinstance(e, HTTPException): raise e
-        raise HTTPException(status_code=401, detail=f"Invalid Google Security Token: {str(e)}")
+        raise HTTPException(status_code=401, detail=f"Invalid Google Token: {str(e)}")
 
-    # 2. Synchronize with our internal PostgreSQL Database
     user = db.query(User).filter(User.email == verified_email).first()
     
-    # 3. If User doesn't exist, Auto-Register them instantly! (1-Click Setup)
+    # Strict check: If User doesn't exist, block login!
     if not user:
-        user = User(
-            full_name=verified_name,
-            email=verified_email,
-            phone=None, # They can update this in Profile settings later
-            password_hash="GOOGLE_OAUTH_MANAGED",
-        )
-        db.add(user)
-        db.commit()
-        db.refresh(user)
+        raise HTTPException(status_code=404, detail="No account found with this email. Please sign up first!")
 
-    # 4. Generate master native access token 
     token = create_access_token(data={"sub": user.id})
+    return TokenResponse(access_token=token, user=UserProfile.model_validate(user))
 
-    return TokenResponse(
-        access_token=token,
-        user=UserProfile.model_validate(user),
-    )
 
-# Keeping a blank dummy register endpoint just in case the API schema breaks unexpectedly,
-# though it is technically unused by the frontend now.
 @router.post("/register", response_model=TokenResponse, status_code=201)
-def dummy_register(data: UserLogin, db: Session = Depends(get_db)):
-    return login(data, db)
+def register(data: UserLogin, db: Session = Depends(get_db)):
+    """Strict Registration via Google OAuth. Creates new user."""
+    try:
+        from google.oauth2 import id_token
+        from google.auth.transport import requests
+        decoded_token = id_token.verify_firebase_token(data.firebase_token, requests.Request(), audience="safeid-auth")
+        verified_email = decoded_token.get("email")
+        verified_name = decoded_token.get("name", "SafeID User")
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Invalid Google Token: {str(e)}")
+
+    user = db.query(User).filter(User.email == verified_email).first()
+    
+    # Strict check: If User already exists, block registration!
+    if user:
+        raise HTTPException(status_code=400, detail="Account already exists. Please log in!")
+
+    # Auto-Register them safely via Google payload
+    user = User(
+        full_name=verified_name,
+        email=verified_email,
+        phone=None,
+        password_hash="GOOGLE_OAUTH_MANAGED",
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    token = create_access_token(data={"sub": user.id})
+    return TokenResponse(access_token=token, user=UserProfile.model_validate(user))
