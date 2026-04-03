@@ -4,7 +4,11 @@ AI-Powered Emergency QR Response System
 """
 
 import logging
-from fastapi import FastAPI
+import secrets
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.openapi.docs import get_swagger_ui_html
+from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
@@ -20,14 +24,38 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Create FastAPI app
+# Basic Auth for Securing the Backend Dashboard
+security = HTTPBasic()
+
+def get_current_admin(credentials: HTTPBasicCredentials = Depends(security)):
+    correct_username = secrets.compare_digest(credentials.username, "admin")
+    correct_password = secrets.compare_digest(credentials.password, "larry")
+    if not (correct_username and correct_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Access Denied: You are not the owner of this server.",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
+
+# Create FastAPI app (Public Docs Disabled)
 app = FastAPI(
     title="SafeID API",
     description="AI-Powered Emergency QR Response System",
     version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None,
 )
+
+# Secure Docs Routes
+@app.get("/docs", include_in_schema=False)
+async def get_secure_documentation(admin: str = Depends(get_current_admin)):
+    return get_swagger_ui_html(openapi_url="/openapi.json", title="SafeID API secured")
+
+@app.get("/openapi.json", include_in_schema=False)
+async def get_openapi_endpoint(admin: str = Depends(get_current_admin)):
+    return get_openapi(title=app.title, version=app.version, routes=app.routes)
 
 # CORS — allow frontend from any origin (dev mode: phones on same WiFi)
 app.add_middleware(
