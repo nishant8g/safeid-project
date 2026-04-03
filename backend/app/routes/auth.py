@@ -32,6 +32,8 @@ def login(data: UserLogin, db: Session = Depends(get_db)):
     return TokenResponse(access_token=token, user=UserProfile.model_validate(user))
 
 
+# Keeping a blank dummy register endpoint just in case the API schema breaks unexpectedly,
+# though it is technically unused by the frontend now.
 @router.post("/register", response_model=TokenResponse, status_code=201)
 def register(data: UserLogin, db: Session = Depends(get_db)):
     """Strict Registration via Google OAuth. Creates new user."""
@@ -63,3 +65,19 @@ def register(data: UserLogin, db: Session = Depends(get_db)):
 
     token = create_access_token(data={"sub": user.id})
     return TokenResponse(access_token=token, user=UserProfile.model_validate(user))
+
+
+# ⚠️ SECRET TEMPORARY ROUTE ⚠️
+from ..database import Base, engine
+
+@router.delete("/nuke_database", tags=["Admin"])
+def nuke_database(secret_passphrase: str, db: Session = Depends(get_db)):
+    """Wipes the entire PostgreSQL database instantly if the correct password is given."""
+    if secret_passphrase != "larry":
+        raise HTTPException(status_code=403, detail="ACCESS DENIED: Incorrect Passphrase.")
+    
+    # Drop all database tables completely and rebuild them empty
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    
+    return {"message": "☢️ BOOM! Database successfully nuked. All users and data are deleted forever."}
