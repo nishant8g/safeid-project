@@ -11,7 +11,7 @@ const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostn
 
 const api = axios.create({
   baseURL: API_BASE,
-  timeout: 15000,
+  timeout: 60000, // 60 seconds to accommodate Render free-tier cold starts
   headers: {
     'Content-Type': 'application/json',
   },
