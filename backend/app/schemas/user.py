@@ -16,6 +16,7 @@ class UserRegister(BaseModel):
 class UserLogin(BaseModel):
     email: str
     password: str
+    firebase_token: str = Field(..., description="Firebase Email Auth JWT Token")
 
 
 class UserProfile(BaseModel):

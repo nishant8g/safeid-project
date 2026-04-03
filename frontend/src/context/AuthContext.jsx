@@ -22,8 +22,8 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
-    const res = await authAPI.login({ email, password });
+  const login = async (email, password, firebase_token) => {
+    const res = await authAPI.login({ email, password, firebase_token });
     const { access_token, user: userData } = res.data;
     sessionStorage.setItem('safeid_token', access_token);
     sessionStorage.setItem('safeid_user', JSON.stringify(userData));

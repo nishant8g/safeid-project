@@ -1,29 +1,65 @@
 /**
- * Login Page
+ * Login Page with Firebase Email Auth
  */
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { auth } from '../config/firebase';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [unverifiedUser, setUnverifiedUser] = useState(null);
+  
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setUnverifiedUser(null);
     setLoading(true);
     try {
-      await login(email, password);
+      // 1. Authenticate with Firebase Email
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // 2. Check if they verified their email inbox
+      if (!user.emailVerified) {
+        setUnverifiedUser(user);
+        throw new Error('email_not_verified');
+      }
+
+      // 3. Extract the un-forgeable JWT token to prove it to our backend
+      const firebaseToken = await user.getIdToken();
+
+      // 4. Send token to backend to establish the master session
+      await login(email, password, firebaseToken);
+      
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Login failed. Please check your credentials.');
+      if (err.message === 'email_not_verified') {
+        setError('Please check your email inbox and click the verification link to activate your account.');
+      } else if (err.code === 'auth/invalid-credential') {
+        setError('Invalid email or password. Please try again.');
+      } else {
+        setError(`Login failed: ${err.message}`);
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendLink = async () => {
+    if (!unverifiedUser) return;
+    try {
+      await sendEmailVerification(unverifiedUser);
+      alert("A new verification link has been sent to your email!");
+    } catch(err) {
+      alert("Please wait a few minutes before requesting another link.");
     }
   };
 
@@ -36,7 +72,20 @@ export default function Login() {
           <p className="text-muted">Sign in to your SafeID account</p>
         </div>
 
-        {error && <div className="alert alert-error">⚠️ {error}</div>}
+        {error && (
+          <div className="alert alert-error" style={{ marginBottom: '1rem' }}>
+            ⚠️ {error}
+            {unverifiedUser && (
+              <button 
+                type="button" 
+                onClick={handleResendLink} 
+                className="btn btn-ghost"
+                style={{ display: 'block', marginTop: '0.5rem', padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}>
+                Resend Verification Link
+              </button>
+            )}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -53,7 +102,12 @@ export default function Login() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Password</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <label className="form-label" style={{ marginBottom: 0 }}>Password</label>
+              <Link to="/forgot-password" style={{ fontSize: '0.85rem', color: 'var(--accent-blue)', textDecoration: 'none' }}>
+                Forgot Password?
+              </Link>
+            </div>
             <input
               type="password"
               className="form-input"
@@ -62,6 +116,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
               id="login-password"
+              style={{ marginTop: '0.5rem' }}
             />
           </div>
 
