@@ -19,6 +19,26 @@ def register(data: UserRegister, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
 
+    # Verify Firebase Phone Auth Token
+    try:
+        from google.oauth2 import id_token
+        from google.auth.transport import requests
+        
+        # Verify the mathematically signed Firebase ID Token
+        decoded_token = id_token.verify_firebase_token(
+            data.firebase_token, 
+            requests.Request(), 
+            audience="safeid-auth"
+        )
+        
+        # Ensure the phone number matches the token exactly
+        verified_phone = decoded_token.get("phone_number")
+        if not verified_phone or verified_phone != data.phone:
+            raise HTTPException(status_code=400, detail="Phone number does not match SMS verification.")
+            
+    except ValueError as e:
+        raise HTTPException(status_code=401, detail=f"Invalid SMS Verification Token: {str(e)}")
+
     # Create user
     user = User(
         full_name=data.full_name,

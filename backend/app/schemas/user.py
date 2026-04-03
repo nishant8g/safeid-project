@@ -8,8 +8,9 @@ from pydantic import BaseModel, EmailStr, Field
 class UserRegister(BaseModel):
     full_name: str = Field(..., min_length=2, max_length=200)
     email: str = Field(..., max_length=255)
-    phone: Optional[str] = Field(None, max_length=20)
+    phone: str = Field(..., max_length=20)
     password: str = Field(..., min_length=6)
+    firebase_token: str = Field(..., description="Firebase SMS Verification JWT Token")
 
 
 class UserLogin(BaseModel):
