@@ -30,12 +30,12 @@ export default function Landing() {
         </p>
         <div className="hero-actions">
           {isAuthenticated ? (
-            <Link to="/dashboard" className="btn-google-premium" style={{ width: 'auto', display: 'inline-flex', padding: '1.2rem 2.5rem', fontSize: '1.2rem' }}>
+            <Link to="/dashboard" className="btn-glass-white">
               📊 Go to Dashboard
             </Link>
           ) : (
             <>
-              <Link to="/register" className="btn-google-premium" style={{ width: 'auto', display: 'inline-flex', padding: '1.2rem 2.5rem', fontSize: '1.2rem' }}>
+              <Link to="/register" className="btn-glass-white">
                 🚀 Create Your SafeID
               </Link>
               <Link to="/login" className="btn btn-ghost btn-lg" style={{ color: 'white' }}>
