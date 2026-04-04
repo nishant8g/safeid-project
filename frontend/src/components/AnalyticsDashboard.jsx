@@ -26,6 +26,7 @@ const emergencyIcon = new L.Icon({
 export default function AnalyticsDashboard({ completionPercent }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchAnalytics = async () => {
@@ -34,6 +35,7 @@ export default function AnalyticsDashboard({ completionPercent }) {
         setData(res.data);
       } catch (err) {
         console.error("Failed to load analytics", err);
+        setError(err.response?.data?.detail || err.message || "Failed to load");
       } finally {
         setLoading(false);
       }
@@ -43,6 +45,16 @@ export default function AnalyticsDashboard({ completionPercent }) {
 
   if (loading) {
     return <div className="glass-card text-center" style={{ padding: '2rem' }}>Loading Enterprise Analytics...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="glass-card text-center" style={{ padding: '2rem', border: '1px solid #ef4444' }}>
+        <h3 style={{ color: '#ef4444' }}>Analytics Error</h3>
+        <p>{error}</p>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Did your backend finish restarting?</p>
+      </div>
+    );
   }
 
   if (!data) return null;
