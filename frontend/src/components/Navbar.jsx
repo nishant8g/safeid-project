@@ -53,16 +53,19 @@ export default function Navbar() {
               </button>
             </>
           ) : (
-            <>
-              <Link to="/login" className={isActive('/login')} onClick={() => setMobileOpen(false)}>
-                Login
-              </Link>
-              <Link to="/register" onClick={() => setMobileOpen(false)}>
-                <span className="btn btn-primary" style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}>
-                  Get Started
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', width: '100%', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', gap: '2rem', margin: '0 auto', color: '#94a3b8', fontSize: '0.95rem' }}>
+                <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='#94a3b8'}>Features</span>
+                <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='#94a3b8'}>Security</span>
+                <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='#94a3b8'}>Support</span>
+                <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='#94a3b8'}>Pricing</span>
+              </div>
+              <Link to="/login" onClick={() => setMobileOpen(false)}>
+                <span className="btn-nav-outline">
+                  Sign In
                 </span>
               </Link>
-            </>
+            </div>
           )}
         </div>
       </div>
