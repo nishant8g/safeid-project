@@ -62,7 +62,7 @@ export const userAPI = {
 
 // ──── QR Code ────
 export const qrAPI = {
-  generate: () => api.post('/qr/generate'),
+  generate: () => api.post(`/qr/generate?frontend_url=${encodeURIComponent(window.location.origin)}`),
   getInfo: () => api.get('/qr/info'),
   getImageUrl: (userId) => `${API_BASE}/qr/image/${userId}`,
 };

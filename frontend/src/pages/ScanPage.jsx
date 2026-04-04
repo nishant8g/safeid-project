@@ -79,10 +79,11 @@ export default function ScanPage() {
         setStep('confirm');
       },
       (err) => {
+        console.warn('Location error:', err);
         setLocationError('Location access denied. Alert will be sent without location.');
         setStep('confirm');
       },
-      { enableHighAccuracy: true, timeout: 10000 }
+      { enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity }
     );
   };
 

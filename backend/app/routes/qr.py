@@ -15,6 +15,7 @@ router = APIRouter(prefix="/qr", tags=["QR Code"])
 
 @router.post("/generate")
 def generate_qr(
+    frontend_url: str = None,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -23,8 +24,8 @@ def generate_qr(
         # Check if QR already exists
         existing = db.query(QRCodeRecord).filter(QRCodeRecord.user_id == current_user.id).first()
 
-        # Generate new QR
-        qr_data = generate_qr_code(current_user.id)
+        # Generate new QR code using dynamic frontend URL
+        qr_data = generate_qr_code(current_user.id, frontend_url)
 
         if existing:
             existing.scan_url = qr_data["scan_url"]
