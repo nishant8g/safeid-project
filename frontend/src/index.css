@@ -1182,51 +1182,43 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   height: 100vh;
   overflow: hidden;
   z-index: 0;
-  background-color: #0b1120;
+  background-color: #000000; /* Deep sophisticated black */
 }
 
 .plasma-blob {
   position: absolute;
-  filter: blur(100px);
+  filter: blur(140px);
   border-radius: 50%;
   opacity: 0.6;
-  animation: floatPlasma 20s infinite alternate ease-in-out;
+  animation: floatAurora 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Force animations to work even on low power mode because user specifically requested it */
-@keyframes floatPlasma {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(15vw, 15vh) scale(1.1); }
-  100% { transform: translate(-15vw, 10vh) scale(0.9); }
+@keyframes floatAurora {
+  0% { transform: translate(-5vw, -5vh) scale(1) rotate(0deg); }
+  50% { transform: translate(5vw, 5vh) scale(1.2) rotate(45deg); }
+  100% { transform: translate(0, 10vh) scale(0.9) rotate(90deg); }
 }
 
 .blob-1 {
-  width: 50vw;
-  height: 50vw;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  top: -10%;
-  left: -10%;
-  animation-delay: 0s;
+  width: 80vw;
+  height: 80vh;
+  background: conic-gradient(from 180deg at 50% 50%, #2a8af6 0deg, #a853ba 180deg, #e92a67 360deg);
+  top: -20%;
+  left: -20%;
 }
 
 .blob-2 {
-  width: 60vw;
-  height: 60vw;
-  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  width: 70vw;
+  height: 70vh;
+  background: conic-gradient(from 0deg at 50% 50%, #172554 0deg, #7c3aed 180deg, #0284c7 360deg);
   bottom: -20%;
-  right: -10%;
+  right: -20%;
   animation-duration: 25s;
-  animation-delay: -5s;
+  animation-direction: alternate-reverse;
 }
 
 .blob-3 {
-  width: 40vw;
-  height: 40vw;
-  background: linear-gradient(135deg, #0ea5e9, #0284c7);
-  top: 30%;
-  left: 50%;
-  animation-duration: 30s;
-  animation-delay: -10s;
+  display: none;
 }
 
 .login-card-wrapper {
