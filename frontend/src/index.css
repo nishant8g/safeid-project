@@ -1172,3 +1172,156 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   background: rgba(139, 92, 246, 0.3);
   color: var(--text-primary);
 }
+
+/* ──── Advanced Login Page Animations ──── */
+.login-blobs-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 0;
+  background-color: #0b1120;
+}
+
+.plasma-blob {
+  position: absolute;
+  filter: blur(100px);
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: floatPlasma 20s infinite alternate ease-in-out;
+}
+
+/* Force animations to work even on low power mode because user specifically requested it */
+@keyframes floatPlasma {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(15vw, 15vh) scale(1.1); }
+  100% { transform: translate(-15vw, 10vh) scale(0.9); }
+}
+
+.blob-1 {
+  width: 50vw;
+  height: 50vw;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  top: -10%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.blob-2 {
+  width: 60vw;
+  height: 60vw;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  bottom: -20%;
+  right: -10%;
+  animation-duration: 25s;
+  animation-delay: -5s;
+}
+
+.blob-3 {
+  width: 40vw;
+  height: 40vw;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  top: 30%;
+  left: 50%;
+  animation-duration: 30s;
+  animation-delay: -10s;
+}
+
+.login-card-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.login-glass-card {
+  background: rgba(15, 23, 42, 0.6) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  padding: 4rem 3rem !important;
+  border-radius: 24px !important;
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+  animation: epicEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes epicEntrance {
+  0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animated-shield-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 2rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+}
+
+.shield-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  animation: pulseNeon 2s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes pulseNeon {
+  to { box-shadow: 0 0 0 45px rgba(59, 130, 246, 0); }
+}
+
+.btn-google-premium {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-google-premium::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.btn-google-premium:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(59, 130, 246, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-google-premium:hover::after {
+  transform: translateX(100%);
+}
+
+.btn-google-premium:active {
+  transform: translateY(1px);
+}

@@ -40,48 +40,53 @@ export default function Login() {
   };
 
   return (
-    <div className="page-container narrow animate-fade-in" style={{ paddingTop: '5rem' }}>
-      <div className="glass-card text-center" style={{ padding: '3rem 2rem' }}>
-        <div style={{ marginBottom: '2rem' }}>
-          <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🛡️</div>
-          <h2>Welcome to SafeID</h2>
-          <p className="text-muted" style={{ fontSize: '1.1rem', marginTop: '0.5rem' }}>
-            Military-grade security. 1-Click Login.
-          </p>
-        </div>
-
-        {error && (
-          <div className="alert alert-error" style={{ marginBottom: '2rem', textAlign: 'left' }}>
-            ⚠️ {error}
-          </div>
-        )}
-
-        <button 
-          onClick={handleGoogleSignIn} 
-          className="btn btn-primary btn-full btn-lg" 
-          disabled={loading}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '12px',
-            backgroundColor: '#ffffff',
-            color: '#000000',
-            border: '1px solid #d1d5db',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
-            fontSize: '1.1rem',
-            padding: '1rem',
-            transition: 'all 0.3s ease'
-          }}
-        >
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24" height="24" alt="Google Logo" />
-          {loading ? 'Authenticating...' : 'Continue with Google'}
-        </button>
-        
-        <p className="text-muted" style={{ marginTop: '2rem', fontSize: '0.9rem' }}>
-          By continuing, you are proving your identity securely via Google Authentication.
-        </p>
+    <>
+      {/* Absolute Ambient Background */}
+      <div className="login-blobs-container">
+        <div className="plasma-blob blob-1"></div>
+        <div className="plasma-blob blob-2"></div>
+        <div className="plasma-blob blob-3"></div>
       </div>
-    </div>
+
+      {/* Foreground Content */}
+      <div className="login-card-wrapper">
+        <div className="login-glass-card">
+          
+          <div className="animated-shield-container">
+            <div className="shield-pulse"></div>
+            🛡️
+          </div>
+
+          <div style={{ marginBottom: '2.5rem' }}>
+            <h2 style={{ fontSize: '2.2rem', fontWeight: '800', marginBottom: '0.5rem', letterSpacing: '-0.02em', background: 'linear-gradient(to right, #ffffff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              SafeID
+            </h2>
+            <p style={{ color: '#94a3b8', fontSize: '1.05rem', lineHeight: '1.5' }}>
+              Military-grade digital identity.<br/>One-tap emergency response.
+            </p>
+          </div>
+
+          {error && (
+            <div className="alert alert-error" style={{ marginBottom: '2rem', textAlign: 'left', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', backdropFilter: 'blur(10px)' }}>
+              ⚠️ {error}
+            </div>
+          )}
+
+          <button 
+            onClick={handleGoogleSignIn} 
+            className="btn-google-premium" 
+            disabled={loading}
+          >
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22" height="22" alt="Google" style={{ background: 'white', borderRadius: '50%', padding: '2px' }} />
+            {loading ? 'Authenticating...' : 'Continue with Google'}
+          </button>
+          
+          <p style={{ marginTop: '2.5rem', fontSize: '0.8rem', color: '#64748b' }}>
+            By continuing, you are proving your identity securely via Google Authentication.
+          </p>
+
+        </div>
+      </div>
+    </>
   );
 }
