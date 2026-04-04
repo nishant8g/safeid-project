@@ -139,20 +139,79 @@ def update_contact(
 
 
 @router.delete("/contacts/{contact_id}")
-def delete_contact(
-    contact_id: str,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
+def delete_contact(contact_id: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """Delete an emergency contact."""
-    contact = (
-        db.query(EmergencyContact)
-        .filter(EmergencyContact.id == contact_id, EmergencyContact.user_id == current_user.id)
-        .first()
-    )
+    contact = db.query(EmergencyContact).filter(
+        EmergencyContact.id == contact_id,
+        EmergencyContact.user_id == current_user.id
+    ).first()
+    
     if not contact:
         raise HTTPException(status_code=404, detail="Contact not found")
-
+        
     db.delete(contact)
     db.commit()
-    return {"status": "deleted", "id": contact_id}
+    return {"message": "Contact deleted successfully"}
+
+# ──── Analytics Dashboard Route ────
+
+@router.get("/analytics")
+def get_user_analytics(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """
+    Returns premium SaaS analytics data including historical QR scan locations,
+    total scans over time, and profile health metric.
+    """
+    from ..models.analytics import ScanLog
+    from ..models.alert import AlertLog
+    
+    # 1. Total Scans & Recent 7 Days
+    from datetime import datetime, timedelta, timezone
+    
+    now = datetime.now(timezone.utc)
+    seven_days_ago = now - timedelta(days=7)
+    
+    # Get all scans
+    all_scans = db.query(ScanLog).filter(ScanLog.user_id == current_user.id).all()
+    total_scans = len(all_scans)
+    
+    # Group by day for the chart
+    scan_history = []
+    # Initialize past 7 days
+    counts_by_day = {}
+    for i in range(6, -1, -1):
+        day = (now - timedelta(days=i)).strftime('%m/%d')
+        counts_by_day[day] = 0
+        
+    for scan in all_scans:
+        if scan.created_at >= seven_days_ago:
+            day_str = scan.created_at.strftime('%m/%d')
+            if day_str in counts_by_day:
+                counts_by_day[day_str] += 1
+                
+    for day, count in counts_by_day.items():
+        scan_history.append({"date": day, "scans": count})
+
+    # 2. Get Historical Locations (from Alerts)
+    alerts = db.query(AlertLog).filter(
+        AlertLog.user_id == current_user.id,
+        AlertLog.latitude.isnot(None),
+        AlertLog.longitude.isnot(None)
+    ).order_by(AlertLog.created_at.desc()).limit(10).all()
+    
+    locations = [
+        {
+            "lat": a.latitude,
+            "lng": a.longitude,
+            "severity": a.severity,
+            "date": a.created_at.isoformat() if a.created_at else None,
+            "address": a.address
+        }
+        for a in alerts
+    ]
+    
+    return {
+        "total_scans": total_scans,
+        "scan_history": scan_history,
+        "alert_locations": locations,
+        "metrics_calculated_at": now.isoformat()
+    }

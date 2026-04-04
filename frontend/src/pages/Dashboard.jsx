@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { userAPI, qrAPI, aiAPI } from '../api/client';
+import AnalyticsDashboard from '../components/AnalyticsDashboard';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -63,47 +64,7 @@ export default function Dashboard() {
         <p>Manage your SafeID profile and stay prepared.</p>
       </div>
 
-      {/* Profile Completion */}
-      <div className="glass-card" style={{ marginBottom: '1.5rem' }}>
-        <div className="flex justify-between items-center" style={{ marginBottom: '0.75rem' }}>
-          <h3 style={{ fontSize: '1rem' }}>Profile Completion</h3>
-          <span className={`badge ${completionPercent === 100 ? 'badge-green' : 'badge-yellow'}`}>
-            {completionPercent}%
-          </span>
-        </div>
-        <div style={{
-          width: '100%', height: '8px', background: 'var(--bg-glass)',
-          borderRadius: 'var(--radius-full)', overflow: 'hidden',
-        }}>
-          <div style={{
-            width: `${completionPercent}%`, height: '100%',
-            background: completionPercent === 100
-              ? 'linear-gradient(90deg, #10b981, #22c55e)'
-              : 'linear-gradient(90deg, #f59e0b, #f97316)',
-            borderRadius: 'var(--radius-full)',
-            transition: 'width 0.5s ease',
-          }} />
-        </div>
-        {completionPercent < 100 && (
-          <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-            {!medical && (
-              <Link to="/profile" className="btn btn-ghost" style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}>
-                + Add Medical Info
-              </Link>
-            )}
-            {contacts.length === 0 && (
-              <Link to="/contacts" className="btn btn-ghost" style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}>
-                + Add Contacts
-              </Link>
-            )}
-            {!qrInfo?.has_qr && (
-              <Link to="/qr" className="btn btn-ghost" style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}>
-                + Generate QR
-              </Link>
-            )}
-          </div>
-        )}
-      </div>
+      <AnalyticsDashboard completionPercent={completionPercent} />
 
       {/* Stats Grid */}
       <div className="stats-grid" style={{ marginBottom: '1.5rem' }}>

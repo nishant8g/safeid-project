@@ -33,6 +33,26 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
     # Get medical info
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
 
+    # Create stealth analytics scan log
+    from ..models.analytics import ScanLog
+    import threading
+
+    def log_scan():
+        # Short-lived isolated DB session for background logging
+        from ..database import SessionLocal
+        bg_db = SessionLocal()
+        try:
+            scan_log = ScanLog(user_id=user_id)
+            bg_db.add(scan_log)
+            bg_db.commit()
+        except:
+            pass
+        finally:
+            bg_db.close()
+
+    # Track silently without delaying the vital emergency API response
+    threading.Thread(target=log_scan).start()
+
     # Return SAFE public data — NO phone, NO email, NO address
     return {
         "user_id": user.id,

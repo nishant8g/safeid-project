@@ -13,9 +13,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 
+from .models import user, medical, contact, qrcode, alert, analytics
+from .routes import auth, user, qr, scan, alert, ai
 from .config import settings
 from .database import init_db
-from .routes import auth, user, qr, scan, alert, ai
 
 # Configure logging
 logging.basicConfig(
