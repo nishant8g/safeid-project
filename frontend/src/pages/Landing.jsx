@@ -9,30 +9,36 @@ export default function Landing() {
 
   return (
     <div className="animate-fade-in">
+      {/* Absolute Ambient Background for Hero */}
+      <div className="login-blobs-container" style={{ position: 'absolute', height: '100vh', top: 0, zIndex: -1 }}>
+        <div className="plasma-blob blob-1"></div>
+        <div className="plasma-blob blob-2"></div>
+      </div>
+
       {/* Hero Section */}
-      <section className="hero-section">
-        <div className="section-tag" style={{ marginBottom: '1.5rem' }}>
+      <section className="hero-section" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', zIndex: 1, paddingTop: '4rem' }}>
+        <div className="section-tag" style={{ marginBottom: '1.5rem', background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}>
           🛡️ AI-Powered Emergency Response
         </div>
-        <h1 className="hero-title">
+        <h1 className="hero-title" style={{ fontSize: '4.5rem', lineHeight: '1.1', textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
           Your Life-Saving<br />
-          <span className="gradient-text">Digital Identity</span>
+          <span style={{ background: 'linear-gradient(to right, #ffffff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Digital Identity</span>
         </h1>
-        <p className="hero-subtitle">
+        <p className="hero-subtitle" style={{ fontSize: '1.2rem', maxWidth: '600px', margin: '1.5rem auto 2.5rem auto', color: '#94a3b8' }}>
           SafeID creates an instant digital lifeline. One QR scan connects bystanders to your
           medical info and emergency contacts — no app needed, works in seconds.
         </p>
         <div className="hero-actions">
           {isAuthenticated ? (
-            <Link to="/dashboard" className="btn btn-primary btn-lg">
+            <Link to="/dashboard" className="btn-google-premium" style={{ width: 'auto', display: 'inline-flex', padding: '1.2rem 2.5rem', fontSize: '1.2rem' }}>
               📊 Go to Dashboard
             </Link>
           ) : (
             <>
-              <Link to="/register" className="btn btn-primary btn-lg">
-                🚀 Create Your SafeID — Free
+              <Link to="/register" className="btn-google-premium" style={{ width: 'auto', display: 'inline-flex', padding: '1.2rem 2.5rem', fontSize: '1.2rem' }}>
+                🚀 Create Your SafeID
               </Link>
-              <Link to="/login" className="btn btn-ghost btn-lg">
+              <Link to="/login" className="btn btn-ghost btn-lg" style={{ color: 'white' }}>
                 Sign In →
               </Link>
             </>
@@ -40,21 +46,21 @@ export default function Landing() {
         </div>
 
         {/* Stats */}
-        <div className="stats-grid" style={{ maxWidth: '700px', margin: '3rem auto 0' }}>
-          <div className="stat-card">
-            <div className="stat-icon">⚡</div>
-            <div className="stat-value">&lt; 3s</div>
-            <div className="stat-label">Response Time</div>
+        <div className="stats-grid" style={{ maxWidth: '800px', margin: '4rem auto 0', gap: '2rem' }}>
+          <div className="stat-card" style={{ background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderRadius: '24px', padding: '2rem' }}>
+            <div className="stat-icon" style={{ background: 'transparent' }}>⚡</div>
+            <div className="stat-value" style={{ textShadow: '0 0 20px rgba(255,255,255,0.3)' }}>&lt; 3s</div>
+            <div className="stat-label" style={{ color: '#94a3b8' }}>Response Time</div>
           </div>
-          <div className="stat-card">
-            <div className="stat-icon">🔒</div>
-            <div className="stat-value">100%</div>
-            <div className="stat-label">Privacy Safe</div>
+          <div className="stat-card" style={{ background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderRadius: '24px', padding: '2rem' }}>
+            <div className="stat-icon" style={{ background: 'transparent' }}>🔒</div>
+            <div className="stat-value" style={{ textShadow: '0 0 20px rgba(255,255,255,0.3)' }}>100%</div>
+            <div className="stat-label" style={{ color: '#94a3b8' }}>Privacy Safe</div>
           </div>
-          <div className="stat-card">
-            <div className="stat-icon">📡</div>
-            <div className="stat-value">SMS</div>
-            <div className="stat-label">Fallback Ready</div>
+          <div className="stat-card" style={{ background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', borderRadius: '24px', padding: '2rem' }}>
+            <div className="stat-icon" style={{ background: 'transparent' }}>📡</div>
+            <div className="stat-value" style={{ textShadow: '0 0 20px rgba(255,255,255,0.3)' }}>SMS</div>
+            <div className="stat-label" style={{ color: '#94a3b8' }}>Fallback Ready</div>
           </div>
         </div>
       </section>
