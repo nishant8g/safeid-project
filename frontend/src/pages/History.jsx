@@ -27,7 +27,9 @@ export default function History() {
 
   const formatDate = (iso) => {
     if (!iso) return '—';
-    const d = new Date(iso);
+    // Append Z to enforce UTC parsing since backend sends naive UTC string
+    const utcDateStr = iso.endsWith('Z') ? iso : `${iso}Z`;
+    const d = new Date(utcDateStr);
     return d.toLocaleString('en-IN', {
       day: '2-digit', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit', hour12: true,

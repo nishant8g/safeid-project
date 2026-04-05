@@ -159,7 +159,9 @@ export default function AnalyticsDashboard({ completionPercent }) {
                 <Popup>
                   <div style={{ color: 'black' }}>
                     <h4 style={{ margin: 0, color: '#dc2626' }}>SOS Alert</h4>
-                    <p style={{ margin: '0.2rem 0', fontSize: '0.8rem' }}>{new Date(loc.date).toLocaleString()}</p>
+                    <p style={{ margin: '0.2rem 0', fontSize: '0.8rem' }}>
+                      {new Date(loc.date.endsWith('Z') ? loc.date : `${loc.date}Z`).toLocaleString()}
+                    </p>
                   </div>
                 </Popup>
               </Marker>
