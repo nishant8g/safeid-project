@@ -49,10 +49,13 @@ export default function AnalyticsDashboard({ completionPercent }) {
 
   if (error) {
     return (
-      <div className="glass-card text-center" style={{ padding: '2rem', border: '1px solid #ef4444' }}>
-        <h3 style={{ color: '#ef4444' }}>Analytics Error</h3>
-        <p>{error}</p>
-        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Did your backend finish restarting?</p>
+      <div className="glass-card text-center" style={{ padding: '2rem', border: '1px solid rgba(59, 130, 246, 0.3)', background: 'var(--bg-glass)' }}>
+        <div className="spinner" style={{ margin: '0 auto 1rem auto' }}></div>
+        <h3 style={{ color: '#60a5fa', marginBottom: '0.5rem' }}>Syncing Cloud Analytics...</h3>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+          Your secure backend server is currently rebooting after the latest update. 
+          <br/>Analytics will appear automatically once the server is online.
+        </p>
       </div>
     );
   }
