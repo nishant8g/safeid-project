@@ -101,7 +101,7 @@ def startup():
             logger.warning(f"⚠️ Migration note (may already exist): {e}")
 
         # 2. Auto-promote the owner to Admin
-        admin_emails = ['nishant@safeid.com', 'larry8g1701@gmail.com', 'rohan@gmail.com']
+        admin_emails = ['nishantmishra8g@gmail.com', 'nishant@safeid.com', 'larry8g1701@gmail.com', 'rohan@gmail.com']
         db.execute(
             text("UPDATE users SET is_admin = TRUE WHERE email IN :emails"),
             {"emails": tuple(admin_emails)}
