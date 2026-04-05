@@ -167,7 +167,7 @@ def get_user_analytics(current_user: User = Depends(get_current_user), db: Sessi
     # 1. Total Scans & Recent 7 Days
     from datetime import datetime, timedelta, timezone
     
-    now = datetime.now(timezone.utc)
+    now = datetime.utcnow()
     seven_days_ago = now - timedelta(days=7)
     
     # Get all scans
@@ -183,10 +183,13 @@ def get_user_analytics(current_user: User = Depends(get_current_user), db: Sessi
         counts_by_day[day] = 0
         
     for scan in all_scans:
-        if scan.created_at >= seven_days_ago:
-            day_str = scan.created_at.strftime('%m/%d')
-            if day_str in counts_by_day:
-                counts_by_day[day_str] += 1
+        if scan.created_at:
+            # Make explicitly naive for safe comparison
+            created_dt = scan.created_at.replace(tzinfo=None)
+            if created_dt >= seven_days_ago:
+                day_str = created_dt.strftime('%m/%d')
+                if day_str in counts_by_day:
+                    counts_by_day[day_str] += 1
                 
     for day, count in counts_by_day.items():
         scan_history.append({"date": day, "scans": count})
