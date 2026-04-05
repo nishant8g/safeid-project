@@ -79,7 +79,7 @@ export default function AnalyticsDashboard({ completionPercent }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '1.5rem' }}>
       
       {/* Top Value Row */}
-      <div className="stats-grid" style={{ gridTemplateColumns: 'minmax(200px, 1fr) minmax(200px, 1fr) minmax(200px, 1fr)' }}>
+      <div className="stats-grid">
         
         {/* Profile Health Circle */}
         <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
