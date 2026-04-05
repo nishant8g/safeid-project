@@ -97,7 +97,7 @@ export default function Navbar() {
                 </span>
               </Link>
               <Link to="/register" onClick={() => setMobileOpen(false)}>
-                <span className="btn-nav-outline" style={{ background: 'var(--accent-blue)', color: 'white', borderColor: 'var(--accent-blue)' }}>
+                <span className="btn-nav-outline">
                   Sign Up
                 </span>
               </Link>

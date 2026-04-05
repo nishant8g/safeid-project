@@ -32,8 +32,8 @@ export default function Landing() {
             </Link>
           ) : (
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link to="/register" className="btn-cyan-pill">
-                Create Your SafeID ↗
+              <Link to="/register" className="btn-nav-outline" style={{ padding: '0.8rem 2rem', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                Sign Up ↗
               </Link>
               <Link to="/login" className="btn-nav-outline" style={{ padding: '0.8rem 2rem', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 Sign In
