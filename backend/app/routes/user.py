@@ -153,9 +153,10 @@ def delete_contact(contact_id: str, current_user: User = Depends(get_current_use
     db.commit()
     return {"message": "Contact deleted successfully"}
 
-# ──── Dashboard Metrics Route ────
+# ──── Dashboard Metrics Route (Dual-Endpoint Support to prevent 404s) ────
 
 @router.get("/metrics")
+@router.get("/analytics")
 def get_user_analytics(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """
     Returns premium SaaS analytics data including historical QR scan locations,
