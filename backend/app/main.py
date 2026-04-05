@@ -92,37 +92,25 @@ def startup():
     from .database import SessionLocal
     db = SessionLocal()
     try:
-        # 1. Ensure the is_admin column exists (Cross-DB compatible check)
-        from sqlalchemy import inspect
-        inspector = inspect(db.bind)
-        columns = [c['name'] for c in inspector.get_columns('users')]
-        
-        if 'is_admin' not in columns:
-            logger.info("🔧 Adding 'is_admin' column to users table...")
-            try:
-                db.execute(text("ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE"))
-                db.commit()
-                logger.info("✅ Database Migration: 'is_admin' column added")
-            except Exception as e:
-                logger.warning(f"⚠️ Direct ALTER failed (might already exist): {e}")
-                db.rollback()
-        else:
-            logger.info("ℹ️ Database Migration: 'is_admin' column already exists")
-
-        # 2. Auto-promote the owner to Admin
-        admin_emails = ['nishantmishra8g@gmail.com', 'nishant@safeid.com', 'larry8g1701@gmail.com', 'rohan@gmail.com']
+        # 1. Simple Column Check & Add
         try:
-            db.execute(
-                text("UPDATE users SET is_admin = TRUE WHERE email IN :emails"),
-                {"emails": tuple(admin_emails)}
-            )
+            db.execute(text("ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE"))
             db.commit()
-            logger.info("👑 Admin permissions synchronized")
-        except Exception as e:
-            logger.error(f"❌ Admin promotion failed: {e}")
+            logger.info("✅ Database Migration: 'is_admin' column added")
+        except Exception:
+            # If it fails, it means column already exists or SQLite doesn't support the Alter yet.
             db.rollback()
+
+        # 2. Sync Admin Permissions
+        admin_emails = ['nishantmishra8g@gmail.com', 'nishant@safeid.com', 'larry8g1701@gmail.com', 'rohan@gmail.com']
+        db.execute(
+            text("UPDATE users SET is_admin = TRUE WHERE email IN :emails"),
+            {"emails": tuple(admin_emails)}
+        )
+        db.commit()
+        logger.info("👑 Admin permissions synchronized")
     except Exception as e:
-        logger.error(f"❌ Startup bootstrap failure: {e}")
+        logger.error(f"❌ Startup bootstrap non-critical failure: {e}")
     finally:
         db.close()
         
