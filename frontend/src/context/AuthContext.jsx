@@ -25,10 +25,6 @@ export function AuthProvider({ children }) {
   const login = async (firebase_token) => {
     const res = await authAPI.login({ email: "google-auth", password: "google-auth", firebase_token });
     const { access_token, user: userData } = res.data;
-    // Safety check for legacy accounts
-    if (userData) {
-      userData.is_admin = !!userData.is_admin;
-    }
     sessionStorage.setItem('safeid_token', access_token);
     sessionStorage.setItem('safeid_user', JSON.stringify(userData));
     setToken(access_token);
