@@ -213,9 +213,15 @@ def get_user_analytics(current_user: User = Depends(get_current_user), db: Sessi
         for a in alerts
     ]
     
+    # 3. Global Platform Stats (for the SaaS creator)
+    global_user_count = db.query(User).count()
+    global_scan_count = db.query(ScanLog).count()
+    
     return {
         "total_scans": total_scans,
         "scan_history": scan_history,
         "alert_locations": locations,
+        "platform_total_users": global_user_count,
+        "platform_total_scans": global_scan_count,
         "metrics_calculated_at": now.isoformat()
     }
