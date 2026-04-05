@@ -67,8 +67,28 @@ export default function Login() {
           </div>
 
           {error && (
-            <div className="alert alert-error" style={{ marginBottom: '2rem', textAlign: 'left', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', backdropFilter: 'blur(10px)' }}>
-              ⚠️ {error}
+            <div className="alert alert-error" style={{ marginBottom: '2.0rem', textAlign: 'left', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', backdropFilter: 'blur(10px)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <span>⚠️ {error}</span>
+              {error.toLowerCase().includes('sign up') && (
+                <button 
+                  onClick={() => navigate('/register')}
+                  style={{ 
+                    background: 'rgba(255, 255, 255, 0.1)', 
+                    border: '1px solid rgba(255, 255, 255, 0.2)', 
+                    color: 'white', 
+                    padding: '8px 12px', 
+                    borderRadius: '6px', 
+                    fontSize: '0.9rem', 
+                    cursor: 'pointer',
+                    marginTop: '0.5rem',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseOver={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.2)'}
+                  onMouseOut={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+                >
+                  Create New Account →
+                </button>
+              )}
             </div>
           )}
 
