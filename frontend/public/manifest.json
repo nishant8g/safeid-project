@@ -1,0 +1,30 @@
+{
+  "short_name": "SafeID",
+  "name": "SafeID — AI Emergency QR System",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/safeid-logo-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/safeid-logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0a0e1a",
+  "background_color": "#0a0e1a",
+  "orientation": "portrait",
+  "description": "Premium AI-powered emergency identity system. One-tap SOS and medical alerts.",
+  "lang": "en-US",
+  "categories": ["medical", "safety", "health"]
+}
