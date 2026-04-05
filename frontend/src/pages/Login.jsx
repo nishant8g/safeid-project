@@ -71,7 +71,7 @@ export default function Login() {
               <span>⚠️ {error}</span>
               {error.toLowerCase().includes('sign up') && (
                 <button 
-                  onClick={() => navigate('/register')}
+                  onClick={() => navigate('/')}
                   style={{ 
                     background: 'rgba(255, 255, 255, 0.1)', 
                     border: '1px solid rgba(255, 255, 255, 0.2)', 
@@ -102,7 +102,7 @@ export default function Login() {
           </button>
           
           <p style={{ marginTop: '2.5rem', fontSize: '0.8rem', color: '#64748b' }}>
-            New to SafeID? <span onClick={() => navigate('/register')} style={{ color: 'var(--accent-blue)', cursor: 'pointer', fontWeight: '600' }}>Create an identity</span>
+            New to SafeID? <span onClick={() => navigate('/')} style={{ color: 'var(--accent-blue)', cursor: 'pointer', fontWeight: '600' }}>Create an identity</span>
             <br/><br/>
             By continuing, you prove your identity via Google Authentication.
           </p>
