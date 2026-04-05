@@ -39,6 +39,7 @@ export default function Register() {
     }
   };
 
+  return (
     <>
       {/* Absolute Ambient Background */}
       <div className="login-blobs-container">
@@ -87,5 +88,6 @@ export default function Register() {
         </div>
       </div>
     </>
+  );
 }
 
