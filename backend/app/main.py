@@ -83,37 +83,8 @@ app.include_router(ai.router)
 
 @app.on_event("startup")
 def startup():
-    """Initialize database and run auto-migrations on startup."""
-    logger.info("🚀 SafeID API starting up...")
+    """Initialize database on startup."""
     init_db()
-    
-    # --- Auto-Migration & Bootstrap Admin ---
-    from sqlalchemy import text
-    from .database import SessionLocal
-    db = SessionLocal()
-    try:
-        # 1. Simple Column Check & Add
-        try:
-            db.execute(text("ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE"))
-            db.commit()
-            logger.info("✅ Database Migration: 'is_admin' column added")
-        except Exception:
-            # If it fails, it means column already exists or SQLite doesn't support the Alter yet.
-            db.rollback()
-
-        # 2. Sync Admin Permissions
-        admin_emails = ['nishantmishra8g@gmail.com', 'nishant@safeid.com', 'larry8g1701@gmail.com', 'rohan@gmail.com']
-        db.execute(
-            text("UPDATE users SET is_admin = TRUE WHERE email IN :emails"),
-            {"emails": tuple(admin_emails)}
-        )
-        db.commit()
-        logger.info("👑 Admin permissions synchronized")
-    except Exception as e:
-        logger.error(f"❌ Startup bootstrap non-critical failure: {e}")
-    finally:
-        db.close()
-        
     logger.info("✅ Database initialized")
     logger.info(f"📡 API docs: http://localhost:8000/docs")
     logger.info(f"🌐 Frontend expected at: {settings.FRONTEND_URL}")

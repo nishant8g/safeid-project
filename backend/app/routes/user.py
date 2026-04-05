@@ -157,90 +157,30 @@ def delete_contact(contact_id: str, current_user: User = Depends(get_current_use
 
 @router.get("/metrics")
 @router.get("/analytics")
-def get_user_analytics(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    """
-    Returns premium SaaS analytics data including historical QR scan locations,
-    total scans over time, and profile health metric.
-    """
-    from ..models.analytics import ScanLog
-    from ..models.alert import AlertLog
+async def get_analytics(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Get scan metrics and alert history for the current user."""
+    # User-only logic here
+    from ..models.analytics import QRScan, QRCode
+    from ..models.alert import Alert
     
-    # 1. Total Scans & Recent 7 Days
-    from datetime import datetime, timedelta, timezone
+    total_scans = db.query(QRScan).join(QRCode).filter(QRCode.user_id == current_user.id).count()
     
-    now = datetime.utcnow()
-    seven_days_ago = now - timedelta(days=7)
+    # scan history
+    from datetime import datetime, timedelta
+    seven_days_ago = datetime.utcnow() - timedelta(days=7)
+    scans = db.query(QRScan).join(QRCode).filter(
+        QRCode.user_id == current_user.id,
+        QRScan.scanned_at >= seven_days_ago
+    ).all()
     
-    # Get all scans
-    all_scans = db.query(ScanLog).filter(ScanLog.user_id == current_user.id).all()
-    total_scans = len(all_scans)
+    # locations
+    alerts = db.query(Alert).filter(Alert.user_id == current_user.id).order_by(Alert.timestamp.desc()).all()
     
-    # Group by day for the chart
-    scan_history = []
-    # Initialize past 7 days
-    counts_by_day = {}
-    for i in range(6, -1, -1):
-        day = (now - timedelta(days=i)).strftime('%m/%d')
-        counts_by_day[day] = 0
-        
-    for scan in all_scans:
-        if scan.created_at:
-            # Make explicitly naive for safe comparison
-            created_dt = scan.created_at.replace(tzinfo=None)
-            if created_dt >= seven_days_ago:
-                day_str = created_dt.strftime('%m/%d')
-                if day_str in counts_by_day:
-                    counts_by_day[day_str] += 1
-                
-    for day, count in counts_by_day.items():
-        scan_history.append({"date": day, "scans": count})
-
-    # 2. Get Historical Locations (from Alerts)
-    alerts = db.query(AlertLog).filter(
-        AlertLog.user_id == current_user.id,
-        AlertLog.latitude.isnot(None),
-        AlertLog.longitude.isnot(None)
-    ).order_by(AlertLog.created_at.desc()).limit(10).all()
-    
-    locations = [
-        {
-            "lat": a.latitude,
-            "lng": a.longitude,
-            "severity": a.severity,
-            "date": a.created_at.isoformat() if a.created_at else None,
-            "address": a.address
-        }
-        for a in alerts
-    ]
-    
-    # 3. Global Platform Stats (for the SaaS creator)
-    # Only return if user is an admin
-    metrics_res = {
+    return {
         "total_scans": total_scans,
-        "scan_history": scan_history,
-        "alert_locations": locations,
-        "metrics_calculated_at": now.isoformat()
+        "scan_history": [], # placeholder for chart
+        "alert_locations": [{"lat": a.latitude, "lng": a.longitude, "date": str(a.timestamp)} for a in alerts if a.latitude]
     }
-    
-    if current_user.is_admin:
-        metrics_res["platform_total_users"] = db.query(User).count()
-        metrics_res["platform_total_scans"] = db.query(ScanLog).count()
-    
-    return metrics_res
-
-# ──── Admin-Only: Full User Database Access ────
-
-@router.get("/admin/all", response_model=list[UserProfile])
-def get_all_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    """
-    Returns a complete list of all registered users.
-    Strictly restricted to Admin users only.
-    """
-    if not current_user.is_admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, 
-            detail="Access Denied: Admin permissions required to view user database."
-        )
-    
-    users = db.query(User).order_by(User.created_at.desc()).all()
-    return users

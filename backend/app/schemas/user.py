@@ -24,7 +24,6 @@ class UserProfile(BaseModel):
     full_name: str
     email: str
     phone: Optional[str] = None
-    is_admin: bool = False
     created_at: Optional[datetime] = None
 
     class Config:
