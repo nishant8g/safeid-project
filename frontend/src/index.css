@@ -1273,6 +1273,7 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   border-radius: 20px;
   padding: 1.5px;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -1434,4 +1435,128 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   background: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 0 40px rgba(255, 255, 255, 0.4);
+}
+
+/* =========================================================================
+   Responsive Landing Page Classes (Mobile First & Scalable)
+   ========================================================================= */
+
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 6rem;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.landing-hero {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0 1.5rem;
+}
+
+.landing-title {
+  font-size: 5.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  letter-spacing: -0.04em;
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
+}
+
+.landing-actions {
+  margin-bottom: 5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.landing-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.feature-card-title {
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 0.8rem;
+  font-weight: 700;
+}
+
+.feature-card-desc {
+  color: #94a3b8;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.landing-footer {
+  margin-top: auto;
+  padding-top: 8rem;
+  padding-bottom: 2rem;
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  color: #64748b;
+  font-size: 0.9rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.footer-brand strong { color: #cbd5e1; }
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-social {
+  display: flex;
+  gap: 1rem;
+  font-size: 1.2rem;
+  color: #94a3b8;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  .landing-container {
+    padding-top: 3rem;
+  }
+  
+  .landing-title {
+    font-size: 3rem;       /* Scaled down massively for mobile */
+    margin-bottom: 1.5rem;
+  }
+  
+  .landing-actions {
+    margin-bottom: 3rem;
+  }
+  
+  .landing-footer {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-top: 4rem;
+    text-align: center;
+  }
+  
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
