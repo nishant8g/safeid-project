@@ -102,7 +102,9 @@ export default function Login() {
           </button>
           
           <p style={{ marginTop: '2.5rem', fontSize: '0.8rem', color: '#64748b' }}>
-            By continuing, you are proving your identity securely via Google Authentication.
+            New to SafeID? <span onClick={() => navigate('/register')} style={{ color: 'var(--accent-blue)', cursor: 'pointer', fontWeight: '600' }}>Create an identity</span>
+            <br/><br/>
+            By continuing, you prove your identity via Google Authentication.
           </p>
 
         </div>
