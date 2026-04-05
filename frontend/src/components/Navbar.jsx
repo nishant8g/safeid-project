@@ -6,7 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -30,35 +30,35 @@ export default function Navbar() {
         <div className={`navbar-links ${mobileOpen ? 'open' : ''}`}>
           {isAuthenticated ? (
             <>
-              <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setMobileOpen(false)}>
+              <Link to="/dashboard" className={`nav-link ${isActive('/dashboard')}`} onClick={() => setMobileOpen(false)}>
                 📊 Dashboard
               </Link>
-              <Link to="/profile" className={isActive('/profile')} onClick={() => setMobileOpen(false)}>
+              <Link to="/profile" className={`nav-link ${isActive('/profile')}`} onClick={() => setMobileOpen(false)}>
                 🩺 Medical
               </Link>
-              <Link to="/contacts" className={isActive('/contacts')} onClick={() => setMobileOpen(false)}>
+              <Link to="/contacts" className={`nav-link ${isActive('/contacts')}`} onClick={() => setMobileOpen(false)}>
                 👥 Contacts
               </Link>
-              <Link to="/qr" className={isActive('/qr')} onClick={() => setMobileOpen(false)}>
+              <Link to="/qr" className={`nav-link ${isActive('/qr')}`} onClick={() => setMobileOpen(false)}>
                 📱 QR Code
               </Link>
-              <Link to="/nfc" className={isActive('/nfc')} onClick={() => setMobileOpen(false)}>
+              <Link to="/nfc" className={`nav-link ${isActive('/nfc')}`} onClick={() => setMobileOpen(false)}>
                 📡 NFC Tag
               </Link>
-              <Link to="/history" className={isActive('/history')} onClick={() => setMobileOpen(false)}>
+              <Link to="/history" className={`nav-link ${isActive('/history')}`} onClick={() => setMobileOpen(false)}>
                 📋 History
               </Link>
-              <button onClick={() => { logout(); setMobileOpen(false); }}>
+              <button className="nav-link" onClick={() => { logout(); setMobileOpen(false); }}>
                 🚪 Logout
               </button>
             </>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', width: '100%', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', gap: '2rem', margin: '0 auto', color: '#94a3b8', fontSize: '0.95rem' }}>
-                <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='#94a3b8'}>Features</span>
-                <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='#94a3b8'}>Security</span>
-                <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='#94a3b8'}>Support</span>
-                <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color='white'} onMouseOut={e => e.target.style.color='#94a3b8'}>Pricing</span>
+            <div className="navbar-unauth-links">
+              <div className="unauth-menu-items">
+                <span className="unauth-link">Features</span>
+                <span className="unauth-link">Security</span>
+                <span className="unauth-link">Support</span>
+                <span className="unauth-link">Pricing</span>
               </div>
               <Link to="/login" onClick={() => setMobileOpen(false)}>
                 <span className="btn-nav-outline">
@@ -72,3 +72,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

@@ -431,12 +431,61 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
     left: 0;
     right: 0;
     flex-direction: column;
-    background: var(--bg-secondary);
+    align-items: stretch; /* Fix indentation glitch */
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-subtle);
     padding: var(--space-md);
+    gap: 0.5rem;
   }
 
   .navbar-links.open { display: flex; }
+  
+  .nav-link {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.8rem 1rem !important;
+  }
+
+  .navbar-unauth-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .unauth-menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+}
+
+/* Unauthenticated Link Styles (Desktop) */
+.navbar-unauth-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.unauth-menu-items {
+  display: flex;
+  gap: 2rem;
+  margin: 0 auto;
+}
+
+.unauth-link {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.unauth-link:hover {
+  color: white;
 }
 
 /* ──── Badge / Tag ──── */
