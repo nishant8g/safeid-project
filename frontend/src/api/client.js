@@ -59,6 +59,7 @@ export const userAPI = {
   updateContact: (id, data) => api.put(`/user/contacts/${id}`, data),
   deleteContact: (id) => api.delete(`/user/contacts/${id}`),
   getAnalytics: () => api.get('/user/metrics'),
+  getAdminUsers: () => api.get('/user/admin/all'),
 };
 
 // ──── QR Code ────

@@ -68,6 +68,14 @@ export default function Navbar() {
               <Link to="/history" className={`nav-link ${isActive('/history')}`} onClick={() => setMobileOpen(false)}>
                 📋 History
               </Link>
+
+              {/* Admin Panel Link */}
+              {user?.is_admin && (
+                <Link to="/admin/users" className={`nav-link ${isActive('/admin/users')}`} style={{ color: 'var(--accent-purple)', fontWeight: 'bold' }} onClick={() => setMobileOpen(false)}>
+                  🛡️ Admin Users
+                </Link>
+              )}
+
               {deferredPrompt && (
                 <button className="nav-link install-btn" onClick={handleInstallClick} style={{ color: 'var(--accent-blue)', fontWeight: 'bold' }}>
                   📲 Get Mobile App

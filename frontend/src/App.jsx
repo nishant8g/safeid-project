@@ -18,6 +18,7 @@ import QRPage from './pages/QRPage';
 import ScanPage from './pages/ScanPage';
 import History from './pages/History';
 import NFCPortal from './pages/NFCPortal';
+import AdminUsers from './pages/AdminUsers';
 
 import { Analytics } from "@vercel/analytics/react";
 
@@ -53,6 +54,9 @@ export default function App() {
           } />
           <Route path="/history" element={
             <ProtectedRoute><History /></ProtectedRoute>
+          } />
+          <Route path="/admin/users" element={
+            <ProtectedRoute><AdminUsers /></ProtectedRoute>
           } />
 
           {/* 404 */}

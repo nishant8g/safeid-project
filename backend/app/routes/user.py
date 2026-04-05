@@ -227,3 +227,20 @@ def get_user_analytics(current_user: User = Depends(get_current_user), db: Sessi
         metrics_res["platform_total_scans"] = db.query(ScanLog).count()
     
     return metrics_res
+
+# ──── Admin-Only: Full User Database Access ────
+
+@router.get("/admin/all", response_model=list[UserProfile])
+def get_all_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """
+    Returns a complete list of all registered users.
+    Strictly restricted to Admin users only.
+    """
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, 
+            detail="Access Denied: Admin permissions required to view user database."
+        )
+    
+    users = db.query(User).order_by(User.created_at.desc()).all()
+    return users
