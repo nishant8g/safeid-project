@@ -92,13 +92,18 @@ def startup():
     from .database import SessionLocal
     db = SessionLocal()
     try:
-        # 1. Ensure the is_admin column exists (SQLAlchemy doesn't add it automatically to existing tables)
-        try:
-            db.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE"))
+        # 1. Ensure the is_admin column exists (Cross-DB compatible check)
+        from sqlalchemy import inspect
+        inspector = inspect(db.bind)
+        columns = [c['name'] for c in inspector.get_columns('users')]
+        
+        if 'is_admin' not in columns:
+            logger.info("🔧 Adding 'is_admin' column to users table...")
+            db.execute(text("ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE"))
             db.commit()
-            logger.info("✅ Database Migration: 'is_admin' column verified/added")
-        except Exception as e:
-            logger.warning(f"⚠️ Migration note (may already exist): {e}")
+            logger.info("✅ Database Migration: 'is_admin' column added")
+        else:
+            logger.info("ℹ️ Database Migration: 'is_admin' column already exists")
 
         # 2. Auto-promote the owner to Admin
         admin_emails = ['nishantmishra8g@gmail.com', 'nishant@safeid.com', 'larry8g1701@gmail.com', 'rohan@gmail.com']

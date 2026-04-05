@@ -37,13 +37,27 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. Fetch Event: Network-first approach with cache fallback
-// (Better for medical apps to ensure they see LATEST data if online)
+// 3. Fetch Event: Network-first approach with cache fallback for UI only
+// (DO NOT cache API calls, which need real-time data)
 self.addEventListener('fetch', (event) => {
+  // Only intercept GET requests for assets, not API calls or POSTs
+  if (event.request.method !== 'GET') return;
+  
+  const url = new URL(event.request.url);
+  
+  // Skip API calls (don't serve cached HTML for an API error)
+  if (url.pathname.startsWith('/auth') || url.pathname.startsWith('/user') || url.pathname.startsWith('/qr')) {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .catch(() => {
-        // If network fails (Offline), check cache
+        // If it's a navigation request (HTML), return index.html
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html');
+        }
+        // Otherwise return whatever asset we have
         return caches.match(event.request);
       })
   );
