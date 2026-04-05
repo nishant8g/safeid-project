@@ -24,37 +24,58 @@ const emergencyIcon = new L.Icon({
 });
 
 export default function AnalyticsDashboard({ completionPercent }) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(() => {
+    // Load cached data immediately so there's no "5 minute wait" error
+    const cached = localStorage.getItem('safeid_analytics_cache');
+    return cached ? JSON.parse(cached) : null;
+  });
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    let retryTimer;
     const fetchAnalytics = async () => {
       try {
         const res = await userAPI.getAnalytics();
         setData(res.data);
-      } catch (err) {
-        console.error("Failed to load analytics", err);
-        setError(err.response?.data?.detail || err.message || "Failed to load");
-      } finally {
+        localStorage.setItem('safeid_analytics_cache', JSON.stringify(res.data));
+        setError(null);
         setLoading(false);
+      } catch (err) {
+        console.error("Backend still booting, retrying in 5s...", err);
+        // If we have cached data, don't show a hard error, just a subtle sync state
+        setError("Syncing...");
+        setLoading(false);
+        retryTimer = setTimeout(fetchAnalytics, 5000);
       }
     };
+    
     fetchAnalytics();
+    return () => clearTimeout(retryTimer);
   }, []);
 
-  if (loading) {
-    return <div className="glass-card text-center" style={{ padding: '2rem' }}>Loading Enterprise Analytics...</div>;
+  if (loading && !data) {
+    return (
+      <div className="glass-card text-center" style={{ padding: '2rem' }}>
+        <div className="spinner" style={{ margin: '0 auto 1rem auto' }}></div>
+        <p>Initializing Secure Analytics...</p>
+      </div>
+    );
   }
 
-  if (error) {
+  // If we have data (cached or fresh), but also an error (rebooting), 
+  // we show the UI but add a small status badge.
+  const isRebooting = error && data;
+
+  if (error && !data) {
     return (
       <div className="glass-card text-center" style={{ padding: '2rem', border: '1px solid rgba(59, 130, 246, 0.3)', background: 'var(--bg-glass)' }}>
         <div className="spinner" style={{ margin: '0 auto 1rem auto' }}></div>
-        <h3 style={{ color: '#60a5fa', marginBottom: '0.5rem' }}>Syncing Cloud Analytics...</h3>
+        <h3 style={{ color: '#60a5fa', marginBottom: '0.5rem' }}>Secure Sync in Progress</h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          Your secure backend server is currently rebooting after the latest update. 
-          <br/>Analytics will appear automatically once the server is online.
+          The backend is currently rebooting to apply your latest changes. 
+          <br/>This takes ~3-5 minutes on Render Free tier.
+          <br/><strong>Auto-refreshing... stay on this page!</strong>
         </p>
       </div>
     );
