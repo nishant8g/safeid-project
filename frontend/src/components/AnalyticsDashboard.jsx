@@ -131,14 +131,13 @@ export default function AnalyticsDashboard({ completionPercent }) {
         <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)' }}>
           <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Total QR Scans</h3>
           <div style={{ fontSize: '3.5rem', fontWeight: '900', color: 'var(--text-primary)', textShadow: '0 0 20px rgba(59, 130, 246, 0.5)' }}>
-            {data.total_scans}
+            {data?.total_scans || 0}
           </div>
           <p style={{ fontSize: '0.8rem', color: 'var(--accent-blue)' }}>Lifetime Views</p>
         </div>
 
-        {/* Global Protection Card */}
         {/* Global Protection Card — Total SaaS Users (Admin Only) */}
-        {data.platform_total_users !== undefined && (
+        {data?.platform_total_users !== undefined && (
           <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
             <h3 style={{ fontSize: '0.9rem', color: 'var(--accent-emerald)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Platform Growth</h3>
             <div style={{ fontSize: '3.5rem', fontWeight: '900', color: '#10b981', textShadow: '0 0 20px rgba(16, 185, 129, 0.4)' }}>
@@ -158,7 +157,7 @@ export default function AnalyticsDashboard({ completionPercent }) {
           </h3>
           <div style={{ flex: 1, minHeight: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data.scan_history}>
+              <AreaChart data={data?.scan_history || []}>
                 <defs>
                   <linearGradient id="colorScans" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4}/>
@@ -178,12 +177,12 @@ export default function AnalyticsDashboard({ completionPercent }) {
           <div style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 1000, background: 'rgba(10, 14, 26, 0.8)', backdropFilter: 'blur(10px)', padding: '0.5rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>
             <h3 style={{ fontSize: '0.9rem', margin: 0 }}>📍 SOS History Map</h3>
           </div>
-          <MapContainer center={center} zoom={data.alert_locations.length > 0 ? 13 : 4} style={{ height: '100%', width: '100%', zIndex: 1 }}>
+          <MapContainer center={center} zoom={data?.alert_locations?.length > 0 ? 13 : 4} style={{ height: '100%', width: '100%', zIndex: 1 }}>
             <TileLayer
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
-            {data.alert_locations.map((loc, idx) => (
+            {(data?.alert_locations || []).map((loc, idx) => (
               <Marker key={idx} position={[loc.lat, loc.lng]} icon={emergencyIcon}>
                 <Popup>
                   <div style={{ color: 'black' }}>

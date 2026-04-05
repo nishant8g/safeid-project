@@ -99,22 +99,30 @@ def startup():
         
         if 'is_admin' not in columns:
             logger.info("🔧 Adding 'is_admin' column to users table...")
-            db.execute(text("ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE"))
-            db.commit()
-            logger.info("✅ Database Migration: 'is_admin' column added")
+            try:
+                db.execute(text("ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE"))
+                db.commit()
+                logger.info("✅ Database Migration: 'is_admin' column added")
+            except Exception as e:
+                logger.warning(f"⚠️ Direct ALTER failed (might already exist): {e}")
+                db.rollback()
         else:
             logger.info("ℹ️ Database Migration: 'is_admin' column already exists")
 
         # 2. Auto-promote the owner to Admin
         admin_emails = ['nishantmishra8g@gmail.com', 'nishant@safeid.com', 'larry8g1701@gmail.com', 'rohan@gmail.com']
-        db.execute(
-            text("UPDATE users SET is_admin = TRUE WHERE email IN :emails"),
-            {"emails": tuple(admin_emails)}
-        )
-        db.commit()
-        logger.info("👑 Admin permissions synchronized")
+        try:
+            db.execute(
+                text("UPDATE users SET is_admin = TRUE WHERE email IN :emails"),
+                {"emails": tuple(admin_emails)}
+            )
+            db.commit()
+            logger.info("👑 Admin permissions synchronized")
+        except Exception as e:
+            logger.error(f"❌ Admin promotion failed: {e}")
+            db.rollback()
     except Exception as e:
-        logger.error(f"❌ Startup bootstrap failed: {e}")
+        logger.error(f"❌ Startup bootstrap failure: {e}")
     finally:
         db.close()
         
