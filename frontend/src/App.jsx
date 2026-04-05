@@ -19,6 +19,8 @@ import ScanPage from './pages/ScanPage';
 import History from './pages/History';
 import NFCPortal from './pages/NFCPortal';
 
+import { Analytics } from "@vercel/analytics/react";
+
 export default function App() {
   return (
     <AuthProvider>
@@ -64,6 +66,7 @@ export default function App() {
           } />
         </Routes>
       </Router>
+      <Analytics />
     </AuthProvider>
   );
 }
