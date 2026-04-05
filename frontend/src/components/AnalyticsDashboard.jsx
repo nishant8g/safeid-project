@@ -137,14 +137,16 @@ export default function AnalyticsDashboard({ completionPercent }) {
         </div>
 
         {/* Global Protection Card */}
-        {/* Global Protection Card — Total SaaS Users */}
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--accent-emerald)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Platform Growth</h3>
-          <div style={{ fontSize: '3.5rem', fontWeight: '900', color: '#10b981', textShadow: '0 0 20px rgba(16, 185, 129, 0.4)' }}>
-            {data.platform_total_users}
+        {/* Global Protection Card — Total SaaS Users (Admin Only) */}
+        {data.platform_total_users !== undefined && (
+          <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+            <h3 style={{ fontSize: '0.9rem', color: 'var(--accent-emerald)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Platform Growth</h3>
+            <div style={{ fontSize: '3.5rem', fontWeight: '900', color: '#10b981', textShadow: '0 0 20px rgba(16, 185, 129, 0.4)' }}>
+              {data.platform_total_users}
+            </div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Total Verified Users</p>
           </div>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Total Verified Users</p>
-        </div>
+        )}
 
       </div>
 
