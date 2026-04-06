@@ -308,16 +308,22 @@ export default function ScanPage() {
                   <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem', textAlign: 'center' }}>
                      Please slide below to confirm and broadcast the emergency alert to the family.
                   </p>
-                  <ConfirmSlider onConfirm={() => setIsConfirmed(true)} text="Slide to Notify Family" />
+                  <ConfirmSlider onConfirm={() => {
+                     console.log("SOS TRIGGERED - ULTRA MODE ACTIVE");
+                     setIsConfirmed(true);
+                     setTimeout(() => {
+                        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                     }, 150);
+                  }} text="Slide to Notify Family" />
                </div>
             ) : (
-               <div className="glass-card" style={{ padding: '1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+               <div className="glass-card animate-fade-in" style={{ padding: '1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
                <div className="flex flex-col" style={{ gap: '1rem' }}>
-                     {(alertResult?.contacts_list || userData?.emergency_contacts)?.map((contact, idx) => (
+                     {(alertResult?.contacts_list || userData?.emergency_contacts || [])?.map((contact, idx) => (
                           <div key={idx} className="flex flex-col" style={{ gap: '0.5rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                              <div style={{ fontSize: '0.9rem', fontWeight: 'bold', opacity: 0.9 }}>Contact: {contact.name}</div>
                              <div className="flex" style={{ gap: '0.5rem' }}>
-                                <a href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(alertResult?.sos_message || `🚨 EMERGENCY ALERT: I have found your relative ${userData.full_name}.`)}`} 
+                                <a href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(alertResult?.sos_message || `🚨 EMERGENCY ALERT: I have found your relative ${userData.full_name}. Here is the location: https://www.google.com/maps?q=${location?.lat},${location?.lng}`)}`} 
                                    target="_blank"
                                    rel="noopener noreferrer"
                                    className="btn flex-1" style={{ backgroundColor: '#25D366', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.8rem' }}>
@@ -338,7 +344,7 @@ export default function ScanPage() {
 
         {/* Footer */}
         <div className="text-center" style={{ padding: '2rem 0 1rem', opacity: 0.4, fontSize: '0.75rem' }}>
-          SafeID v2.0 · Professional Emergency Response · SENIOR PROTECTED
+          SafeID v2.0 · (BUILD: ULTRA V2) · SENIOR PROTECTED
         </div>
       </div>
     </div>

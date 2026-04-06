@@ -543,8 +543,15 @@ async def upload_incident_photo(
     print(f"\n📡 FINAL SOS TEMPLATE:\n{sos_message}\n")
 
     # 6. MOCK BROADCAST (Strict Manual Mode)
-    results = [{"contact": c.name, "method": "whatsapp", "status": "manual", "to": c.phone} for c in contacts]
-
+   # 6. ACTUAL WHATSAPP/SMS BROADCAST
+    try:
+        print("📡 TRIGGERING ACTUAL WHATSAPP/SMS BROADCAST...")
+        # This calls YOUR actual Twilio/Messaging service from alert_service.py
+        results = send_alerts_to_contacts(contacts, sos_message)
+        print("✅ BROADCAST COMPLETE!")
+    except Exception as e:
+        print(f"❌ BROADCAST FAILED: {str(e)}")
+        results = [{"error": str(e), "status": "failed"}]
     # 7. Log the Alert
     contact_list = [{"name": c.name, "phone": c.phone} for c in contacts]
     alert_log = AlertLog(
