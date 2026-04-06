@@ -21,12 +21,15 @@ export default function ConfirmSlider({ onConfirm, label = 'Slide to confirm' })
     if (!isDragging || confirmed) return;
 
     const handleMove = (e) => {
+      // --- SENIOR ENGINEER TOUCH LOCK ---
+      if (e.cancelable) e.preventDefault();
+      
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const p = calculateProgress(clientX);
       setProgress(p);
 
-      // Trigger SUCCESS at 85% for better UX on mobile
-      if (p >= 0.85) {
+      // Trigger SUCCESS at 65% for emergency ease on mobile
+      if (p >= 0.65) {
         setConfirmed(true);
         setIsDragging(false);
         setProgress(1);
