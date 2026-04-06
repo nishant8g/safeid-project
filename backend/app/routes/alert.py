@@ -525,19 +525,15 @@ async def upload_incident_photo(
     # 5. Generate Universal SOS Message
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
     
-    # FIX 2: Standard Google Maps format (https://www.google.com/maps?q=lat,lng)
+    # SENIOR FIX: Optimize for WhatsApp Link Preview
     sos_message = (
-        f"🚨 *VISUAL VERIFICATION ALERT* 🚨\n\n"
+        f"🚨 *SAFEID EMERGENCY ALERT* 🚨\n\n"
         f"I have found your relative *{user.full_name}* at an accident scene.\n\n"
-        f"📸 *VIEW INCIDENT PHOTO:*\n"
-        f"{media_url if media_url else '⚠️ Photo capture failed (' + upload_error + ')'}\n\n"
-        f"🏥 *MEDICAL INFO:*\n"
-        f"• Blood: {med.blood_group if med else 'Unknown'}\n"
-        f"• Allergies: {med.allergies if med and med.allergies else 'None Recorded'}\n\n"
-        f"📍 *ACCIDENT LOCATION:*\n"
-        f"{address if address else 'Coordinates: ' + str(latitude) + ',' + str(longitude)}\n"
-        f"🔗 Google Maps Pin: https://www.google.com/maps?q={latitude},{longitude}\n\n"
-        f"🆔 *FULL PROFILE:* {settings.BASE_URL}/scan/{user_id}\n"
+        f"📸 *INCIDENT PHOTO:* {media_url if media_url else 'Pending/Failed'}\n\n"
+        f"🏥 *MEDICAL INFO:* {med.blood_group if med else 'Unknown'}\n"
+        f"• Allergies: {med.allergies if med and med.allergies else 'None'}\n\n"
+        f"📍 *LOCATION:* https://www.google.com/maps?q={latitude},{longitude}\n\n"
+        f"🆔 *PROFILE:* {settings.BASE_URL}/scan/{user_id}\n"
     )
 
     print(f"\n📡 FINAL SOS TEMPLATE:\n{sos_message}\n")
