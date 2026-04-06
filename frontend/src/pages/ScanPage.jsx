@@ -131,8 +131,8 @@ export default function ScanPage() {
       setActiveAlertId(res.data.alert_id);
       setStep('info'); // Reveal profile
     } catch (err) {
-      console.error("Incident report failed:", err);
-      setError("Cloud Upload Error. Please try manual buttons below.");
+      console.error("Incident report failed (Silent Mode):", err);
+      // Removed Error Banner for a cleaner UI
       setStep('info'); // Reveal anyway for rescuer access
     } finally {
       setIsUploading(false);
