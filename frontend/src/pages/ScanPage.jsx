@@ -306,23 +306,30 @@ export default function ScanPage() {
             {!isConfirmed ? (
                 <div className="glass-card" style={{ padding: '1.5rem', border: '2px solid rgba(239, 68, 68, 0.4)', textAlign: 'center' }}>
                    <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-                      Tap the button below to instantly broadcast the emergency alert and see family contacts.
+                      {isUploading ? 'Please wait while we secure the incident photo...' : 'Tap the button below to instantly broadcast the emergency alert.'}
                    </p>
                    <button 
                       onClick={() => {
+                        if (isUploading) return;
                         console.log("SOS TRIGGERED - DIRECT BUTTON");
                         setIsConfirmed(true);
                         setTimeout(() => window.scrollTo({ top: 9999, behavior: 'smooth' }), 100);
                       }}
-                      className="btn btn-danger btn-lg w-full animate-pulse"
+                      disabled={isUploading}
+                      className={`btn ${isUploading ? 'btn-disabled' : 'btn-danger'} btn-lg w-full ${!isUploading && 'animate-pulse'}`}
                       style={{ 
                         padding: '1.25rem', 
                         fontSize: '1.25rem', 
                         fontWeight: '800',
-                        boxShadow: '0 0 30px rgba(220, 38, 38, 0.4)'
+                        boxShadow: isUploading ? 'none' : '0 0 30px rgba(220, 38, 38, 0.4)',
+                        opacity: isUploading ? 0.7 : 1
                       }}
                    >
-                      🚨 NOTIFY FAMILY NOW
+                      {isUploading ? (
+                        <><span className="spinner-small"></span> 📸 PROCESSING PHOTO...</>
+                      ) : (
+                        '🚨 NOTIFY FAMILY NOW'
+                      )}
                    </button>
                 </div>
             ) : (
