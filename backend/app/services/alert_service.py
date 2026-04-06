@@ -11,6 +11,20 @@ from ..config import settings
 logger = logging.getLogger(__name__)
 
 
+def normalize_phone(phone: str) -> str:
+    """Normalize a phone number to E.164 format for Twilio."""
+    clean_phone = phone.strip().replace(" ", "").replace("-", "").replace("(", "").replace(")", "")
+    
+    # If it's a 10-digit number without a +, assume +91 (India) as a default smart guess
+    if not clean_phone.startswith("+"):
+        if len(clean_phone) == 10:
+            return f"+91{clean_phone}"
+        # If it's longer but no +, just prepend +
+        return f"+{clean_phone}"
+    
+    return clean_phone
+
+
 def get_twilio_client() -> Optional[Client]:
     """Create a Twilio client. Returns None if credentials not set."""
     if settings.TWILIO_ACCOUNT_SID and settings.TWILIO_AUTH_TOKEN:
@@ -22,68 +36,15 @@ def get_twilio_client() -> Optional[Client]:
 
 
 def send_sms(to_phone: str, message: str, media_url: Optional[str] = None) -> dict:
-    """
-    Send an SMS via Twilio.
-    Falls back to console logging if Twilio is not configured.
-    """
-    client = get_twilio_client()
-
-    if client:
-        try:
-            msg_params = {
-                "body": message,
-                "from_": settings.TWILIO_PHONE_NUMBER,
-                "to": to_phone,
-            }
-            if media_url:
-                msg_params["media_url"] = [f"{settings.BASE_URL}{media_url}" if media_url.startswith("/") else media_url]
-
-            msg = client.messages.create(**msg_params)
-            logger.info(f"SMS sent to {to_phone}: SID={msg.sid}")
-            return {"status": "sent", "sid": msg.sid, "to": to_phone}
-        except TwilioRestException as e:
-            logger.error(f"Twilio SMS failed to {to_phone}: {e}")
-            return {"status": "failed", "error": str(e), "to": to_phone}
-    else:
-        # Mock mode — log to console
-        logger.warning(f"[MOCK SMS] To: {to_phone}")
-        logger.warning(f"[MOCK SMS] Message: {message}")
-        print(f"\n{'='*60}")
-        print(f"📱 MOCK SMS → {to_phone}")
-        print(f"📝 {message}")
-        print(f"{'='*60}\n")
-        return {"status": "mock", "to": to_phone}
+    """Manual-Only Override: Skips Twilio and forces manual action on frontend."""
+    to_phone = normalize_phone(to_phone)
+    return {"status": "manual", "to": to_phone, "reason": "System set to Manual Mode"}
 
 
 def send_whatsapp(to_phone: str, message: str, media_url: Optional[str] = None) -> dict:
-    """Send a WhatsApp message via Twilio."""
-    client = get_twilio_client()
-
-    if client and settings.TWILIO_WHATSAPP_FROM:
-        try:
-            # Ensure the to number has whatsapp: prefix
-            wa_to = to_phone if to_phone.startswith("whatsapp:") else f"whatsapp:{to_phone}"
-            
-            msg_params = {
-                "body": message,
-                "from_": settings.TWILIO_WHATSAPP_FROM,
-                "to": wa_to,
-            }
-            if media_url:
-                msg_params["media_url"] = [f"{settings.BASE_URL}{media_url}" if media_url.startswith("/") else media_url]
-
-            msg = client.messages.create(**msg_params)
-            logger.info(f"WhatsApp sent to {to_phone}: SID={msg.sid}")
-            return {"status": "sent", "sid": msg.sid, "to": to_phone}
-        except TwilioRestException as e:
-            logger.error(f"Twilio WhatsApp failed to {to_phone}: {e}")
-            return {"status": "failed", "error": str(e), "to": to_phone}
-    else:
-        print(f"\n{'='*60}")
-        print(f"💬 MOCK WHATSAPP → {to_phone}")
-        print(f"📝 {message}")
-        print(f"{'='*60}\n")
-        return {"status": "mock", "to": to_phone}
+    """Manual-Only Override: Skips Twilio and forces manual action on frontend."""
+    to_phone = normalize_phone(to_phone)
+    return {"status": "manual", "to": to_phone, "reason": "System set to Manual Mode"}
 
 
 def make_emergency_call(to_phone: str, message: str) -> dict:

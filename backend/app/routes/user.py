@@ -163,24 +163,24 @@ async def get_analytics(
 ):
     """Get scan metrics and alert history for the current user."""
     # User-only logic here
-    from ..models.analytics import QRScan, QRCode
-    from ..models.alert import Alert
+    from ..models.analytics import ScanLog
+    from ..models.alert import AlertLog
     
-    total_scans = db.query(QRScan).join(QRCode).filter(QRCode.user_id == current_user.id).count()
+    total_scans = db.query(ScanLog).filter(ScanLog.user_id == current_user.id).count()
     
     # scan history
-    from datetime import datetime, timedelta
-    seven_days_ago = datetime.utcnow() - timedelta(days=7)
-    scans = db.query(QRScan).join(QRCode).filter(
-        QRCode.user_id == current_user.id,
-        QRScan.scanned_at >= seven_days_ago
+    from datetime import datetime, timedelta, timezone
+    seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+    scans = db.query(ScanLog).filter(
+        ScanLog.user_id == current_user.id,
+        ScanLog.created_at >= seven_days_ago
     ).all()
     
     # locations
-    alerts = db.query(Alert).filter(Alert.user_id == current_user.id).order_by(Alert.timestamp.desc()).all()
+    alerts = db.query(AlertLog).filter(AlertLog.user_id == current_user.id).order_by(AlertLog.created_at.desc()).all()
     
     return {
         "total_scans": total_scans,
-        "scan_history": [], # placeholder for chart
-        "alert_locations": [{"lat": a.latitude, "lng": a.longitude, "date": str(a.timestamp)} for a in alerts if a.latitude]
+        "scan_history": [s.id for s in scans], # simplified history list
+        "alert_locations": [{"lat": a.latitude, "lng": a.longitude, "date": str(a.created_at)} for a in alerts if a.latitude]
     }

@@ -68,6 +68,15 @@ export default function Register() {
           {error && (
             <div className="alert alert-error" style={{ marginBottom: '2rem', textAlign: 'left', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', backdropFilter: 'blur(10px)' }}>
               ⚠️ {error}
+              <input
+                type="tel"
+                className="form-control"
+                placeholder="+919876543210 (Required)"
+                pattern="^\+[0-9]{10,15}$"
+                onInvalid={(e) => e.target.setCustomValidity('Please include + and country code (e.g. +91...)')}
+                onInput={(e) => e.target.setCustomValidity('')}
+                required
+              />
             </div>
           )}
 
