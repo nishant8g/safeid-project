@@ -39,7 +39,7 @@ export default function ScanPage() {
   const [error, setError] = useState('');
 
   // Alert flow state
-  const [step, setStep] = useState('info'); // info → confirm → sending → sent
+  const [step, setStep] = useState('request-location'); // request-location → request-photo → processing → info (revealed)
   const [location, setLocation] = useState(null);
   const [locationError, setLocationError] = useState('');
   const [alertResult, setAlertResult] = useState(null);
@@ -78,7 +78,7 @@ export default function ScanPage() {
   const requestLocation = (silent = false) => {
     if (!navigator.geolocation) {
       setLocationError('Location not supported on this device');
-      if (!silent) setStep('confirm');
+      if (!silent) setStep('request-photo');
       return;
     }
 
@@ -86,15 +86,20 @@ export default function ScanPage() {
     navigator.geolocation.watchPosition(
       (pos) => {
         setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-        if (!silent && step === 'info') setStep('confirm');
+        if (!silent && step === 'request-location') setStep('request-photo');
       },
       (err) => {
         console.warn('Location error:', err);
-        setLocationError('Location access denied. Alert will be sent without location.');
-        if (!silent) setStep('confirm');
+        setLocationError('Location access denied.');
+        // We don't auto-skip on error unless it's a silent load check
+        if (!silent && step === 'request-location') setStep('request-photo');
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
+  };
+
+  const handleSkipLocation = () => {
+    setStep('request-photo');
   };
 
   // Heartbeat Effect: Push live coordinates to backend if an alert is active
@@ -126,11 +131,12 @@ export default function ScanPage() {
     }
   };
 
-  // Handle Photo Submission (Feature 3)
+  // Handle Photo Submission (Bug 1: Mandatory Step)
   const handlePhotoCapture = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    setStep('processing'); // Lock UI while cloud upload happens
     setIsUploading(true);
     const formData = new FormData();
     formData.append('user_id', userId);
@@ -142,9 +148,10 @@ export default function ScanPage() {
       const res = await alertAPI.reportIncident(formData);
       setAlertResult(res.data);
       setActiveAlertId(res.data.alert_id); // Enable live heartbeat
-      setStep('sent');
+      setStep('info'); // REVEAL MEDICAL PROFILE
     } catch (err) {
-      setError('Failed to upload incident photo. SOS alert still possible below.');
+      setError('Photo upload failed, but SOS was sent. Emergency profile unlocked.');
+      setStep('info'); // Reveal profile anyway as failsafe
     } finally {
       setIsUploading(false);
     }
@@ -177,112 +184,82 @@ export default function ScanPage() {
     handleEmergencyClick();
   };
 
-  // ──── LOADING ────
-  if (loading) {
+  // ──── STAGE 1: LOCATION LOCK (SKIPABLE) ────
+  if (step === 'request-location') {
     return (
       <div className="scan-page">
-        <div className="loading-overlay" style={{ minHeight: '100vh' }}>
-          <div className="spinner"></div>
-          <p>Loading emergency data...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // ──── BUG 1: DEACTIVATED UI ────
-  if (isDeactivated) {
-    return (
-      <div className="scan-page">
-        <div className="loading-overlay" style={{ minHeight: '100vh' }}>
-          <div style={{ fontSize: '4rem' }}>🔒</div>
-          <h2>SafeID Deactivated</h2>
-          <p className="text-muted" style={{ maxWidth: '400px', textAlign: 'center' }}>
-            This SafeID is currently in "Privacy Mode" or has been disabled by its owner. No medical information is available.
+        <div className="loading-overlay" style={{ minHeight: '100vh', padding: '2rem' }}>
+          <div style={{ fontSize: '4rem' }}>📍</div>
+          <h2>Live Tracking Request</h2>
+          <p className="text-muted" style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            We need your location to alert the family of the exact accident spot.
           </p>
-          <div className="flex" style={{ gap: '1rem', marginTop: '1.5rem' }}>
-            <a href="tel:112" className="btn btn-danger btn-lg">📞 Call 112</a>
+          <div className="flex flex-col w-full" style={{ gap: '1rem', maxWidth: '300px' }}>
+            <button className="btn btn-primary btn-lg w-full" onClick={() => requestLocation(false)}>
+              Allow Live Tracking
+            </button>
+            <button className="btn btn-ghost w-full" onClick={handleSkipLocation}>
+              Skip (Use Static Location)
+            </button>
           </div>
         </div>
       </div>
     );
   }
 
-  // ──── ERROR ────
-  if (error && !userData) {
+  // ──── STAGE 2: PHOTO LOCK (MANDATORY) ────
+  if (step === 'request-photo') {
+    return (
+      <div className="scan-page">
+        <div className="loading-overlay" style={{ minHeight: '100vh', padding: '2rem' }}>
+          <div style={{ fontSize: '4rem' }}>📸</div>
+          <h2>Accident Evidence</h2>
+          <p className="text-muted" style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <strong>Mandatory:</strong> Please take a live photo of the accident scene to help the family understand the situation.
+          </p>
+          <label className="btn btn-danger btn-lg w-full" style={{ maxWidth: '300px', cursor: 'pointer' }}>
+            📷 Capture & Unlock Profile
+            <input 
+              type="file" 
+              accept="image/*" 
+              capture="camera" 
+              onChange={handlePhotoCapture}
+              style={{ display: 'none' }}
+            />
+          </label>
+        </div>
+      </div>
+    );
+  }
+
+  // ──── STAGE 3: PROCESSING (MMS / CLOUD UPLOAD) ────
+  if (step === 'processing' || isUploading) {
     return (
       <div className="scan-page">
         <div className="loading-overlay" style={{ minHeight: '100vh' }}>
-          <div style={{ fontSize: '4rem' }}>⚠️</div>
-          <h2>SafeID Error</h2>
-          <p className="text-muted" style={{ maxWidth: '400px', textAlign: 'center' }}>{error}</p>
-          <a href="tel:112" className="btn btn-danger btn-lg" style={{ marginTop: '1rem' }}>
-            📞 Call Emergency Services (112)
-          </a>
+          <div className="spinner" style={{ borderTopColor: 'var(--accent-red)' }}></div>
+          <h2>Uploading Report...</h2>
+          <p className="text-muted">Contacting family via Cloud SMS & WhatsApp</p>
         </div>
       </div>
     );
   }
 
-  // ──── SENT (PREPARED FOR NATIVE PUSH) ────
-  if (step === 'sent') {
-    return (
-      <div className="scan-page">
-        <div className="success-page" style={{ flexDirection: 'column', padding: '2rem' }}>
-          <div className="success-icon animate-scale-in" style={{ backgroundColor: '#f59e0b' }}>📱</div>
-          <h2 style={{ marginBottom: '0.5rem' }}>Alert Generated!</h2>
-          <p className="text-muted" style={{ marginBottom: '1.5rem', maxWidth: '400px', textAlign: 'center' }}>
-            Tap the buttons below to instantly send the emergency message from your own phone.
-          </p>
-
-          <div className="glass-card" style={{ width: '100%', maxWidth: '500px', marginBottom: '1.5rem', textAlign: 'left' }}>
-            <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem', color: 'white' }}>Send Emergency Alerts</h3>
-            
-            {alertResult?.contacts_list?.map((contact, idx) => {
-              // Clean phone number for URI
-              const cleanPhone = contact.phone.replace(/[^0-9+]/g, '');
-              const waPhone = contact.phone.replace(/[^0-9]/g, '');
-              const encodedMsg = encodeURIComponent(alertResult.sos_message);
-
-              return (
-                <div key={idx} style={{ marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                  <p style={{ margin: '0 0 0.5rem 0', fontWeight: 'bold' }}>To: {contact.name} ({contact.phone})</p>
-                  <div className="flex" style={{ gap: '0.5rem' }}>
-                    <a href={`https://wa.me/${waPhone}?text=${encodedMsg}`} 
-                       target="_blank" rel="noopener noreferrer" 
-                       className="btn flex-1" style={{ backgroundColor: '#25D366', color: 'white', border: 'none' }}>
-                      💬 WhatsApp
-                    </a>
-                    <a href={`sms:${cleanPhone}?body=${encodedMsg}`} 
-                       className="btn flex-1" style={{ backgroundColor: '#3b82f6', color: 'white', border: 'none' }}>
-                      ✉️ SMS
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="flex" style={{ gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <a href="tel:112" className="btn btn-danger btn-lg">
-              📞 Call 112 (Emergency)
-            </a>
-            <a href="tel:108" className="btn btn-ghost btn-lg">
-              🚑 Call 108 (Ambulance)
-            </a>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ──── MAIN VIEW ────
+  // ──── MAIN VIEW (REVEALED ONLY AFTER DATA CAPTURE) ────
   return (
     <div className="scan-page">
       <div style={{ maxWidth: '500px', margin: '0 auto', padding: '0 1rem', position: 'relative', zIndex: 1 }}>
 
+        {/* Success Banner if alert was just sent */}
+        {alertResult && (
+          <div className="alert alert-success animate-bounce-in" style={{ marginTop: '1rem', border: '2px solid var(--accent-green)' }}>
+            ✅ <strong>Alert Broadcasted!</strong> Family has been notified with your photo and location.
+          </div>
+        )}
+
         {/* Header */}
         <div className="scan-header">
-          <div className="safeid-badge">🛡️ SafeID Emergency</div>
+          <div className="safeid-badge">🛡️ SafeID Emergency Profile</div>
           <h1 style={{ fontSize: '1.8rem', marginBottom: '0.25rem' }}>
             {userData.full_name}
           </h1>
@@ -292,7 +269,8 @@ export default function ScanPage() {
         {error && <div className="alert alert-error">{error}</div>}
 
         {/* Medical Info */}
-        <div className="glass-card emergency animate-slide-up" style={{ marginBottom: '1rem' }}>
+        <div className="glass-card emergency animate-slide-up">
+           {/* ... existing medical grid content ... */}
           <div className="medical-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
             <div className="medical-item highlight">
               <div className="item-label">🩸 {t.blood}</div>
@@ -325,7 +303,7 @@ export default function ScanPage() {
               </div>
             </div>
           )}
-
+          
           {userData.medications && (
             <div className="medical-item" style={{ marginTop: '0.75rem' }}>
               <div className="item-label">💊 {t.medications}</div>
@@ -345,108 +323,31 @@ export default function ScanPage() {
           )}
         </div>
 
-        {/* Action Area */}
-        {step === 'info' && (
-          <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            {/* Emergency Button */}
-            <button
-              className="emergency-btn pulsing"
-              onClick={handleEmergencyClick}
-              id="notify-family-btn"
-            >
-              🚨 {t.notify}
-            </button>
-
-            {/* Voice Input */}
-            <div style={{ marginTop: '1.5rem' }}>
-              <VoiceInput
-                onTranscript={setVoiceTranscript}
-                onTriggerWord={handleVoiceTrigger}
-              />
+        {/* Final Emergency Actions */}
+        <div className="animate-slide-up" style={{ marginTop: '2rem' }}>
+            <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Manual Notification Fallback</h3>
+            {/* If Cloud SMS failed, let the rescuer push manually via Native URI */}
+            <div className="glass-card" style={{ padding: '1rem' }}>
+                 <p className="text-muted" style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>
+                    Press below to trigger <strong>Native Messaging</strong> if the cloud alert was delayed.
+                 </p>
+                 <div className="flex flex-col" style={{ gap: '0.75rem' }}>
+                    {alertResult?.contacts_list?.map((contact, idx) => (
+                         <div key={idx} className="flex" style={{ gap: '0.5rem' }}>
+                            <a href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(alertResult.sos_message)}`} 
+                               className="btn flex-1" style={{ backgroundColor: '#25D366' }}>WhatsApp {contact.name}</a>
+                            <a href={`sms:${contact.phone}?body=${encodeURIComponent(alertResult.sos_message)}`} 
+                               className="btn flex-1" style={{ backgroundColor: '#3b82f6' }}>Direct SMS</a>
+                         </div>
+                    ))}
+                 </div>
             </div>
 
-            {/* Feature 3: Accident Photo Payload */}
-            <div className="glass-card" style={{ marginTop: '2rem', border: '1px dashed var(--accent-red)' }}>
-              <p style={{ fontSize: '0.85rem', marginBottom: '1rem', color: '#fca5a5' }}>
-                📸 <strong>Live Accident Photo</strong><br/>
-                If you are a responder, take a live photo of the incident to help the family understand the situation.
-              </p>
-              <label className="btn btn-danger flex items-center justify-center" style={{ gap: '0.5rem', cursor: 'pointer' }}>
-                {isUploading ? '📤 Uploading...' : '📷 Capture & Send Photo'}
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  capture="camera" 
-                  onChange={handlePhotoCapture}
-                  disabled={isUploading}
-                  style={{ display: 'none' }}
-                />
-              </label>
+            <div className="flex" style={{ gap: '0.75rem', marginTop: '1.5rem', justifyContent: 'center' }}>
+                <a href="tel:112" className="btn btn-danger btn-lg">📞 Call 112</a>
+                <a href="tel:108" className="btn btn-ghost btn-lg">🚑 Call 108</a>
             </div>
-
-            {/* Direct call */}
-            <div className="flex" style={{
-              gap: '0.75rem', marginTop: '1.5rem',
-              justifyContent: 'center', flexWrap: 'wrap',
-            }}>
-              <a href="tel:112" className="btn btn-ghost">📞 Call 112</a>
-              <a href="tel:108" className="btn btn-ghost">🚑 Call 108</a>
-            </div>
-
-            {/* SMS Fallback */}
-            {userData.sms_fallback_code && (
-              <div className="qr-fallback" style={{ marginTop: '1.5rem' }}>
-                <div className="fallback-label">📵 No Internet? SMS Fallback</div>
-                <div className="fallback-code">{userData.sms_fallback_code}</div>
-                <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                  Text this code to emergency services
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Confirmation Step */}
-        {step === 'confirm' && (
-          <div className="animate-slide-up">
-            {locationError && (
-              <div className="alert alert-warning" style={{ marginBottom: '1rem' }}>
-                📍 {locationError}
-              </div>
-            )}
-            {location && (
-              <div className="alert alert-success" style={{ marginBottom: '1rem' }}>
-                📍 Location captured successfully
-              </div>
-            )}
-
-            <div className="glass-card" style={{ marginBottom: '1rem', textAlign: 'center' }}>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-                ⚠️ This will send emergency alerts to {userData.full_name}'s family.
-                <br />Slide to confirm this is a real emergency.
-              </p>
-              <ConfirmSlider
-                onConfirm={handleConfirm}
-                label="Slide to send alert"
-              />
-            </div>
-
-            <button className="btn btn-ghost btn-full" onClick={() => setStep('info')}>
-              ← Go Back
-            </button>
-          </div>
-        )}
-
-        {/* Sending */}
-        {step === 'sending' && (
-          <div className="loading-overlay animate-fade-in" style={{ minHeight: '200px' }}>
-            <div className="spinner" style={{ borderTopColor: 'var(--accent-red)' }}></div>
-            <p>Sending emergency alerts...</p>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              Contacting family via SMS & WhatsApp
-            </p>
-          </div>
-        )}
+        </div>
 
         {/* Footer */}
         <div className="text-center" style={{ padding: '2rem 0 1rem', opacity: 0.4, fontSize: '0.75rem' }}>

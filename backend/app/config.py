@@ -53,6 +53,9 @@ class Settings(BaseSettings):
     # What3Words
     WHAT3WORDS_API_KEY: str = ""
 
+    # ImgBB Cloud Storage
+    IMGBB_API_KEY: str = ""
+
     # CORS — allow both localhost and LAN access
     FRONTEND_URL: str = f"http://{LAN_IP}:3000"
 

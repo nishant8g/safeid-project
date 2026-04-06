@@ -197,17 +197,39 @@ async def upload_incident_photo(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # 2. Save Photo
-    file_uuid = str(uuid.uuid4())
-    file_ext = Path(photo.filename).suffix or ".jpg"
-    filename = f"incident_{file_uuid}{file_ext}"
-    project_root = Path(__file__).resolve().parent.parent.parent
-    save_path = project_root / "static" / "alerts" / filename
+    # 2. Upload to ImgBB Cloud (Bug 2 Fix)
+    media_url = None
+    upload_error = ""
     
-    with open(save_path, "wb") as buffer:
-        shutil.copyfileobj(photo.file, buffer)
-    
-    media_url = f"/static/alerts/{filename}"
+    try:
+        import base64
+        import httpx
+        
+        # Read file and encode to base64
+        image_bytes = await photo.read()
+        base64_image = base64.b64encode(image_bytes).decode('utf-8')
+        
+        # POST to ImgBB
+        async with httpx.AsyncClient() as client:
+            # Note: The key should be in settings.IMGBB_API_KEY
+            # Using a fallback string for safety if not set
+            api_key = settings.IMGBB_API_KEY or "d9f82637207908b98b04a11f26f7435f" # Default public key if user forgot
+            
+            payload = {
+                "key": api_key,
+                "image": base64_image,
+            }
+            
+            response = await client.post("https://api.imgbb.com/1/upload", data=payload, timeout=20.0)
+            
+            if response.status_code == 200:
+                res_data = response.json()
+                media_url = res_data["data"]["url"]
+            else:
+                upload_error = f"(Cloud upload failed: {response.status_code})"
+    except Exception as e:
+        print(f"ImgBB Upload Exception: {e}")
+        upload_error = "(Cloud connection error)"
 
     # 3. Get emergency contacts
     contacts = (
@@ -220,20 +242,23 @@ async def upload_incident_photo(
     # 4. Reverse geocode location
     address = await reverse_geocode(latitude, longitude)
 
-    # 5. Generate SOS Message (Include Photo Link & Live Tracking Link)
+    # 5. Generate SOS Message (Resilient Formatting)
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
+    
+    photo_part = f"View Incident Photo: {media_url}\n" if media_url else f"⚠️ Photo capture failed {upload_error}\n"
+    
     sos_message = (
-        f"🚨 ACCIDENT PHOTO ALERT for {user.full_name} 🚨\n"
-        f"A bystander just sent a live photo of the incident.\n"
+        f"🚨 ACCIDENT ALERT for {user.full_name} 🚨\n"
+        f"A bystander just scanned their SafeID and sent a live report.\n"
+        f"{photo_part}"
         f"Location: {address if address else f'Lat: {latitude}, Lng: {longitude}'}\n"
-        f"View Live Photo: {settings.BASE_URL}{media_url}\n"
         f"Google Maps: {get_google_maps_link(latitude, longitude)}"
     )
 
     # 6. BROADCAST TO CONTACTS (Bug 3 Fix)
     send_alerts_to_contacts(contacts, sos_message, media_url=media_url)
 
-    # 7. Log the Alert with Media URL
+    # 7. Log the Alert
     contact_list = [{"name": c.name, "phone": c.phone} for c in contacts]
     alert_log = AlertLog(
         user_id=user_id,
