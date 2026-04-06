@@ -72,6 +72,11 @@ qr_dir = Path(__file__).resolve().parent.parent / "qr" / "generated"
 qr_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/static/qr", StaticFiles(directory=str(qr_dir)), name="qr_images")
 
+# Mount accident photos as static files
+alert_dir = Path(__file__).resolve().parent.parent / "static" / "alerts"
+alert_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/static/alerts", StaticFiles(directory=str(alert_dir)), name="alert_images")
+
 # Include routers
 app.include_router(auth.router)
 app.include_router(user.router)

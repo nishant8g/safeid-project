@@ -78,10 +78,41 @@ export default function Dashboard() {
           <div className="stat-value">{contacts.length}</div>
           <div className="stat-label">Emergency Contacts</div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card" style={{ position: 'relative' }}>
           <div className="stat-icon">📱</div>
-          <div className="stat-value">{qrInfo?.has_qr ? '✅' : '❌'}</div>
-          <div className="stat-label">QR Code</div>
+          <div className="stat-value" 
+               onClick={async () => {
+                 try {
+                   const res = await qrAPI.toggle();
+                   setQrInfo(prev => ({ ...prev, is_active: res.data.is_active }));
+                 } catch (err) {
+                   console.error('Toggle failed:', err);
+                 }
+               }}
+               style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          >
+            {qrInfo?.is_active ? '✅ ON' : '❌ OFF'}
+            <div className={`toggle-pill ${qrInfo?.is_active ? 'active' : ''}`} style={{ 
+              width: '40px', 
+              height: '20px', 
+              background: qrInfo?.is_active ? 'var(--accent-emerald)' : '#4b5563', 
+              borderRadius: '20px',
+              position: 'relative',
+              transition: 'all 0.3s'
+            }}>
+              <div style={{ 
+                width: '16px', 
+                height: '16px', 
+                background: 'white', 
+                borderRadius: '50%', 
+                position: 'absolute', 
+                top: '2px', 
+                left: qrInfo?.is_active ? '22px' : '2px',
+                transition: 'all 0.3s'
+              }} />
+            </div>
+          </div>
+          <div className="stat-label">QR Privacy {qrInfo?.is_active ? '(Enabled)' : '(Disabled)'}</div>
         </div>
       </div>
 

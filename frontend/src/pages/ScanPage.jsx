@@ -44,10 +44,13 @@ export default function ScanPage() {
   const [locationError, setLocationError] = useState('');
   const [alertResult, setAlertResult] = useState(null);
   const [voiceTranscript, setVoiceTranscript] = useState('');
+  const [photo, setPhoto] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Load user data
   useEffect(() => {
     loadScanData();
+    requestLocation(true); // Silent request on load
   }, [userId]);
 
   const loadScanData = async () => {
@@ -66,30 +69,58 @@ export default function ScanPage() {
   };
 
   // Request GPS
-  const requestLocation = () => {
+  const requestLocation = (silent = false) => {
     if (!navigator.geolocation) {
       setLocationError('Location not supported on this device');
-      setStep('confirm');
+      if (!silent) setStep('confirm');
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-        setStep('confirm');
+        if (!silent) setStep('confirm');
       },
       (err) => {
         console.warn('Location error:', err);
         setLocationError('Location access denied. Alert will be sent without location.');
-        setStep('confirm');
+        if (!silent) setStep('confirm');
       },
-      { enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
   // Handle emergency button click
   const handleEmergencyClick = () => {
-    requestLocation();
+    // If we don't have location yet, try one more time
+    if (!location) {
+      requestLocation();
+    } else {
+      setStep('confirm');
+    }
+  };
+
+  // Handle Photo Submission (Feature 3)
+  const handlePhotoCapture = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append('user_id', userId);
+    formData.append('latitude', location?.lat || 0);
+    formData.append('longitude', location?.lng || 0);
+    formData.append('photo', file);
+
+    try {
+      const res = await alertAPI.reportIncident(formData);
+      setAlertResult(res.data);
+      setStep('sent');
+    } catch (err) {
+      setError('Failed to upload incident photo. SOS alert still possible below.');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   // Handle slider confirmation
@@ -286,6 +317,25 @@ export default function ScanPage() {
                 onTranscript={setVoiceTranscript}
                 onTriggerWord={handleVoiceTrigger}
               />
+            </div>
+
+            {/* Feature 3: Accident Photo Payload */}
+            <div className="glass-card" style={{ marginTop: '2rem', border: '1px dashed var(--accent-red)' }}>
+              <p style={{ fontSize: '0.85rem', marginBottom: '1rem', color: '#fca5a5' }}>
+                📸 <strong>Live Accident Photo</strong><br/>
+                If you are a responder, take a live photo of the incident to help the family understand the situation.
+              </p>
+              <label className="btn btn-danger flex items-center justify-center" style={{ gap: '0.5rem', cursor: 'pointer' }}>
+                {isUploading ? '📤 Uploading...' : '📷 Capture & Send Photo'}
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  capture="camera" 
+                  onChange={handlePhotoCapture}
+                  disabled={isUploading}
+                  style={{ display: 'none' }}
+                />
+              </label>
             </div>
 
             {/* Direct call */}

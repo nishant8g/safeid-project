@@ -66,6 +66,7 @@ export const userAPI = {
 export const qrAPI = {
   generate: () => api.post(`/qr/generate?frontend_url=${encodeURIComponent(window.location.origin)}`),
   getInfo: () => api.get('/qr/info'),
+  toggle: () => api.patch('/qr/toggle'),
   getImageUrl: (userId) => `${API_BASE}/qr/image/${userId}`,
 };
 
@@ -77,6 +78,9 @@ export const scanAPI = {
 // ──── Alert (Public) ────
 export const alertAPI = {
   trigger: (data) => api.post('/alert/trigger', data),
+  reportIncident: (formData) => api.post('/alert/incident', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
   getHistory: (userId) => api.get(`/alert/history?user_id=${userId}`),
 };
 

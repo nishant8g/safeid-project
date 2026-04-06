@@ -66,6 +66,21 @@ def get_qr_image(user_id: str):
     )
 
 
+@router.patch("/toggle")
+def toggle_qr(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Toggle the active status of the user's QR code."""
+    qr = db.query(QRCodeRecord).filter(QRCodeRecord.user_id == current_user.id).first()
+    if not qr:
+        raise HTTPException(status_code=404, detail="QR code not found")
+
+    qr.is_active = not qr.is_active
+    db.commit()
+    return {"status": "success", "is_active": qr.is_active}
+
+
 @router.get("/info")
 def get_qr_info(
     current_user: User = Depends(get_current_user),

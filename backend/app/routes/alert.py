@@ -136,11 +136,12 @@
 
 
 
-"""Alert trigger route — sends SOS to emergency contacts."""
-
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Form
 from sqlalchemy.orm import Session
 from typing import Optional
+import uuid
+import shutil
+from pathlib import Path
 
 from ..database import get_db
 from ..models.user import User
@@ -153,6 +154,83 @@ from ..services.ai_service import generate_sos_message
 from ..services.location_service import reverse_geocode, get_google_maps_link
 
 router = APIRouter(prefix="/alert", tags=["Emergency Alerts"])
+
+
+@router.post("/incident", response_model=AlertResponse)
+async def upload_incident_photo(
+    user_id: str = Form(...),
+    latitude: float = Form(...),
+    longitude: float = Form(...),
+    photo: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    """
+    PUBLIC endpoint — Receive a live accident photo and location payload.
+    Forces camera capture on frontend and sends to backend contacts.
+    """
+    # 1. Get user
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # 2. Save Photo
+    file_uuid = str(uuid.uuid4())
+    file_ext = Path(photo.filename).suffix or ".jpg"
+    filename = f"incident_{file_uuid}{file_ext}"
+    project_root = Path(__file__).resolve().parent.parent.parent
+    save_path = project_root / "static" / "alerts" / filename
+    
+    with open(save_path, "wb") as buffer:
+        shutil.copyfileobj(photo.file, buffer)
+    
+    media_url = f"/static/alerts/{filename}"
+
+    # 3. Get emergency contacts
+    contacts = (
+        db.query(EmergencyContact)
+        .filter(EmergencyContact.user_id == user_id)
+        .order_by(EmergencyContact.priority)
+        .all()
+    )
+    
+    # 4. Reverse geocode location
+    address = await reverse_geocode(latitude, longitude)
+
+    # 5. Generate SOS Message (Include Photo Link)
+    med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
+    sos_message = (
+        f"🚨 ACCIDENT PHOTO ALERT for {user.full_name} 🚨\n"
+        f"A bystander just sent a live photo of the incident.\n"
+        f"Location: {address if address else f'Lat: {latitude}, Lng: {longitude}'}\n"
+        f"View Live Photo: {settings.BASE_URL}{media_url}\n"
+        f"Google Maps: {get_google_maps_link(latitude, longitude)}"
+    )
+
+    # 6. Log the Alert with Media URL
+    contact_list = [{"name": c.name, "phone": c.phone} for c in contacts]
+    alert_log = AlertLog(
+        user_id=user_id,
+        triggered_by="camera",
+        latitude=latitude,
+        longitude=longitude,
+        address=address,
+        severity="critical",
+        message_sent=sos_message,
+        contacts_notified=contact_list,
+        media_url=media_url
+    )
+    db.add(alert_log)
+    db.commit()
+    db.refresh(alert_log)
+
+    return AlertResponse(
+        status="photo_received",
+        message="Incident photo and location have been logged and family alerted.",
+        alert_id=alert_log.id,
+        contacts_notified=len(contacts),
+        sos_message=sos_message,
+        contacts_list=contact_list,
+    )
 
 
 @router.post("/trigger", response_model=AlertResponse)
