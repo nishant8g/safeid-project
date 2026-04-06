@@ -327,8 +327,13 @@ export default function ScanPage() {
                 </div>
             ) : (
                <div className="glass-card animate-fade-in" style={{ padding: '1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
-               <div className="flex flex-col" style={{ gap: '1rem' }}>
-                     {(alertResult?.contacts_list || userData?.emergency_contacts || [])?.map((contact, idx) => (
+                  <div className="flex flex-col" style={{ gap: '1rem' }}>
+                     {(() => {
+                        const contacts = alertResult?.contacts_list || userData?.emergency_contacts || [];
+                        if (contacts.length === 0) {
+                           return <div className="text-center py-4 opacity-60">⚠️ No emergency contacts found.</div>;
+                        }
+                        return contacts.map((contact, idx) => (
                           <div key={idx} className="flex flex-col" style={{ gap: '0.5rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                              <div style={{ fontSize: '0.9rem', fontWeight: 'bold', opacity: 0.9 }}>Contact: {contact.name}</div>
                              <div className="flex" style={{ gap: '0.5rem' }}>
@@ -340,7 +345,8 @@ export default function ScanPage() {
                                 </a>
                              </div>
                           </div>
-                     ))}
+                        ));
+                     })()}
                   </div>
                </div>
             )}

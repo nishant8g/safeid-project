@@ -59,7 +59,7 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
     # Track silently without delaying the vital emergency API response
     threading.Thread(target=log_scan).start()
 
-    # Return SAFE public data — NO phone, NO email, NO address
+    # Return SAFE public data — INCLUDING emergency contacts for immediate bystander use
     return {
         "user_id": user.id,
         "full_name": user.full_name,
@@ -70,4 +70,7 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
         "organ_donor": med.organ_donor if med else False,
         "special_notes": med.special_notes if med else None,
         "sms_fallback_code": qr.sms_fallback_code if qr else None,
+        "emergency_contacts": [
+            {"name": c.name, "phone": c.phone} for c in user.emergency_contacts
+        ]
     }
