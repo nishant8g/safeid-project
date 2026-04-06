@@ -184,8 +184,52 @@ export default function ScanPage() {
     handleEmergencyClick();
   };
 
+  // ──── 0. SAFETY GUARDS ────
+  if (loading) {
+    return (
+      <div className="scan-page">
+        <div className="loading-overlay" style={{ minHeight: '100vh' }}>
+          <div className="spinner"></div>
+          <p>Loading emergency data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isDeactivated) {
+    return (
+      <div className="scan-page">
+        <div className="loading-overlay" style={{ minHeight: '100vh' }}>
+          <div style={{ fontSize: '4rem' }}>🔒</div>
+          <h2>SafeID Deactivated</h2>
+          <p className="text-muted" style={{ maxWidth: '400px', textAlign: 'center' }}>
+            This SafeID is currently in "Privacy Mode" or has been disabled by its owner. No medical information is available.
+          </p>
+          <div className="flex" style={{ gap: '1rem', marginTop: '1.5rem' }}>
+            <a href="tel:112" className="btn btn-danger btn-lg">📞 Call 112</a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !userData) {
+    return (
+      <div className="scan-page">
+        <div className="loading-overlay" style={{ minHeight: '100vh' }}>
+          <div style={{ fontSize: '4rem' }}>⚠️</div>
+          <h2>SafeID Error</h2>
+          <p className="text-muted" style={{ maxWidth: '400px', textAlign: 'center' }}>{error}</p>
+          <a href="tel:112" className="btn btn-danger btn-lg" style={{ marginTop: '1rem' }}>
+            📞 Call Emergency Services (112)
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   // ──── STAGE 1: LOCATION LOCK (SKIPABLE) ────
-  if (step === 'request-location') {
+  if (step === 'request-location' && !alertResult) {
     return (
       <div className="scan-page">
         <div className="loading-overlay" style={{ minHeight: '100vh', padding: '2rem' }}>
@@ -208,7 +252,7 @@ export default function ScanPage() {
   }
 
   // ──── STAGE 2: PHOTO LOCK (MANDATORY) ────
-  if (step === 'request-photo') {
+  if (step === 'request-photo' && !alertResult) {
     return (
       <div className="scan-page">
         <div className="loading-overlay" style={{ minHeight: '100vh', padding: '2rem' }}>

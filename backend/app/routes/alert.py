@@ -255,6 +255,9 @@ async def upload_incident_photo(
         f"Google Maps: {get_google_maps_link(latitude, longitude)}"
     )
 
+    # console log for debugging the exact message content
+    print(f"\n{'='*60}\n📡 OUTBOUND SOS BROADCAST:\n{sos_message}\n{'='*60}\n")
+
     # 6. BROADCAST TO CONTACTS (Bug 3 Fix)
     send_alerts_to_contacts(contacts, sos_message, media_url=media_url)
 
