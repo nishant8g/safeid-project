@@ -1,50 +1,38 @@
-"""Public scan route — NO authentication required.
-This is what the rescuer sees when they scan the QR code.
-"""
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
 from ..database import get_db
 from ..models.user import User
-from ..models.medical import MedicalInfo
+from ..models.medical import MedicalInfo, EmergencyContact
 from ..models.qrcode import QRCodeRecord
-from ..schemas.medical import PublicMedicalInfo
 
 router = APIRouter(prefix="/scan", tags=["Emergency Scan"])
 
-
 @router.get("/{user_id}")
 def get_scan_data(user_id: str, db: Session = Depends(get_db)):
-    """
-    PUBLIC endpoint — returns minimal safe data for QR scan.
-    No authentication needed. This is the critical emergency endpoint.
-    """
-    # Check user exists
+    # 1. Get user
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Check QR is active
+    # 2. Check QR is active
     qr = db.query(QRCodeRecord).filter(QRCodeRecord.user_id == user_id).first()
-    
-    # CRITICAL: If QR record is explicitly marked inactive, BLOCK access immediately.
-    # If no QR record exists, we default to block (unassigned ID).
     if not qr or not qr.is_active:
         raise HTTPException(
             status_code=403, 
             detail="PROTECTED: This SafeID has been deactivated by the owner."
         )
 
-    # Get medical info
+    # 3. Get medical info
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
+    
+    # 4. Direct query for family contacts (Zero-Error Optimization)
+    contacts = db.query(EmergencyContact).filter(EmergencyContact.user_id == user_id).all()
 
-    # Create stealth analytics scan log
+    # 5. Create stealth analytics scan log
     from ..models.analytics import ScanLog
     import threading
 
     def log_scan():
-        # Short-lived isolated DB session for background logging
         from ..database import SessionLocal
         bg_db = SessionLocal()
         try:
@@ -56,10 +44,9 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
         finally:
             bg_db.close()
 
-    # Track silently without delaying the vital emergency API response
     threading.Thread(target=log_scan).start()
 
-    # Return SAFE public data — INCLUDING emergency contacts for immediate bystander use
+    # 6. Return SAFE public data
     return {
         "user_id": user.id,
         "full_name": user.full_name,
@@ -71,6 +58,6 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
         "special_notes": med.special_notes if med else None,
         "sms_fallback_code": qr.sms_fallback_code if qr else None,
         "emergency_contacts": [
-            {"name": c.name, "phone": c.phone} for c in user.emergency_contacts
+            {"name": c.name, "phone": c.phone} for c in contacts
         ]
     }
