@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models.user import User
-from ..models.medical import MedicalInfo, EmergencyContact
+from ..models.medical import MedicalInfo
+from ..models.contact import EmergencyContact
 from ..models.qrcode import QRCodeRecord
 
 router = APIRouter(prefix="/scan", tags=["Emergency Scan"])
