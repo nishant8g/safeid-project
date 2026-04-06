@@ -46,6 +46,8 @@ export default function ScanPage() {
   const [voiceTranscript, setVoiceTranscript] = useState('');
   const [photo, setPhoto] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDeactivated, setIsDeactivated] = useState(false);
+  const [activeAlertId, setActiveAlertId] = useState(null);
 
   // Load user data
   useEffect(() => {
@@ -58,17 +60,21 @@ export default function ScanPage() {
       const res = await scanAPI.getData(userId);
       setUserData(res.data);
     } catch (err) {
-      setError(
-        err.response?.status === 404
-          ? 'SafeID not found. This QR code may be invalid.'
-          : 'Failed to load emergency data. Please try again.'
-      );
+      if (err.response?.status === 403) {
+        setIsDeactivated(true);
+      } else {
+        setError(
+          err.response?.status === 404
+            ? 'SafeID not found. This QR code may be invalid.'
+            : 'Failed to load emergency data. Please try again.'
+        );
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  // Request GPS
+  // Request GPS (Upgraded to watchPosition for Bug 2)
   const requestLocation = (silent = false) => {
     if (!navigator.geolocation) {
       setLocationError('Location not supported on this device');
@@ -76,10 +82,11 @@ export default function ScanPage() {
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
+    // Capture initial position and start watching
+    navigator.geolocation.watchPosition(
       (pos) => {
         setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-        if (!silent) setStep('confirm');
+        if (!silent && step === 'info') setStep('confirm');
       },
       (err) => {
         console.warn('Location error:', err);
@@ -89,6 +96,25 @@ export default function ScanPage() {
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
+
+  // Heartbeat Effect: Push live coordinates to backend if an alert is active
+  useEffect(() => {
+    if (activeAlertId && location) {
+      const sendHeartbeat = async () => {
+        const formData = new FormData();
+        formData.append('latitude', location.lat);
+        formData.append('longitude', location.lng);
+        try {
+          await alertAPI.liveUpdate(activeAlertId, formData);
+        } catch (err) {
+          console.error('Heartbeat failed:', err);
+        }
+      };
+      
+      const timer = setTimeout(sendHeartbeat, 5000); // Send update every 5 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [location, activeAlertId]);
 
   // Handle emergency button click
   const handleEmergencyClick = () => {
@@ -115,6 +141,7 @@ export default function ScanPage() {
     try {
       const res = await alertAPI.reportIncident(formData);
       setAlertResult(res.data);
+      setActiveAlertId(res.data.alert_id); // Enable live heartbeat
       setStep('sent');
     } catch (err) {
       setError('Failed to upload incident photo. SOS alert still possible below.');
@@ -136,6 +163,7 @@ export default function ScanPage() {
         message_override: voiceTranscript || null,
       });
       setAlertResult(res.data);
+      setActiveAlertId(res.data.alert_id); // Enable live heartbeat
       setStep('sent');
     } catch (err) {
       setError('Failed to send alert. Please call emergency services directly.');
@@ -156,6 +184,24 @@ export default function ScanPage() {
         <div className="loading-overlay" style={{ minHeight: '100vh' }}>
           <div className="spinner"></div>
           <p>Loading emergency data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ──── BUG 1: DEACTIVATED UI ────
+  if (isDeactivated) {
+    return (
+      <div className="scan-page">
+        <div className="loading-overlay" style={{ minHeight: '100vh' }}>
+          <div style={{ fontSize: '4rem' }}>🔒</div>
+          <h2>SafeID Deactivated</h2>
+          <p className="text-muted" style={{ maxWidth: '400px', textAlign: 'center' }}>
+            This SafeID is currently in "Privacy Mode" or has been disabled by its owner. No medical information is available.
+          </p>
+          <div className="flex" style={{ gap: '1rem', marginTop: '1.5rem' }}>
+            <a href="tel:112" className="btn btn-danger btn-lg">📞 Call 112</a>
+          </div>
         </div>
       </div>
     );

@@ -152,8 +152,32 @@ from ..schemas.alert import AlertTrigger, AlertResponse
 
 from ..services.ai_service import generate_sos_message
 from ..services.location_service import reverse_geocode, get_google_maps_link
+from ..services.alert_service import send_alerts_to_contacts
+from ..config import settings
 
 router = APIRouter(prefix="/alert", tags=["Emergency Alerts"])
+
+
+@router.patch("/live-update/{alert_id}")
+async def update_live_location(
+    alert_id: str,
+    latitude: float = Form(...),
+    longitude: float = Form(...),
+    db: Session = Depends(get_db)
+):
+    """
+    Heartbeat endpoint for Bug 2 (Live Tracking).
+    Continuous updates of scanner location while in transit.
+    """
+    alert = db.query(AlertLog).filter(AlertLog.id == alert_id).first()
+    if not alert:
+        raise HTTPException(status_code=404, detail="Alert session not found")
+    
+    alert.latitude = latitude
+    alert.longitude = longitude
+    # Optionally update address in background
+    db.commit()
+    return {"status": "updated", "lat": latitude, "lng": longitude}
 
 
 @router.post("/incident", response_model=AlertResponse)
@@ -196,7 +220,7 @@ async def upload_incident_photo(
     # 4. Reverse geocode location
     address = await reverse_geocode(latitude, longitude)
 
-    # 5. Generate SOS Message (Include Photo Link)
+    # 5. Generate SOS Message (Include Photo Link & Live Tracking Link)
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
     sos_message = (
         f"🚨 ACCIDENT PHOTO ALERT for {user.full_name} 🚨\n"
@@ -206,7 +230,10 @@ async def upload_incident_photo(
         f"Google Maps: {get_google_maps_link(latitude, longitude)}"
     )
 
-    # 6. Log the Alert with Media URL
+    # 6. BROADCAST TO CONTACTS (Bug 3 Fix)
+    send_alerts_to_contacts(contacts, sos_message, media_url=media_url)
+
+    # 7. Log the Alert with Media URL
     contact_list = [{"name": c.name, "phone": c.phone} for c in contacts]
     alert_log = AlertLog(
         user_id=user_id,

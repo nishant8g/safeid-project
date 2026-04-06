@@ -21,7 +21,7 @@ def get_twilio_client() -> Optional[Client]:
     return None
 
 
-def send_sms(to_phone: str, message: str) -> dict:
+def send_sms(to_phone: str, message: str, media_url: Optional[str] = None) -> dict:
     """
     Send an SMS via Twilio.
     Falls back to console logging if Twilio is not configured.
@@ -30,11 +30,15 @@ def send_sms(to_phone: str, message: str) -> dict:
 
     if client:
         try:
-            msg = client.messages.create(
-                body=message,
-                from_=settings.TWILIO_PHONE_NUMBER,
-                to=to_phone,
-            )
+            msg_params = {
+                "body": message,
+                "from_": settings.TWILIO_PHONE_NUMBER,
+                "to": to_phone,
+            }
+            if media_url:
+                msg_params["media_url"] = [f"{settings.BASE_URL}{media_url}" if media_url.startswith("/") else media_url]
+
+            msg = client.messages.create(**msg_params)
             logger.info(f"SMS sent to {to_phone}: SID={msg.sid}")
             return {"status": "sent", "sid": msg.sid, "to": to_phone}
         except TwilioRestException as e:
@@ -51,7 +55,7 @@ def send_sms(to_phone: str, message: str) -> dict:
         return {"status": "mock", "to": to_phone}
 
 
-def send_whatsapp(to_phone: str, message: str) -> dict:
+def send_whatsapp(to_phone: str, message: str, media_url: Optional[str] = None) -> dict:
     """Send a WhatsApp message via Twilio."""
     client = get_twilio_client()
 
@@ -59,11 +63,16 @@ def send_whatsapp(to_phone: str, message: str) -> dict:
         try:
             # Ensure the to number has whatsapp: prefix
             wa_to = to_phone if to_phone.startswith("whatsapp:") else f"whatsapp:{to_phone}"
-            msg = client.messages.create(
-                body=message,
-                from_=settings.TWILIO_WHATSAPP_FROM,
-                to=wa_to,
-            )
+            
+            msg_params = {
+                "body": message,
+                "from_": settings.TWILIO_WHATSAPP_FROM,
+                "to": wa_to,
+            }
+            if media_url:
+                msg_params["media_url"] = [f"{settings.BASE_URL}{media_url}" if media_url.startswith("/") else media_url]
+
+            msg = client.messages.create(**msg_params)
             logger.info(f"WhatsApp sent to {to_phone}: SID={msg.sid}")
             return {"status": "sent", "sid": msg.sid, "to": to_phone}
         except TwilioRestException as e:
@@ -102,7 +111,7 @@ def make_emergency_call(to_phone: str, message: str) -> dict:
         return {"status": "mock", "to": to_phone}
 
 
-def send_alerts_to_contacts(contacts: list, message: str) -> List[dict]:
+def send_alerts_to_contacts(contacts: list, message: str, media_url: Optional[str] = None) -> List[dict]:
     """
     Send SOS alerts to all emergency contacts.
     Tries SMS first, then WhatsApp as backup.
@@ -113,11 +122,11 @@ def send_alerts_to_contacts(contacts: list, message: str) -> List[dict]:
         personalized_msg = f"🚨 EMERGENCY ALERT for {contact.name}:\n\n{message}"
 
         # Send SMS
-        sms_result = send_sms(phone, personalized_msg)
+        sms_result = send_sms(phone, personalized_msg, media_url=media_url)
         results.append({"contact": contact.name, "method": "sms", **sms_result})
 
         # Also try WhatsApp
-        wa_result = send_whatsapp(phone, personalized_msg)
+        wa_result = send_whatsapp(phone, personalized_msg, media_url=media_url)
         results.append({"contact": contact.name, "method": "whatsapp", **wa_result})
 
     return results

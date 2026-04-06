@@ -27,8 +27,14 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
 
     # Check QR is active
     qr = db.query(QRCodeRecord).filter(QRCodeRecord.user_id == user_id).first()
-    if qr and not qr.is_active:
-        raise HTTPException(status_code=403, detail="This SafeID has been deactivated")
+    
+    # CRITICAL: If QR record is explicitly marked inactive, BLOCK access immediately.
+    # If no QR record exists, we default to block (unassigned ID).
+    if not qr or not qr.is_active:
+        raise HTTPException(
+            status_code=403, 
+            detail="PROTECTED: This SafeID has been deactivated by the owner."
+        )
 
     # Get medical info
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()

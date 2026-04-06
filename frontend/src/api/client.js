@@ -81,6 +81,9 @@ export const alertAPI = {
   reportIncident: (formData) => api.post('/alert/incident', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),
+  liveUpdate: (id, formData) => api.patch(`/alert/live-update/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
   getHistory: (userId) => api.get(`/alert/history?user_id=${userId}`),
 };
 
