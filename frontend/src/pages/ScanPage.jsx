@@ -304,18 +304,27 @@ export default function ScanPage() {
             <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Family Notification</h3>
             
             {!isConfirmed ? (
-               <div className="glass-card" style={{ padding: '1.5rem', border: '2px solid rgba(239, 68, 68, 0.3)' }}>
-                  <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem', textAlign: 'center' }}>
-                     Please slide below to confirm and broadcast the emergency alert to the family.
-                  </p>
-                  <ConfirmSlider onConfirm={() => {
-                     console.log("SOS TRIGGERED - ULTRA MODE ACTIVE");
-                     setIsConfirmed(true);
-                     setTimeout(() => {
-                        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                     }, 150);
-                  }} text="Slide to Notify Family" />
-               </div>
+                <div className="glass-card" style={{ padding: '1.5rem', border: '2px solid rgba(239, 68, 68, 0.4)', textAlign: 'center' }}>
+                   <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+                      Tap the button below to instantly broadcast the emergency alert and see family contacts.
+                   </p>
+                   <button 
+                      onClick={() => {
+                        console.log("SOS TRIGGERED - DIRECT BUTTON");
+                        setIsConfirmed(true);
+                        setTimeout(() => window.scrollTo({ top: 9999, behavior: 'smooth' }), 100);
+                      }}
+                      className="btn btn-danger btn-lg w-full animate-pulse"
+                      style={{ 
+                        padding: '1.25rem', 
+                        fontSize: '1.25rem', 
+                        fontWeight: '800',
+                        boxShadow: '0 0 30px rgba(220, 38, 38, 0.4)'
+                      }}
+                   >
+                      🚨 NOTIFY FAMILY NOW
+                   </button>
+                </div>
             ) : (
                <div className="glass-card animate-fade-in" style={{ padding: '1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
                <div className="flex flex-col" style={{ gap: '1rem' }}>
