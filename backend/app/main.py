@@ -67,13 +67,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Vercel Serverless environment makes disk read-only except for /tmp
+import os
+if os.environ.get("VERCEL"):
+    qr_dir = Path("/tmp/qr")
+    alert_dir = Path("/tmp/alerts")
+else:
+    qr_dir = Path(__file__).resolve().parent.parent / "qr" / "generated"
+    alert_dir = Path(__file__).resolve().parent.parent / "static" / "alerts"
+
 # Mount QR code images as static files
-qr_dir = Path(__file__).resolve().parent.parent / "qr" / "generated"
 qr_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/static/qr", StaticFiles(directory=str(qr_dir)), name="qr_images")
 
 # Mount accident photos as static files
-alert_dir = Path(__file__).resolve().parent.parent / "static" / "alerts"
 alert_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/static/alerts", StaticFiles(directory=str(alert_dir)), name="alert_images")
 
