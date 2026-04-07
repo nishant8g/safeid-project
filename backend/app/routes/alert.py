@@ -167,6 +167,7 @@ async def upload_incident_photo(
     sos_message = (
         f"🚨 *SAFEID EMERGENCY ALERT* 🚨\n\n"
         f"I have found your relative *{user.full_name}* at an accident scene.\n\n"
+        f"📸 *INCIDENT PHOTO:* {media_url if media_url else 'Pending/Failed'}\n\n"
         f"🏥 *MEDICAL INFO:* {med.blood_group if med else 'Unknown'}\n"
         f"• Allergies: {med.allergies if med and med.allergies else 'None'}\n\n"
         f"📍 *LOCATION:* https://www.google.com/maps?q={latitude},{longitude}\n\n"

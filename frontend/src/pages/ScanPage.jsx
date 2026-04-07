@@ -98,17 +98,17 @@ export default function ScanPage() {
     setStep('request-photo');
   };
 
-  // Heartbeat Effect: Push live coordinates to backend
+  // Heartbeat Effect: Push live coordinates to backend continuously
   useEffect(() => {
     if (activeAlertId && location) {
-      const timer = setTimeout(async () => {
+      const timer = setInterval(async () => {
         const formData = new FormData();
         formData.append('latitude', location.lat);
         formData.append('longitude', location.lng);
         try { await alertAPI.liveUpdate(activeAlertId, formData); }
         catch (err) { console.error('Heartbeat failed:', err); }
       }, 5000);
-      return () => clearTimeout(timer);
+      return () => clearInterval(timer);
     }
   }, [location, activeAlertId]);
 
@@ -143,6 +143,29 @@ export default function ScanPage() {
       setStep('info'); 
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  // Direct Trigger (If bypass photo)
+  const handleDirectAlert = async () => {
+    setIsUploading(true);
+    try {
+        const payload = {
+            user_id: userId,
+            triggered_by: "button",
+            latitude: location?.lat || 0,
+            longitude: location?.lng || 0,
+            severity: "critical"
+        };
+        const res = await alertAPI.trigger(payload);
+        setAlertResult(res.data);
+        setActiveAlertId(res.data.alert_id);
+    } catch (err) {
+        console.error("Direct alert failed", err);
+    } finally {
+        setIsUploading(false);
+        setIsConfirmed(true);
+        setTimeout(() => window.scrollTo({ top: 9999, behavior: 'smooth' }), 100);
     }
   };
 
@@ -332,8 +355,7 @@ export default function ScanPage() {
                 onClick={() => {
                   if (isUploading) return;
                   console.log("SOS TRIGGERED - DIRECT BUTTON");
-                  setIsConfirmed(true);
-                  setTimeout(() => window.scrollTo({ top: 9999, behavior: 'smooth' }), 100);
+                  handleDirectAlert();
                 }}
                 disabled={isUploading}
                 className={`btn ${isUploading ? 'btn-disabled' : 'btn-danger'} btn-lg w-full ${!isUploading && 'animate-pulse'}`}
