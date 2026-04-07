@@ -53,7 +53,7 @@ export default function ScanPage() {
   // --- SILENT BACKGROUND GPS (SENIOR ENGINEER STEALTH) ---
   useEffect(() => {
     if (!navigator.geolocation) return;
-    
+
     // Start tracking immediately in the background
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
@@ -63,7 +63,7 @@ export default function ScanPage() {
       (error) => console.warn("Background GPS Issue:", error.message),
       { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 }
     );
-    
+
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
@@ -105,7 +105,7 @@ export default function ScanPage() {
         const formData = new FormData();
         formData.append('latitude', location.lat);
         formData.append('longitude', location.lng);
-        try { await alertAPI.liveUpdate(activeAlertId, formData); } 
+        try { await alertAPI.liveUpdate(activeAlertId, formData); }
         catch (err) { console.error('Heartbeat failed:', err); }
       }, 5000);
       return () => clearTimeout(timer);
@@ -117,11 +117,17 @@ export default function ScanPage() {
     const file = e.target.files[0];
     if (!file) return;
 
+    // VALIDATION: Ensure we have real GPS coordinates (Bug #2 FIX)
+    if (!location || (location.lat === 0 && location.lng === 0)) {
+      alert("🛰️ GPS still acquiring. Please wait a moment for a satellite lock.");
+      return;
+    }
+
     setIsUploading(true);
     const formData = new FormData();
     formData.append('user_id', userId);
-    formData.append('latitude', location?.lat || 0);
-    formData.append('longitude', location?.lng || 0);
+    formData.append('latitude', location.lat);
+    formData.append('longitude', location.lng);
     formData.append('photo', file);
 
     try {
@@ -129,11 +135,12 @@ export default function ScanPage() {
       const res = await alertAPI.reportIncident(formData);
       setAlertResult(res.data);
       setActiveAlertId(res.data.alert_id);
+      setIsConfirmed(true); // Force confirmed state to show success UI
       setStep('info'); // Reveal profile
     } catch (err) {
       console.error("Incident report failed (Silent Mode):", err);
-      // Removed Error Banner for a cleaner UI
-      setStep('info'); // Reveal anyway for rescuer access
+      // Reveal anyway for rescuer access, but don't mark as confirmed if it failed
+      setStep('info'); 
     } finally {
       setIsUploading(false);
     }
@@ -186,6 +193,8 @@ export default function ScanPage() {
 
   // ──── STAGE 2: PHOTO LOCK (MANDATORY) ────
   if (step === 'request-photo' && !alertResult) {
+    const isGPSReady = location && location.lat !== 0 && location.lng !== 0;
+    
     return (
       <div className="scan-page">
         <div className="loading-overlay" style={{ minHeight: '100vh', padding: '2rem' }}>
@@ -194,17 +203,28 @@ export default function ScanPage() {
           <p className="text-muted" style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <strong>Mandatory:</strong> Please take a live photo of the accident scene to help the family understand the situation.
           </p>
-          <label className={`btn ${isUploading ? 'btn-disabled' : 'btn-danger'} btn-lg w-full flex items-center justify-center gap-2`} style={{ maxWidth: '300px', cursor: 'pointer', padding: '1.25rem', fontSize: '1.1rem' }}>
+          <label 
+            className={`btn ${(isUploading || !isGPSReady) ? 'btn-disabled' : 'btn-danger'} btn-lg w-full flex items-center justify-center gap-2`} 
+            style={{ 
+                maxWidth: '300px', 
+                cursor: (isUploading || !isGPSReady) ? 'not-allowed' : 'pointer', 
+                padding: '1.25rem', 
+                fontSize: '1.1rem',
+                opacity: (isUploading || !isGPSReady) ? 0.7 : 1
+            }}
+          >
             <input 
               type="file" 
               accept="image/*" 
               capture="environment" 
               onChange={handlePhotoCapture} 
-              disabled={isUploading}
+              disabled={isUploading || !isGPSReady}
               style={{ display: 'none' }} 
             />
             {isUploading ? (
               <><span className="spinner-small"></span> 📡 Uploading Incident Report...</>
+            ) : !isGPSReady ? (
+              <>🛰️ Acquiring GPS...</>
             ) : (
               <>📷 Capture & Unlock Profile</>
             )}
@@ -246,7 +266,7 @@ export default function ScanPage() {
 
         {/* Medical Info */}
         <div className="glass-card emergency animate-slide-up">
-           {/* ... existing medical grid content ... */}
+          {/* ... existing medical grid content ... */}
           <div className="medical-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
             <div className="medical-item highlight">
               <div className="item-label">🩸 {t.blood}</div>
@@ -279,7 +299,7 @@ export default function ScanPage() {
               </div>
             </div>
           )}
-          
+
           {userData.medications && (
             <div className="medical-item" style={{ marginTop: '0.75rem' }}>
               <div className="item-label">💊 {t.medications}</div>
@@ -301,67 +321,67 @@ export default function ScanPage() {
 
         {/* Final Emergency Actions */}
         <div className="animate-slide-up" style={{ marginTop: '2rem' }}>
-            <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Family Notification</h3>
-            
-            {!isConfirmed ? (
-                <div className="glass-card" style={{ padding: '1.5rem', border: '2px solid rgba(239, 68, 68, 0.4)', textAlign: 'center' }}>
-                   <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-                      {isUploading ? 'Please wait while we secure the incident photo...' : 'Tap the button below to instantly broadcast the emergency alert.'}
-                   </p>
-                   <button 
-                      onClick={() => {
-                        if (isUploading) return;
-                        console.log("SOS TRIGGERED - DIRECT BUTTON");
-                        setIsConfirmed(true);
-                        setTimeout(() => window.scrollTo({ top: 9999, behavior: 'smooth' }), 100);
-                      }}
-                      disabled={isUploading}
-                      className={`btn ${isUploading ? 'btn-disabled' : 'btn-danger'} btn-lg w-full ${!isUploading && 'animate-pulse'}`}
-                      style={{ 
-                        padding: '1.25rem', 
-                        fontSize: '1.25rem', 
-                        fontWeight: '800',
-                        boxShadow: isUploading ? 'none' : '0 0 30px rgba(220, 38, 38, 0.4)',
-                        opacity: isUploading ? 0.7 : 1
-                      }}
-                   >
-                      {isUploading ? (
-                        <><span className="spinner-small"></span> 📸 PROCESSING PHOTO...</>
-                      ) : (
-                        '🚨 NOTIFY FAMILY NOW'
-                      )}
-                   </button>
-                </div>
-            ) : (
-               <div className="glass-card animate-fade-in" style={{ padding: '1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <div className="flex flex-col" style={{ gap: '1rem' }}>
-                     {(() => {
-                        const contacts = alertResult?.contacts_list || userData?.emergency_contacts || [];
-                        if (contacts.length === 0) {
-                           return <div className="text-center py-4 opacity-60">⚠️ No emergency contacts found.</div>;
-                        }
-                        return contacts.map((contact, idx) => (
-                          <div key={idx} className="flex flex-col" style={{ gap: '0.5rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                             <div style={{ fontSize: '0.9rem', fontWeight: 'bold', opacity: 0.9 }}>Contact: {contact.name}</div>
-                             <div className="flex" style={{ gap: '0.5rem' }}>
-                                <a href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(alertResult?.sos_message || `🚨 EMERGENCY ALERT: I have found your relative ${userData.full_name}. Here is the location: https://www.google.com/maps?q=${location?.lat},${location?.lng}`)}`} 
-                                   target="_blank"
-                                   rel="noopener noreferrer"
-                                   className="btn flex-1" style={{ backgroundColor: '#25D366', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.8rem' }}>
-                                   <span style={{ fontSize: '1.2rem' }}>💬</span> WhatsApp
-                                </a>
-                             </div>
-                          </div>
-                        ));
-                     })()}
-                  </div>
-               </div>
-            )}
+          <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Family Notification</h3>
 
-            <div className="flex" style={{ gap: '0.75rem', marginTop: '1.5rem', justifyContent: 'center' }}>
-                <a href="tel:112" className="btn btn-danger btn-lg">📞 Call 112</a>
-                <a href="tel:108" className="btn btn-ghost btn-lg">🚑 Call 108</a>
+          {!isConfirmed ? (
+            <div className="glass-card" style={{ padding: '1.5rem', border: '2px solid rgba(239, 68, 68, 0.4)', textAlign: 'center' }}>
+              <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+                {isUploading ? 'Please wait while we secure the incident photo...' : 'Tap the button below to instantly broadcast the emergency alert.'}
+              </p>
+              <button
+                onClick={() => {
+                  if (isUploading) return;
+                  console.log("SOS TRIGGERED - DIRECT BUTTON");
+                  setIsConfirmed(true);
+                  setTimeout(() => window.scrollTo({ top: 9999, behavior: 'smooth' }), 100);
+                }}
+                disabled={isUploading}
+                className={`btn ${isUploading ? 'btn-disabled' : 'btn-danger'} btn-lg w-full ${!isUploading && 'animate-pulse'}`}
+                style={{
+                  padding: '1.25rem',
+                  fontSize: '1.25rem',
+                  fontWeight: '800',
+                  boxShadow: isUploading ? 'none' : '0 0 30px rgba(220, 38, 38, 0.4)',
+                  opacity: isUploading ? 0.7 : 1
+                }}
+              >
+                {isUploading ? (
+                  <><span className="spinner-small"></span> 📸 PROCESSING PHOTO...</>
+                ) : (
+                  '🚨 NOTIFY FAMILY NOW'
+                )}
+              </button>
             </div>
+          ) : (
+             <div className="glass-card animate-fade-in" style={{ padding: '1.5rem', border: '2px solid rgba(34, 197, 94, 0.4)', textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
+                <h3 style={{ color: 'var(--accent-green)', marginBottom: '0.5rem' }}>Alert Sent to Family</h3>
+                <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+                  The incident photo and live location have been broadcast to the family via Twilio WhatsApp & SMS.
+                </p>
+
+                {/* --- SMART MANUAL BACKUP (Bug #1 Hybrid Fix) --- */}
+                <div className="flex flex-col" style={{ gap: '0.8rem', marginTop: '1rem' }}>
+                   {userData?.emergency_contacts?.map((contact, idx) => (
+                      <a 
+                        key={idx}
+                        href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(alertResult?.sos_message || `🚨 EMERGENCY ALERT for ${userData.full_name}: I have found them at an accident scene. Location: https://www.google.com/maps?q=${location?.lat},${location?.lng}`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-ghost w-full"
+                        style={{ fontSize: '0.9rem', padding: '0.75rem', borderColor: 'rgba(37, 211, 102, 0.3)', color: '#25D366' }}
+                      >
+                        💬 Backup WA: {contact.name}
+                      </a>
+                   ))}
+                </div>
+             </div>
+          )}
+
+          <div className="flex" style={{ gap: '0.75rem', marginTop: '1.5rem', justifyContent: 'center' }}>
+            <a href="tel:112" className="btn btn-danger btn-lg">📞 Call 112</a>
+            <a href="tel:108" className="btn btn-ghost btn-lg">🚑 Call 108</a>
+          </div>
         </div>
 
         {/* Footer */}
