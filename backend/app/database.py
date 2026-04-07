@@ -12,10 +12,6 @@ db_url = settings.DATABASE_URL
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-# Vercel Serverless environment makes disk read-only except for /tmp
-if os.environ.get("VERCEL"):
-    db_url = "sqlite:////tmp/safeid.db"
-
 # SQLite needs check_same_thread=False for FastAPI
 connect_args = {}
 if db_url.startswith("sqlite"):
