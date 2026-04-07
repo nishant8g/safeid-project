@@ -1,5 +1,6 @@
 """Database setup with SQLAlchemy."""
 
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -10,6 +11,10 @@ from .config import settings
 db_url = settings.DATABASE_URL
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+# Vercel Serverless environment makes disk read-only except for /tmp
+if os.environ.get("VERCEL"):
+    db_url = "sqlite:////tmp/safeid.db"
 
 # SQLite needs check_same_thread=False for FastAPI
 connect_args = {}
