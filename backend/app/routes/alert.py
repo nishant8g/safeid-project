@@ -77,9 +77,9 @@ async def update_live_location(
                 # Send updated location to all contacts
                 send_alerts_to_contacts(contacts, updated_message, media_url=alert.media_url)
                 alert.last_location_broadcast = now
-                logging.info(f"Live location broadcast to {len(contacts)} contacts")
+                logger.info(f"Live location broadcast to {len(contacts)} contacts")
             except Exception as e:
-                logging.error(f"Live broadcast failed: {e}")
+                logger.error(f"Live broadcast failed: {e}")
     
     db.commit()
     return {
@@ -176,8 +176,7 @@ async def upload_incident_photo(
 
     print(f"\n📡 FINAL SOS TEMPLATE:\n{sos_message}\n")
 
-    # 6. MOCK BROADCAST (Strict Manual Mode)
-   # 6. ACTUAL WHATSAPP/SMS BROADCAST
+    # 6. WhatsApp / SMS Broadcast Base Engine
     try:
         print("📡 TRIGGERING ACTUAL WHATSAPP/SMS BROADCAST...")
         # This calls YOUR actual Twilio/Messaging service from alert_service.py
