@@ -42,9 +42,54 @@ def send_sms(to_phone: str, message: str, media_url: Optional[str] = None) -> di
 
 
 def send_whatsapp(to_phone: str, message: str, media_url: Optional[str] = None) -> dict:
-    """Manual-Only Override: Skips Twilio and forces manual action on frontend."""
+    """Send WhatsApp message with optional media attachment via Twilio (Fix #3)."""
     to_phone = normalize_phone(to_phone)
-    return {"status": "manual", "to": to_phone, "reason": "System set to Manual Mode"}
+    client = get_twilio_client()
+    
+    if client:
+        try:
+            # For WhatsApp, use the Twilio WhatsApp number format
+            msg_params = {
+                "body": message,
+                "from_": f"whatsapp:{settings.TWILIO_PHONE_NUMBER if settings.TWILIO_PHONE_NUMBER else '+14155238886'}",
+                "to": f"whatsapp:{to_phone}"
+            }
+            
+            # If we have an image URL, add it
+            if media_url:
+                # Twilio requires a list for media_url
+                msg_params["media_url"] = [media_url]
+            
+            message_obj = client.messages.create(**msg_params)
+            logger.info(f"WhatsApp sent to {to_phone}: SID={message_obj.sid}")
+            return {
+                "status": "sent",
+                "method": "whatsapp",
+                "sid": message_obj.sid,
+                "to": to_phone,
+                "has_media": bool(media_url)
+            }
+        except TwilioRestException as e:
+            logger.error(f"Twilio WhatsApp failed to {to_phone}: {e}")
+            return {
+                "status": "failed",
+                "method": "whatsapp",
+                "error": str(e),
+                "to": to_phone
+            }
+    else:
+        print(f"\n{'='*60}")
+        print(f"📱 MOCK WHATSAPP → {to_phone}")
+        print(f"📝 {message}")
+        if media_url:
+            print(f"📸 MEDIA: {media_url}")
+        print(f"{'='*60}\n")
+        return {
+            "status": "mock",
+            "method": "whatsapp",
+            "to": to_phone,
+            "has_media": bool(media_url)
+        }
 
 
 def make_emergency_call(to_phone: str, message: str) -> dict:

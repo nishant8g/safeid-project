@@ -20,4 +20,5 @@ class AlertLog(Base):
     message_sent = Column(Text, nullable=True)
     contacts_notified = Column(JSON, nullable=True)
     media_url = Column(String(500), nullable=True)
+    last_location_broadcast = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
