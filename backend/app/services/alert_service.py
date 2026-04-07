@@ -75,10 +75,9 @@ def send_whatsapp(to_phone: str, message: str, media_url: Optional[str] = None) 
                 "to": f"whatsapp:{to_phone}"
             }
             
-            # If we have an image URL, add it
-            if media_url:
-                # Twilio requires a list for media_url
-                msg_params["media_url"] = [media_url]
+            # Twilio WhatsApp Sandbox often rejects third-party media URLs (returns "image not supported").
+            # Since the URL is already in the message body, WhatsApp will render a Rich Preview automatically.
+            # We strictly send just the text body to ensure 100% delivery success.
             
             message_obj = client.messages.create(**msg_params)
             logger.info(f"WhatsApp sent to {to_phone}: SID={message_obj.sid}")
