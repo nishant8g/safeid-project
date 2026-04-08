@@ -38,11 +38,15 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "sqlite:///./safeid.db"
 
-    # Twilio
+    # Twilio (optional secondary channel)
     TWILIO_ACCOUNT_SID: str = ""
     TWILIO_AUTH_TOKEN: str = ""
     TWILIO_PHONE_NUMBER: str = ""
     TWILIO_WHATSAPP_FROM: str = ""
+
+    # Gmail SMTP (primary channel)
+    SMTP_EMAIL: str = ""
+    SMTP_APP_PASSWORD: str = ""
 
     # Anthropic
     ANTHROPIC_API_KEY: str = ""

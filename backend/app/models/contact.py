@@ -14,6 +14,7 @@ class EmergencyContact(Base):
     user_id = Column(String, ForeignKey("users.id"), nullable=False)
     name = Column(String(200), nullable=False)
     phone = Column(String(20), nullable=False)
+    email = Column(String(255), nullable=True)
     relationship = Column(String(100), nullable=True)
     priority = Column(Integer, default=1)  # 1 = primary
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))

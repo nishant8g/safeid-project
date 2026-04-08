@@ -16,6 +16,7 @@ from ..schemas.alert import AlertTrigger, AlertResponse
 from ..services.ai_service import generate_sos_message
 from ..services.location_service import reverse_geocode, get_google_maps_link, get_what3words
 from ..services.alert_service import send_alerts_to_contacts
+from ..services.email_service import send_email_alerts_to_contacts
 from ..config import settings
 
 logger = logging.getLogger(__name__)
@@ -176,15 +177,33 @@ async def upload_incident_photo(
 
     print(f"\n📡 FINAL SOS TEMPLATE:\n{sos_message}\n")
 
-    # 6. WhatsApp / SMS Broadcast Base Engine
+    # 6. PRIMARY: Email Broadcast (always works, free, supports images)
+    results = []
     try:
-        print("📡 TRIGGERING ACTUAL WHATSAPP/SMS BROADCAST...")
-        # This calls YOUR actual Twilio/Messaging service from alert_service.py
-        results = send_alerts_to_contacts(contacts, sos_message, media_url=media_url)
-        print("✅ BROADCAST COMPLETE!")
+        logger.info("📧 Sending EMAIL alerts (primary channel)...")
+        email_results = send_email_alerts_to_contacts(
+            contacts=contacts,
+            victim_name=user.full_name,
+            sos_message=sos_message,
+            latitude=latitude,
+            longitude=longitude,
+            media_url=media_url,
+            blood_group=med.blood_group if med else None,
+            allergies=med.allergies if med else None,
+        )
+        results.extend(email_results)
+        logger.info(f"✅ Email broadcast complete: {email_results}")
     except Exception as e:
-        print(f"❌ BROADCAST FAILED: {str(e)}")
-        results = [{"error": str(e), "status": "failed"}]
+        logger.error(f"❌ Email broadcast failed: {e}")
+
+    # 7. SECONDARY: Twilio SMS/WhatsApp (optional, if configured)
+    try:
+        logger.info("📱 Sending Twilio SMS/WhatsApp alerts (secondary channel)...")
+        twilio_results = send_alerts_to_contacts(contacts, sos_message, media_url=media_url)
+        results.extend(twilio_results)
+        logger.info(f"✅ Twilio broadcast complete")
+    except Exception as e:
+        logger.error(f"⚠️ Twilio broadcast failed (non-critical): {e}")
     # 7. Log the Alert
     contact_list = [{"name": c.name, "phone": c.phone} for c in contacts]
     alert_log = AlertLog(
@@ -264,13 +283,29 @@ async def trigger_alert(data: AlertTrigger, db: Session = Depends(get_db)):
     if data.message_override:
         sos_message += f"\n\n🎤 Rescuer Note: \"{data.message_override}\""
 
-    # 7. REAL TWILIO BROADCAST to all emergency contacts
+    # 7. PRIMARY: Email Broadcast
+    results = []
     try:
-        results = send_alerts_to_contacts(contacts, sos_message)
-        logger.info(f"Alert broadcast sent to {len(contacts)} contacts")
+        logger.info("📧 Sending EMAIL alerts (primary)...")
+        email_results = send_email_alerts_to_contacts(
+            contacts=contacts,
+            victim_name=user.full_name,
+            sos_message=sos_message,
+            latitude=data.latitude,
+            longitude=data.longitude,
+            blood_group=med.blood_group if med else None,
+            allergies=med.allergies if med else None,
+        )
+        results.extend(email_results)
     except Exception as e:
-        logger.error(f"Alert broadcast failed: {e}")
-        results = [{"error": str(e), "status": "failed"}]
+        logger.error(f"Email broadcast failed: {e}")
+
+    # 8. SECONDARY: Twilio SMS/WhatsApp (optional)
+    try:
+        twilio_results = send_alerts_to_contacts(contacts, sos_message)
+        results.extend(twilio_results)
+    except Exception as e:
+        logger.error(f"Twilio broadcast failed (non-critical): {e}")
 
     # 8. Log the Alert
     contact_list = [{"name": c.name, "phone": c.phone} for c in contacts]

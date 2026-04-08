@@ -7,7 +7,7 @@ import { userAPI } from '../api/client';
 export default function Contacts() {
   const [contacts, setContacts] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ name: '', phone: '', relationship: '', priority: 1 });
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '', relationship: '', priority: 1 });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,7 @@ export default function Contacts() {
     setError('');
     try {
       await userAPI.addContact(formData);
-      setFormData({ name: '', phone: '', relationship: '', priority: contacts.length + 1 });
+      setFormData({ name: '', phone: '', email: '', relationship: '', priority: contacts.length + 1 });
       setShowForm(false);
       loadContacts();
     } catch (err) {
@@ -79,6 +79,7 @@ export default function Contacts() {
               <div className="contact-details">
                 <h4>{contact.name}</h4>
                 <p>{contact.relationship || 'Emergency Contact'} · {contact.phone}</p>
+                {contact.email && <p style={{ fontSize: '0.75rem', color: 'var(--accent-blue)' }}>✉️ {contact.email}</p>}
               </div>
             </div>
             <div className="contact-actions">
@@ -131,6 +132,19 @@ export default function Contacts() {
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   required
                   id="contact-phone"
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Email (for alerts)</label>
+                <input
+                  type="email"
+                  className="form-input"
+                  placeholder="contact@gmail.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  id="contact-email"
                 />
               </div>
             </div>

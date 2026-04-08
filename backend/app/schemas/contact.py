@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 class ContactCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=200)
     phone: str = Field(..., min_length=5, max_length=20)
+    email: Optional[str] = None
     relationship: Optional[str] = None
     priority: int = Field(default=1, ge=1, le=5)
 
@@ -16,6 +17,7 @@ class ContactResponse(BaseModel):
     user_id: str
     name: str
     phone: str
+    email: Optional[str] = None
     relationship: Optional[str] = None
     priority: int = 1
 
@@ -26,5 +28,6 @@ class ContactResponse(BaseModel):
 class ContactUpdate(BaseModel):
     name: Optional[str] = None
     phone: Optional[str] = None
+    email: Optional[str] = None
     relationship: Optional[str] = None
     priority: Optional[int] = None
