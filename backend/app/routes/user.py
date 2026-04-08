@@ -85,13 +85,18 @@ def get_contacts(
     db: Session = Depends(get_db),
 ):
     """Get all emergency contacts."""
-    contacts = (
-        db.query(EmergencyContact)
-        .filter(EmergencyContact.user_id == current_user.id)
-        .order_by(EmergencyContact.priority)
-        .all()
-    )
-    return [ContactResponse.model_validate(c) for c in contacts]
+    logger.info(f"Fetching contacts for user: {current_user.id}")
+    try:
+        contacts = (
+            db.query(EmergencyContact)
+            .filter(EmergencyContact.user_id == current_user.id)
+            .order_by(EmergencyContact.priority)
+            .all()
+        )
+        return [ContactResponse.model_validate(c) for c in contacts]
+    except Exception as e:
+        logger.error(f"Failed to fetch contacts: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 
 @router.post("/contacts", response_model=ContactResponse, status_code=201)
@@ -101,16 +106,22 @@ def add_contact(
     db: Session = Depends(get_db),
 ):
     """Add a new emergency contact."""
+    logger.info(f"Adding new contact for user: {current_user.id}")
     # Limit to 5 contacts
-    count = db.query(EmergencyContact).filter(EmergencyContact.user_id == current_user.id).count()
-    if count >= 5:
-        raise HTTPException(status_code=400, detail="Maximum 5 emergency contacts allowed")
+    try:
+        count = db.query(EmergencyContact).filter(EmergencyContact.user_id == current_user.id).count()
+        if count >= 5:
+            raise HTTPException(status_code=400, detail="Maximum 5 emergency contacts allowed")
 
-    contact = EmergencyContact(user_id=current_user.id, **data.model_dump())
-    db.add(contact)
-    db.commit()
-    db.refresh(contact)
-    return ContactResponse.model_validate(contact)
+        contact = EmergencyContact(user_id=current_user.id, **data.model_dump())
+        db.add(contact)
+        db.commit()
+        db.refresh(contact)
+        return ContactResponse.model_validate(contact)
+    except Exception as e:
+        logger.error(f"Failed to add contact: {str(e)}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to save contact: {str(e)}")
 
 
 @router.put("/contacts/{contact_id}", response_model=ContactResponse)

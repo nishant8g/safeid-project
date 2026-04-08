@@ -19,7 +19,7 @@ class ContactResponse(BaseModel):
     phone: str
     email: Optional[str] = None
     relationship: Optional[str] = None
-    priority: int = 1
+    priority: Optional[int] = 1
 
     class Config:
         from_attributes = True
