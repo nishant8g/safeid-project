@@ -73,8 +73,7 @@ export default function AnalyticsDashboard({ completionPercent }) {
         <div className="spinner" style={{ margin: '0 auto 1rem auto' }}></div>
         <h3 style={{ color: '#60a5fa', marginBottom: '0.5rem' }}>Secure Sync in Progress</h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          The backend is currently rebooting to apply your latest changes. 
-          <br/>This takes ~3-5 minutes on Render Free tier.
+          The backend is currently connecting to your secure vault.
           <br/><strong>Auto-refreshing... stay on this page!</strong>
         </p>
       </div>
