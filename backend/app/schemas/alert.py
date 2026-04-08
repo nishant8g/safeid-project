@@ -19,11 +19,10 @@ class ContactInfo(BaseModel):
 
 class AlertResponse(BaseModel):
     status: str
-    message: str
     alert_id: str
-    contacts_notified: int
     sos_message: str
-    contacts_list: List[ContactInfo] = []
+    contacts_list: list = []
+    delivery_results: list = []
 
 
 class AIMessageRequest(BaseModel):

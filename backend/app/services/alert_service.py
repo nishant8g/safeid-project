@@ -71,7 +71,7 @@ def send_whatsapp(to_phone: str, message: str, media_url: Optional[str] = None) 
             # For WhatsApp, use the Twilio WhatsApp number format
             msg_params = {
                 "body": message,
-                "from_": f"whatsapp:{settings.TWILIO_PHONE_NUMBER if settings.TWILIO_PHONE_NUMBER else '+14155238886'}",
+                "from_": settings.TWILIO_WHATSAPP_FROM if settings.TWILIO_WHATSAPP_FROM else "whatsapp:+14155238886",
                 "to": f"whatsapp:{to_phone}"
             }
             

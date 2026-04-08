@@ -9,8 +9,11 @@ from pathlib import Path
 
 from ..config import settings
 
-# QR output directory
-QR_DIR = Path(__file__).resolve().parent.parent.parent / "qr" / "generated"
+# QR output directory — Vercel filesystem is read-only, use /tmp
+if os.environ.get("VERCEL"):
+    QR_DIR = Path("/tmp/qr/generated")
+else:
+    QR_DIR = Path(__file__).resolve().parent.parent.parent / "qr" / "generated"
 QR_DIR.mkdir(parents=True, exist_ok=True)
 
 

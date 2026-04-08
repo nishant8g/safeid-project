@@ -29,23 +29,14 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
     # 4. Direct query for family contacts (Zero-Error Optimization)
     contacts = db.query(EmergencyContact).filter(EmergencyContact.user_id == user_id).all()
 
-    # 5. Create stealth analytics scan log
+    # 5. Log the scan (synchronous — fast single INSERT, safe for serverless)
     from ..models.analytics import ScanLog
-    import threading
-
-    def log_scan():
-        from ..database import SessionLocal
-        bg_db = SessionLocal()
-        try:
-            scan_log = ScanLog(user_id=user_id)
-            bg_db.add(scan_log)
-            bg_db.commit()
-        except:
-            pass
-        finally:
-            bg_db.close()
-
-    threading.Thread(target=log_scan).start()
+    try:
+        scan_log = ScanLog(user_id=user_id)
+        db.add(scan_log)
+        db.commit()
+    except Exception:
+        db.rollback()
 
     # 6. Return SAFE public data
     return {

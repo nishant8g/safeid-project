@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "safeid-super-secret-key"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
-    BASE_URL: str = f"http://{LAN_IP}:3000"
+    BASE_URL: str = "https://safeid-project.vercel.app"
 
     # Database
     DATABASE_URL: str = "sqlite:///./safeid.db"

@@ -264,8 +264,13 @@ async def trigger_alert(data: AlertTrigger, db: Session = Depends(get_db)):
     if data.message_override:
         sos_message += f"\n\n🎤 Rescuer Note: \"{data.message_override}\""
 
-    # 7. MOCK BROADCAST (Strict Manual Mode)
-    results = [{"contact": c.name, "method": "whatsapp", "status": "manual", "to": c.phone} for c in contacts]
+    # 7. REAL TWILIO BROADCAST to all emergency contacts
+    try:
+        results = send_alerts_to_contacts(contacts, sos_message)
+        logger.info(f"Alert broadcast sent to {len(contacts)} contacts")
+    except Exception as e:
+        logger.error(f"Alert broadcast failed: {e}")
+        results = [{"error": str(e), "status": "failed"}]
 
     # 8. Log the Alert
     contact_list = [{"name": c.name, "phone": c.phone} for c in contacts]

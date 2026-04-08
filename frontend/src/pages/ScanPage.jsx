@@ -107,7 +107,7 @@ export default function ScanPage() {
         formData.append('longitude', location.lng);
         try { await alertAPI.liveUpdate(activeAlertId, formData); }
         catch (err) { console.error('Heartbeat failed:', err); }
-      }, 5000);
+      }, 30000);
       return () => clearInterval(timer);
     }
   }, [location, activeAlertId]);
