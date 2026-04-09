@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     """Application settings."""
 
     # App
+    LAN_IP: str = LAN_IP
     APP_NAME: str = "SafeID"
     APP_ENV: str = "development"
     SECRET_KEY: str = "safeid-super-secret-key"
