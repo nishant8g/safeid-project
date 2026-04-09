@@ -47,6 +47,7 @@ app = FastAPI(
     docs_url=None,
     redoc_url=None,
     openapi_url=None,
+    root_path="/api" if os.environ.get("VERCEL") else "",
 )
 
 # Secure Docs Routes
