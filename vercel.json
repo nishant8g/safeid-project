@@ -12,35 +12,7 @@
   ],
   "routes": [
     {
-      "src": "/api/auth/login",
-      "dest": "/backend/app/main.py"
-    },
-    {
-      "src": "/api/auth/register",
-      "dest": "/backend/app/main.py"
-    },
-    {
-      "src": "/api/user/(.*)",
-      "dest": "/backend/app/main.py"
-    },
-    {
-      "src": "/api/qr/(.*)",
-      "dest": "/backend/app/main.py"
-    },
-    {
-      "src": "/api/scan/(.*)",
-      "dest": "/backend/app/main.py"
-    },
-    {
-      "src": "/api/alert/(.*)",
-      "dest": "/backend/app/main.py"
-    },
-    {
-      "src": "/api/ai/(.*)",
-      "dest": "/backend/app/main.py"
-    },
-    {
-      "src": "/api/health",
+      "src": "/api/(.*)",
       "dest": "/backend/app/main.py"
     },
     {
