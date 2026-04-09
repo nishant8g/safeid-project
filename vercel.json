@@ -15,19 +15,15 @@
   ],
   "rewrites": [
     {
-      "source": "/api/:path*",
+      "source": "/api/(.*)",
       "destination": "/api/index.py"
     },
     {
-      "source": "/(assets|icons.svg|favicon.svg|manifest.json|sw.js|safeid-logo-192.png|safeid-logo-512.png)",
+      "source": "/(assets|sw.js|manifest.json|favicon.svg|icons.svg|safeid-logo-192.png|safeid-logo-512.png)",
       "destination": "/frontend/$1"
     },
     {
-      "source": "/(scan|login|register|dashboard|profile|contacts|qr|nfc|history|auth|user|alert)/:path*",
-      "destination": "/frontend/index.html"
-    },
-    {
-      "source": "/((?!api|frontend).* )",
+      "source": "/(.*)",
       "destination": "/frontend/index.html"
     }
   ]
