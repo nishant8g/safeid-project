@@ -7,11 +7,12 @@ import './index.css'
 import App from './App.jsx'
 
 // Force clear any old service workers causing hangs (Rollback)
+// Register Service Worker for PWA (Get App functionality)
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(registrations => {
-    for (let registration of registrations) {
-      registration.unregister();
-    }
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('🚀 Service Worker Registered!', reg))
+      .catch(err => console.log('❌ Service Worker Registration Failed', err));
   });
 }
 
