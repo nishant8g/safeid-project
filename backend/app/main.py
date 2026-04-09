@@ -48,7 +48,7 @@ app = FastAPI(
     docs_url=None,
     redoc_url=None,
     openapi_url=None,
-    root_path="/server" if os.environ.get("VERCEL") else "",
+    root_path="/api" if os.environ.get("VERCEL") else "",
 )
 
 # Secure Docs Routes
@@ -63,7 +63,12 @@ async def get_openapi_endpoint(admin: str = Depends(get_current_admin)):
 # CORS — allow frontend from any origin (dev mode: phones on same WiFi)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "*", 
+        "http://localhost:3000",
+        "https://safeid-project.vercel.app",
+        f"http://{settings.LAN_IP}:3000"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

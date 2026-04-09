@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/(assets|icons|safeid-logo|manifest|sw|favicon)/(.*)",
+      "destination": "/frontend/$1/$2"
+    },
+    {
+      "source": "/(scan|login|register|dashboard|profile|contacts|qr|nfc|history|.*)",
+      "destination": "/frontend/index.html"
+    }
+  ]
+}
