@@ -19,11 +19,15 @@
       "destination": "/api/index.py"
     },
     {
-      "source": "/(assets|icons|safeid-logo|manifest|sw|favicon)/(.*)",
-      "destination": "/frontend/$1/$2"
+      "source": "/(assets|icons.svg|favicon.svg|manifest.json|sw.js|safeid-logo-192.png|safeid-logo-512.png)",
+      "destination": "/frontend/$1"
     },
     {
-      "source": "/(scan|login|register|dashboard|profile|contacts|qr|nfc|history|.*)",
+      "source": "/(scan|login|register|dashboard|profile|contacts|qr|nfc|history|auth|user|alert)/:path*",
+      "destination": "/frontend/index.html"
+    },
+    {
+      "source": "/((?!api|frontend).* )",
       "destination": "/frontend/index.html"
     }
   ]
