@@ -9,3 +9,6 @@ dist/
 build/
 qr/generated/
 .DS_Store
+
+.vercel
+.env*.local

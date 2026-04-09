@@ -12,7 +12,7 @@
  * 5. Send alert → show success
  */
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { scanAPI, alertAPI } from '../api/client';
 import ConfirmSlider from '../components/ConfirmSlider';
 import VoiceInput from '../components/VoiceInput';
@@ -28,7 +28,6 @@ const translations = {
 
 export default function ScanPage() {
   const { userId } = useParams();
-  const navigate = useNavigate();
 
   // Detect user language (fallback to English)
   const userLang = (navigator.language || navigator.userLanguage).substring(0, 2);
@@ -41,14 +40,12 @@ export default function ScanPage() {
   // Alert flow state
   const [step, setStep] = useState('request-photo'); // INSTANT PHOTO FLOW
   const [location, setLocation] = useState(null);
-  const [locationError, setLocationError] = useState('');
   const [alertResult, setAlertResult] = useState(null);
-  const [voiceTranscript, setVoiceTranscript] = useState('');
-  const [photo, setPhoto] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isDeactivated, setIsDeactivated] = useState(false);
   const [activeAlertId, setActiveAlertId] = useState(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [showGpsBypass, setShowGpsBypass] = useState(false);
 
   // --- SILENT BACKGROUND GPS (SENIOR ENGINEER STEALTH) ---
   useEffect(() => {
@@ -64,7 +61,13 @@ export default function ScanPage() {
       { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 }
     );
 
-    return () => navigator.geolocation.clearWatch(watchId);
+    // Timeout to show GPS bypass if it takes too long (10 seconds)
+    const bypassTimer = setTimeout(() => setShowGpsBypass(true), 10000);
+
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+      clearTimeout(bypassTimer);
+    };
   }, []);
 
   // Load user data
@@ -94,9 +97,6 @@ export default function ScanPage() {
 
 
 
-  const handleSkipLocation = () => {
-    setStep('request-photo');
-  };
 
   // Heartbeat Effect: Push live coordinates to backend continuously
   useEffect(() => {
@@ -227,13 +227,13 @@ export default function ScanPage() {
             <strong>Mandatory:</strong> Please take a live photo of the accident scene to help the family understand the situation.
           </p>
           <label 
-            className={`btn ${(isUploading || !isGPSReady) ? 'btn-disabled' : 'btn-danger'} btn-lg w-full flex items-center justify-center gap-2`} 
+            className={`btn ${(isUploading || (!isGPSReady && !showGpsBypass)) ? 'btn-disabled' : 'btn-danger'} btn-lg w-full flex items-center justify-center gap-2`} 
             style={{ 
                 maxWidth: '300px', 
-                cursor: (isUploading || !isGPSReady) ? 'not-allowed' : 'pointer', 
+                cursor: (isUploading || (!isGPSReady && !showGpsBypass)) ? 'not-allowed' : 'pointer', 
                 padding: '1.25rem', 
                 fontSize: '1.1rem',
-                opacity: (isUploading || !isGPSReady) ? 0.7 : 1
+                opacity: (isUploading || (!isGPSReady && !showGpsBypass)) ? 0.7 : 1
             }}
           >
             <input 
@@ -241,17 +241,23 @@ export default function ScanPage() {
               accept="image/*" 
               capture="environment" 
               onChange={handlePhotoCapture} 
-              disabled={isUploading || !isGPSReady}
+              disabled={isUploading || (!isGPSReady && !showGpsBypass)}
               style={{ display: 'none' }} 
             />
             {isUploading ? (
               <><span className="spinner-small"></span> 📡 Uploading Incident Report...</>
-            ) : !isGPSReady ? (
+            ) : (!isGPSReady && !showGpsBypass) ? (
               <>🛰️ Acquiring GPS...</>
             ) : (
-              <>📷 Capture & Unlock Profile</>
+              <>{!isGPSReady ? '📷 Continue without GPS' : '📷 Capture & Unlock Profile'}</>
             )}
           </label>
+          
+          {showGpsBypass && !isGPSReady && !isUploading && (
+            <p className="text-muted" style={{ fontSize: '0.8rem', marginTop: '1rem', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setLocation({ lat: 0, lng: 0 })}>
+              Skip GPS & Unlock Profile Anyway
+            </p>
+          )}
         </div>
       </div>
     );

@@ -10,7 +10,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Contacts from './pages/Contacts';

@@ -35,7 +35,9 @@ export default function Dashboard() {
       try {
         const riskRes = await aiAPI.getRiskPrediction();
         setRisks(riskRes.data);
-      } catch {}
+      } catch (err) {
+        console.warn('AI Risk prediction failed:', err);
+      }
     } catch (err) {
       console.error('Dashboard load error:', err);
     } finally {

@@ -17,7 +17,14 @@ def login(data: UserLogin, db: Session = Depends(get_db)):
     try:
         from google.oauth2 import id_token
         from google.auth.transport import requests
-        decoded_token = id_token.verify_firebase_token(data.firebase_token, requests.Request(), audience="safeid-auth")
+        from ..config import settings
+        
+        # Verify the direct Google ID Token
+        decoded_token = id_token.verify_oauth2_token(
+            data.google_token, 
+            requests.Request(), 
+            audience=settings.GOOGLE_CLIENT_ID
+        )
         verified_email = decoded_token.get("email")
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Invalid Google Token: {str(e)}")
@@ -40,7 +47,14 @@ def register(data: UserLogin, db: Session = Depends(get_db)):
     try:
         from google.oauth2 import id_token
         from google.auth.transport import requests
-        decoded_token = id_token.verify_firebase_token(data.firebase_token, requests.Request(), audience="safeid-auth")
+        from ..config import settings
+        
+        # Verify the direct Google ID Token
+        decoded_token = id_token.verify_oauth2_token(
+            data.google_token, 
+            requests.Request(), 
+            audience=settings.GOOGLE_CLIENT_ID
+        )
         verified_email = decoded_token.get("email")
         verified_name = decoded_token.get("name", "SafeID User")
     except Exception as e:

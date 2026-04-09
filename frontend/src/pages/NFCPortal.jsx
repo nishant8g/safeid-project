@@ -3,7 +3,7 @@
  */
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { qrAPI } from '../api/client'; // Uses the same base URL resolver
+
 
 export default function NFCPortal() {
   const { user } = useAuth();

@@ -22,8 +22,8 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  const login = async (firebase_token) => {
-    const res = await authAPI.login({ email: "google-auth", password: "google-auth", firebase_token });
+  const login = async (googleToken) => {
+    const res = await authAPI.login({ email: "google-auth", password: "google-auth", google_token: googleToken });
     const { access_token, user: userData } = res.data;
     sessionStorage.setItem('safeid_token', access_token);
     sessionStorage.setItem('safeid_user', JSON.stringify(userData));
@@ -32,8 +32,8 @@ export function AuthProvider({ children }) {
     return userData;
   };
 
-  const register = async (firebase_token) => {
-    const res = await authAPI.register({ email: "google-auth", password: "google-auth", firebase_token });
+  const register = async (googleToken) => {
+    const res = await authAPI.register({ email: "google-auth", password: "google-auth", google_token: googleToken });
     const { access_token, user: userData } = res.data;
     sessionStorage.setItem('safeid_token', access_token);
     sessionStorage.setItem('safeid_user', JSON.stringify(userData));

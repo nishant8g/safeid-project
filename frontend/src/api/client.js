@@ -7,7 +7,7 @@ import axios from 'axios';
 // Dynamically detect the backend URL based on how the user accessed the frontend.
 // If accessed via phone (LAN IP), API calls also go to LAN IP, not localhost.
 // When deployed on Vercel, it uses VITE_API_URL from environment variables.
-const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "/api" : `http://${window.location.hostname}:8001`);
+const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "/api" : `http://${window.location.hostname}:8000`);
 
 const api = axios.create({
   baseURL: API_BASE,

@@ -10,13 +10,13 @@ class UserRegister(BaseModel):
     email: str = Field(..., max_length=255)
     phone: str = Field(..., max_length=20)
     password: str = Field(..., min_length=6)
-    firebase_token: str = Field(..., description="Firebase SMS Verification JWT Token")
+    google_token: str = Field(..., description="Google OAuth2 ID Token")
 
 
 class UserLogin(BaseModel):
     email: str
     password: str
-    firebase_token: str = Field(..., description="Firebase Email Auth JWT Token")
+    google_token: str = Field(..., description="Google OAuth2 ID Token")
 
 
 class UserProfile(BaseModel):

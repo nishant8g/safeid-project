@@ -4,8 +4,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
   const [error, setError] = useState('');
@@ -14,26 +13,20 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSuccess = async (credentialResponse) => {
     setError('');
     setLoading(true);
     try {
-      const provider = new GoogleAuthProvider();
-      // 1. Authenticate intensely securely via Google Popup
-      const userCredential = await signInWithPopup(auth, provider);
-      
-      // 2. Extract mathematical JWT to prove identity to the backend
-      const firebaseToken = await userCredential.user.getIdToken();
+      // 1. credentialResponse.credential is the direct Google ID Token (JWT)
+      const googleToken = credentialResponse.credential;
 
-      // 3. Authenticate with SafeID API
-      await login(firebaseToken);
+      // 2. Authenticate with SafeID API
+      await login(googleToken);
       
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
-      if (err.code !== 'auth/popup-closed-by-user') {
-        setError(err.response?.data?.detail || `Secure Login failed: ${err.message}`);
-      }
+      setError(err.response?.data?.detail || `Secure Login failed: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -69,37 +62,18 @@ export default function Login() {
           {error && (
             <div className="alert alert-error" style={{ marginBottom: '2.0rem', textAlign: 'left', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', backdropFilter: 'blur(10px)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <span>⚠️ {error}</span>
-              {error.toLowerCase().includes('sign up') && (
-                <button 
-                  onClick={() => navigate('/')}
-                  style={{ 
-                    background: 'rgba(255, 255, 255, 0.1)', 
-                    border: '1px solid rgba(255, 255, 255, 0.2)', 
-                    color: 'white', 
-                    padding: '8px 12px', 
-                    borderRadius: '6px', 
-                    fontSize: '0.9rem', 
-                    cursor: 'pointer',
-                    marginTop: '0.5rem',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseOver={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.2)'}
-                  onMouseOut={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
-                >
-                  Create New Account →
-                </button>
-              )}
             </div>
           )}
 
-          <button 
-            onClick={handleGoogleSignIn} 
-            className="btn-google-premium" 
-            disabled={loading}
-          >
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22" height="22" alt="Google" style={{ background: 'white', borderRadius: '50%', padding: '2px' }} />
-            {loading ? 'Authenticating...' : 'Continue with Google'}
-          </button>
+          <div className="google-login-container" style={{ display: 'flex', justifyContent: 'center' }}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError('Google Authentication Failed')}
+              useOneTap
+              theme="filled_blue"
+              shape="pill"
+            />
+          </div>
           
           <p style={{ marginTop: '2.5rem', fontSize: '0.8rem', color: '#64748b' }}>
             New to SafeID? <span onClick={() => navigate('/')} style={{ color: 'var(--accent-blue)', cursor: 'pointer', fontWeight: '600' }}>Create an identity</span>
@@ -112,3 +86,4 @@ export default function Login() {
     </>
   );
 }
+

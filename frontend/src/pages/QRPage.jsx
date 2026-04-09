@@ -20,7 +20,8 @@ export default function QRPage() {
     try {
       const res = await qrAPI.getInfo();
       setQrInfo(res.data);
-    } catch {
+    } catch (err) {
+      console.warn("Failed to load existing QR info:", err);
     } finally {
       setLoading(false);
     }

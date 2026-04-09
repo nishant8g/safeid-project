@@ -15,8 +15,12 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <GoogleOAuthProvider clientId="963876569237-9osij8medcclsjr52ehr7mb4vs2fluq7.apps.googleusercontent.com">
+      <App />
+    </GoogleOAuthProvider>
   </React.StrictMode>
 )
