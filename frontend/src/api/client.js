@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SafeID API Client
  * Centralized HTTP client for all backend communication.
  */
@@ -7,7 +7,7 @@ import axios from 'axios';
 // Dynamically detect the backend URL based on how the user accessed the frontend.
 // If accessed via phone (LAN IP), API calls also go to LAN IP, not localhost.
 // When deployed on Vercel, it uses VITE_API_URL from environment variables.
-const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "/api" : `http://${window.location.hostname}:8001`);
+const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "/server" : `http://${window.location.hostname}:8001`);
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -17,7 +17,7 @@ const api = axios.create({
   },
 });
 
-// Request interceptor — attach JWT token
+// Request interceptor â€” attach JWT token
 api.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('safeid_token');
   if (token) {
@@ -26,7 +26,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Response interceptor — handle auth errors
+// Response interceptor â€” handle auth errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -42,13 +42,13 @@ api.interceptors.response.use(
   }
 );
 
-// ──── Auth ────
+// â”€â”€â”€â”€ Auth â”€â”€â”€â”€
 export const authAPI = {
   register: (data) => api.post('/auth/register', data),
   login: (data) => api.post('/auth/login', data),
 };
 
-// ──── User ────
+// â”€â”€â”€â”€ User â”€â”€â”€â”€
 export const userAPI = {
   getProfile: () => api.get('/user/profile'),
   updateProfile: (data) => api.put('/user/profile', data),
@@ -62,7 +62,7 @@ export const userAPI = {
   getAdminUsers: () => api.get('/user/admin/all'),
 };
 
-// ──── QR Code ────
+// â”€â”€â”€â”€ QR Code â”€â”€â”€â”€
 export const qrAPI = {
   generate: () => api.post(`/qr/generate?frontend_url=${encodeURIComponent(window.location.origin)}`),
   getInfo: () => api.get('/qr/info'),
@@ -70,12 +70,12 @@ export const qrAPI = {
   getImageUrl: (userId) => `${API_BASE}/qr/image/${userId}`,
 };
 
-// ──── Scan (Public) ────
+// â”€â”€â”€â”€ Scan (Public) â”€â”€â”€â”€
 export const scanAPI = {
   getData: (userId) => api.get(`/scan/${userId}`),
 };
 
-// ──── Alert (Public) ────
+// â”€â”€â”€â”€ Alert (Public) â”€â”€â”€â”€
 export const alertAPI = {
   trigger: (data) => api.post('/alert/trigger', data),
   reportIncident: (formData) => api.post('/alert/incident', formData, {
@@ -87,7 +87,7 @@ export const alertAPI = {
   getHistory: (userId) => api.get(`/alert/history?user_id=${userId}`),
 };
 
-// ──── AI ────
+// â”€â”€â”€â”€ AI â”€â”€â”€â”€
 export const aiAPI = {
   generateMessage: (data) => api.post('/ai/generate-message', data),
   analyzeSeverity: (description, imageDescription) =>
