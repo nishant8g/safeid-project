@@ -19,7 +19,7 @@
       "destination": "server/index.py"
     },
     {
-      "source": "/((?!server/).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
