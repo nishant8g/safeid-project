@@ -1,5 +1,6 @@
 """User profile and medical info routes."""
 
+import logging
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
@@ -14,6 +15,7 @@ from ..schemas.contact import ContactCreate, ContactResponse, ContactUpdate
 from ..services.auth_service import get_current_user
 
 router = APIRouter(prefix="/user", tags=["User Profile"])
+logger = logging.getLogger(__name__)
 
 
 # ──── Profile ────

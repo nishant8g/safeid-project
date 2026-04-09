@@ -22,8 +22,8 @@ def get_gemini_model():
     if HAS_GEMINI and settings.GEMINI_API_KEY:
         try:
             genai.configure(api_key=settings.GEMINI_API_KEY)
-            # Using 1.5-flash for speed and generous free tier
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            # Using 1.5-flash-latest for stability across API versions
+            model = genai.GenerativeModel('gemini-1.5-flash-latest')
             return model
         except Exception as e:
             logger.error(f"Failed to configure Gemini: {e}")
