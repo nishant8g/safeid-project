@@ -116,21 +116,36 @@ def send_emergency_email(
         msg["Subject"] = f"🚨 EMERGENCY ALERT — {victim_name} needs help!"
         msg["From"] = f"SafeID Emergency <{sender_email}>"
         msg["To"] = to_email
+        msg["X-Priority"] = "1 (Highest)"
+        msg["Importance"] = "High"
 
         # Plain text fallback
         msg.attach(MIMEText(sos_message, "plain"))
         # Rich HTML version
         msg.attach(MIMEText(html_body, "html"))
 
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        # Port 587 with STARTTLS is more compatible with cloud environments
+        with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as server:
+            server.set_debuglevel(1) if logger.isEnabledFor(logging.DEBUG) else None
+            server.ehlo()
+            server.starttls() # Secure the connection
+            server.ehlo()
+            
+            if "abcdefghijklmnop" in sender_password:
+                 logger.error("❌ Email failed: Placeholder password 'abcdefghijklmnop' detected. Replace it with your real 16-char Gmail App Password.")
+                 return {"status": "failed", "method": "email", "reason": "Placeholder password used"}
+                 
             server.login(sender_email, sender_password)
             server.sendmail(sender_email, to_email, msg.as_string())
 
-        logger.info(f"Emergency email sent to {to_email}")
+        logger.info(f"✅ Emergency email sent to {to_email}")
         return {"status": "sent", "method": "email", "to": to_email}
 
+    except smtplib.SMTPAuthenticationError:
+        logger.error(f"❌ Email Auth Failed for {sender_email}. Check App Password (16 chars).")
+        return {"status": "failed", "method": "email", "reason": "Authentication Denied (Check App Password)"}
     except Exception as e:
-        logger.error(f"Email failed to {to_email}: {e}")
+        logger.error(f"❌ Email failed to {to_email}: {e}")
         return {"status": "failed", "method": "email", "to": to_email, "error": str(e)}
 
 
