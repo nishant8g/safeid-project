@@ -24,23 +24,7 @@ export default function Landing() {
           Digital Identity
         </h1>
         
-        {/* Main CTA */}
-        <div className="hero-actions landing-actions">
-          {isAuthenticated ? (
-            <Link to="/dashboard" className="btn-cyan-pill">
-              Go to Dashboard ↗
-            </Link>
-          ) : (
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link to="/register" className="btn-nav-outline" style={{ padding: '0.8rem 2rem', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                Sign Up ↗
-              </Link>
-              <Link to="/login" className="btn-nav-outline" style={{ padding: '0.8rem 2rem', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                Sign In
-              </Link>
-            </div>
-          )}
-        </div>
+        {/* Hero Actions removed for cleaner minimalist design */}
 
         {/* Glowing Feature Cards */}
         <div className="landing-features-grid">
