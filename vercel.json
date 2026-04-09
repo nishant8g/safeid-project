@@ -10,46 +10,54 @@
       "use": "@vercel/python"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/auth/(.*)",
-      "destination": "backend/app/main.py"
+      "src": "/api/auth/login",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/api/user/(.*)",
-      "destination": "backend/app/main.py"
+      "src": "/api/auth/register",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/api/qr/(.*)",
-      "destination": "backend/app/main.py"
+      "src": "/api/user/(.*)",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/api/scan/(.*)",
-      "destination": "backend/app/main.py"
+      "src": "/api/qr/(.*)",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/api/alert/(.*)",
-      "destination": "backend/app/main.py"
+      "src": "/api/scan/(.*)",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/api/ai/(.*)",
-      "destination": "backend/app/main.py"
+      "src": "/api/alert/(.*)",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/api/health",
-      "destination": "backend/app/main.py"
+      "src": "/api/ai/(.*)",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/docs",
-      "destination": "backend/app/main.py"
+      "src": "/api/health",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/openapi.json",
-      "destination": "backend/app/main.py"
+      "src": "/docs",
+      "dest": "/backend/app/main.py"
     },
     {
-      "source": "/(.*)",
-      "destination": "/frontend/$1"
+      "src": "/openapi.json",
+      "dest": "/backend/app/main.py"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/frontend/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/index.html"
     }
   ]
 }
