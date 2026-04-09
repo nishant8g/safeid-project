@@ -19,8 +19,8 @@
       "destination": "server/index.py"
     },
     {
-      "source": "/(.*)",
-      "destination": "/frontend/$1"
+      "source": "/((?!server/).*)",
+      "destination": "/index.html"
     }
   ]
 }
