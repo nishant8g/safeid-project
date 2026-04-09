@@ -5,6 +5,7 @@ AI-Powered Emergency QR Response System
 
 import logging
 import secrets
+import os
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.openapi.docs import get_swagger_ui_html
