@@ -20,8 +20,10 @@ if db_url.startswith("sqlite"):
 engine = create_engine(
     db_url,
     connect_args=connect_args,
-    pool_pre_ping=True,
-    pool_recycle=300,
+    pool_size=2,          # Max active connections per server
+    max_overflow=5,       # How many extra can we open temporarily
+    pool_pre_ping=True,   # Check connection health before using
+    pool_recycle=300,     # Refresh connections every 5 minutes
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
