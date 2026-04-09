@@ -1,25 +1,32 @@
-"""AI Service — Claude-powered message generation and severity analysis."""
+"""AI Service — Google Gemini-powered message generation and severity analysis."""
 
 import logging
+import json
 from typing import Optional
 
 from ..config import settings
 
 logger = logging.getLogger(__name__)
 
-# Try to import anthropic
+# Try to import google-generativeai
 try:
-    import anthropic
-    HAS_ANTHROPIC = True
+    import google.generativeai as genai
+    HAS_GEMINI = True
 except ImportError:
-    HAS_ANTHROPIC = False
-    logger.warning("anthropic package not installed, using template fallback")
+    HAS_GEMINI = False
+    logger.warning("google-generativeai package not installed, using template fallback")
 
 
-def get_claude_client():
-    """Get Anthropic client if available."""
-    if HAS_ANTHROPIC and settings.ANTHROPIC_API_KEY:
-        return anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+def get_gemini_model():
+    """Configure and return Gemini model if available."""
+    if HAS_GEMINI and settings.GEMINI_API_KEY:
+        try:
+            genai.configure(api_key=settings.GEMINI_API_KEY)
+            # Using 1.5-flash for speed and generous free tier
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            return model
+        except Exception as e:
+            logger.error(f"Failed to configure Gemini: {e}")
     return None
 
 
@@ -34,7 +41,7 @@ def generate_sos_message(
 ) -> str:
     """
     Generate a clear, human-friendly SOS message.
-    Uses Claude AI if available, otherwise falls back to a template.
+    Uses Google Gemini AI if available, otherwise falls back to a template.
     """
     # Build location info
     location_str = ""
@@ -45,14 +52,14 @@ def generate_sos_message(
         location_str = f"📍 Location: {address}"
 
     # Try AI generation
-    client = get_claude_client()
-    if client:
+    model = get_gemini_model()
+    if model:
         try:
             prompt = f"""Generate a brief, clear emergency SOS message for sending to family contacts.
 The message should be:
 - Urgent but not panic-inducing
 - Include all critical medical info
-- Be under 300 characters suitable for SMS
+- Be under 300 characters suitable for SMS/WhatsApp
 
 Details:
 - Person's name: {user_name}
@@ -64,15 +71,11 @@ Details:
 
 Return ONLY the message text, no quotes or explanation."""
 
-            response = client.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=300,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            ai_message = response.content[0].text.strip()
+            response = model.generate_content(prompt)
+            ai_message = response.text.strip()
             return ai_message
         except Exception as e:
-            logger.error(f"Claude AI message generation failed: {e}")
+            logger.error(f"Gemini AI message generation failed: {e}")
 
     # Template fallback
     medical_info = []
@@ -99,9 +102,9 @@ def analyze_severity(description: str = None, image_description: str = None) -> 
     Analyze severity of an emergency situation.
     Returns: {severity: minor/moderate/critical, explanation: str}
     """
-    client = get_claude_client()
+    model = get_gemini_model()
 
-    if client:
+    if model:
         try:
             prompt = f"""You are a medical triage assistant. Based on the following information,
 classify the emergency severity as one of: minor, moderate, or critical.
@@ -114,16 +117,13 @@ Respond in this exact JSON format:
 
 Return ONLY the JSON, nothing else."""
 
-            response = client.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=200,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            import json
-            result = json.loads(response.content[0].text.strip())
+            response = model.generate_content(prompt)
+            # Remove any markdown formatting if present
+            clean_text = response.text.strip().replace('```json', '').replace('```', '').strip()
+            result = json.loads(clean_text)
             return result
         except Exception as e:
-            logger.error(f"Claude severity analysis failed: {e}")
+            logger.error(f"Gemini severity analysis failed: {e}")
 
     # Fallback
     return {
@@ -142,9 +142,9 @@ def generate_risk_predictions(
     """
     Generate health risk predictions and recommendations based on medical data.
     """
-    client = get_claude_client()
+    model = get_gemini_model()
 
-    if client:
+    if model:
         try:
             prompt = f"""You are a medical safety advisor. Based on the following patient information,
 provide risk warnings and safety recommendations they should be aware of in emergencies.
@@ -165,16 +165,12 @@ Respond in this exact JSON format:
 
 Be specific and actionable. Max 3 warnings and 4 recommendations. Return ONLY JSON."""
 
-            response = client.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=500,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            import json
-            result = json.loads(response.content[0].text.strip())
+            response = model.generate_content(prompt)
+            clean_text = response.text.strip().replace('```json', '').replace('```', '').strip()
+            result = json.loads(clean_text)
             return result
         except Exception as e:
-            logger.error(f"Claude risk prediction failed: {e}")
+            logger.error(f"Gemini risk prediction failed: {e}")
 
     # Template-based fallback
     warnings = []

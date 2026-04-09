@@ -48,8 +48,9 @@ class Settings(BaseSettings):
     SMTP_EMAIL: str = ""
     SMTP_APP_PASSWORD: str = ""
 
-    # Anthropic
+    # AI (Migrating to Gemini for Free Tier)
     ANTHROPIC_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
 
     # Google Maps
     GOOGLE_MAPS_API_KEY: str = ""
