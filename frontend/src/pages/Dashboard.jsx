@@ -114,7 +114,7 @@ export default function Dashboard() {
               }} />
             </div>
           </div>
-          <div className="stat-label">QR Privacy {qrInfo?.is_active ? '(Enabled)' : '(Disabled)'}</div>
+          <div className="stat-label">{qrInfo?.is_active ? 'QR Working' : 'QR Privacy'}</div>
         </div>
       </div>
 
