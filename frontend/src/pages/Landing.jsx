@@ -56,6 +56,38 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="how-it-works-section">
+        <h2 className="how-it-works-title">Three Steps to Security</h2>
+        <div className="steps-grid">
+          
+          <div className="step-card">
+            <div className="step-number">1</div>
+            <div className="step-content">
+              <h3 className="step-title">Setup</h3>
+              <p className="step-desc">Create your secure medical profile and add your primary emergency contacts.</p>
+            </div>
+          </div>
+
+          <div className="step-card">
+            <div className="step-number">2</div>
+            <div className="step-content">
+              <h3 className="step-title">Connect</h3>
+              <p className="step-desc">Generate your high-security QR code or link your profile to an NFC-enabled tag.</p>
+            </div>
+          </div>
+
+          <div className="step-card">
+            <div className="step-number">3</div>
+            <div className="step-content">
+              <h3 className="step-title">Protect</h3>
+              <p className="step-desc">In an emergency, rescuers scan your tag to get instant life-saving information.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       {/* Footer Area Matching Image */}
       <footer className="landing-footer">
         <div className="footer-brand">
