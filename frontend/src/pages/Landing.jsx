@@ -45,7 +45,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="glow-card glow-card-magenta">
+          <div className="glow-card glow-card-magenta feature-card-centered">
             <div className="card-icon-box" style={{ color: '#d946ef' }}>☁️</div>
             <h3 className="feature-card-title">Digital Health Record</h3>
             <p className="feature-card-desc">
