@@ -85,12 +85,7 @@ export default function Navbar() {
                   📲 Get App
                 </button>
               )}
-              <div className="unauth-menu-items">
-                <span className="unauth-link">Features</span>
-                <span className="unauth-link">Security</span>
-                <span className="unauth-link">Support</span>
-                <span className="unauth-link">Pricing</span>
-              </div>
+
               <Link to="/login" onClick={() => setMobileOpen(false)}>
                 <span className="btn-nav-outline">
                   Sign In

@@ -61,12 +61,7 @@ export default function Landing() {
         <div className="footer-brand">
           <strong>SafeID</strong> Copyright 2024
         </div>
-        <div className="footer-links">
-          <span>Links</span>
-          <span>Security</span>
-          <span>Support</span>
-          <span>Pricing</span>
-        </div>
+
         <div className="footer-social">
           <span>🐙</span> {/* GitHub placeholder */}
           <span>𝕏</span>  {/* X placeholder */}
