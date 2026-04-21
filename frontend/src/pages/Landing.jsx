@@ -227,13 +227,13 @@ export default function Landing() {
           initial="hidden" animate="visible" variants={staggerContainer}
         >
           {/* Badge */}
-          <motion.div variants={fadeUpVariant} style={{ display: 'inline-flex', alignItems: 'center', padding: '8px 20px', background: 'rgba(255, 255, 255, 0.6)', backdropFilter: 'blur(12px)', border: '1px solid rgba(0, 97, 255, 0.2)', borderRadius: '100px', marginBottom: '12px', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)' }}>
+          <motion.div variants={fadeUpVariant} style={{ display: 'inline-flex', alignItems: 'center', padding: '8px 20px', background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(12px)', border: '1px solid rgba(0, 97, 255, 0.15)', borderRadius: '100px', marginBottom: '12px', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)' }}>
             <span style={{ display: 'block', width: '6px', height: '6px', background: '#0061FF', borderRadius: '50%', marginRight: '8px', boxShadow: '0 0 10px #0061FF' }} />
-            <span style={{ fontWeight: '700', fontSize: '0.8rem', color: '#0061FF', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Next-Gen Emergency Response</span>
+            <span style={{ fontWeight: '700', fontSize: '0.75rem', color: '#0061FF', letterSpacing: '0.8px', textTransform: 'uppercase' }}>Next-Gen Emergency Response</span>
           </motion.div>
 
           {/* Title */}
-          <motion.h1 variants={fadeUpVariant} style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: '900', color: '#0f172a', lineHeight: '1.05', letterSpacing: '-0.04em', maxWidth: '900px', marginBottom: '8px' }}>
+          <motion.h1 variants={fadeUpVariant} style={{ fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)', fontWeight: '900', color: '#0f172a', lineHeight: '1.05', letterSpacing: '-0.04em', maxWidth: '900px', marginBottom: '10px' }}>
             Your Digital Shield in <br />
             <span style={{ background: 'linear-gradient(135deg, #0061FF 0%, #9D50BB 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Critical Moments
@@ -241,7 +241,7 @@ export default function Landing() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', color: '#475569', maxWidth: '850px', lineHeight: '1.4', marginBottom: '24px' }}>
+          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', color: '#475569', maxWidth: '820px', lineHeight: '1.5', marginBottom: '28px', opacity: 0.9 }}>
             SafeID uses advanced QR and NFC technology to instantly provide first responders with your life-saving medical data and alert your emergency contacts.
           </motion.p>
 
@@ -267,72 +267,73 @@ export default function Landing() {
         </motion.div>
       </section>
 
-      {/* High-Tech Grid Features - Neat and equal sizing */}
-      <section style={{ padding: '120px 24px', position: 'relative', zIndex: 10 }}>
+      {/* High-Tech Grid Features - Balanced and Premium */}
+      <section style={{ padding: '100px 24px', position: 'relative', zIndex: 10 }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <h2 style={{ fontSize: 'clamp(2.2rem, 4vw, 3rem)', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em', marginBottom: '16px' }}>Enterprise-Grade Security</h2>
-            <p style={{ color: '#64748b', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>Combining robust encryption with seamless accessibility to ensure your data is perfectly strictly safe, yet instantly available when it matters.</p>
+          <div style={{ textAlign: 'center', marginBottom: '70px' }}>
+            <span style={{ color: '#0061FF', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.8rem' }}>Core Capabilities</span>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em', marginBottom: '16px', marginTop: '12px' }}>Enterprise-Grade Security</h2>
+            <p style={{ color: '#64748b', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>Combining robust encryption with seamless accessibility to ensure your data is strictly safe, yet instantly available when it matters.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '30px' }}>
-
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '30px' }}>
+            
             {/* Box 1: Alerts */}
-            <motion.div
-              style={{ background: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(24px)', borderRadius: '30px', padding: '40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.06), 0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.3s ease', cursor: 'default' }}
-              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
-              whileHover={{ y: -8, scale: 1.01, boxShadow: '0 30px 60px rgba(67, 56, 202, 0.12)' }}
+            <motion.div 
+              style={{ background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(30px)', borderRadius: '32px', padding: '48px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.04), 0 1px 3px rgba(0,0,0,0.01)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'default' }}
+              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUpVariant}
+              whileHover={{ y: -10, boxShadow: '0 40px 80px rgba(67, 56, 202, 0.1)' }}
             >
-              <div style={{ width: '64px', height: '64px', background: 'rgba(0, 97, 255, 0.1)', color: '#0061FF', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
-                <Wifi size={32} strokeWidth={2.5} />
+              <div style={{ width: '60px', height: '60px', background: 'linear-gradient(135deg, rgba(0, 97, 255, 0.12), rgba(0, 97, 255, 0.05))', color: '#0061FF', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
+                <Wifi size={30} strokeWidth={2.5} />
               </div>
-              <h3 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>Instant Alerts</h3>
-              <p style={{ fontSize: '1rem', color: '#475569', lineHeight: '1.6', flexGrow: 1 }}>When your QR code or NFC tag is scanned, SafeID instantly dispatches a high-priority SMS and WhatsApp alert to your contacts.</p>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>Instant Alerts</h3>
+              <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: '1.6', flexGrow: 1 }}>When your QR code or NFC tag is scanned, SafeID instantly dispatches a high-priority SMS and WhatsApp alert to your contacts.</p>
             </motion.div>
 
             {/* Box 2: Encryption */}
-            <motion.div
-              style={{ background: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(24px)', borderRadius: '30px', padding: '40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.06), 0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', overflow: 'hidden', transition: 'all 0.3s ease', cursor: 'default' }}
-              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
-              whileHover={{ y: -8, scale: 1.01, boxShadow: '0 30px 60px rgba(67, 56, 202, 0.12)' }}
+            <motion.div 
+              style={{ background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(30px)', borderRadius: '32px', padding: '48px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.04), 0 1px 3px rgba(0,0,0,0.01)', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', overflow: 'hidden', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'default' }}
+              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUpVariant}
+              whileHover={{ y: -10, boxShadow: '0 40px 80px rgba(67, 56, 202, 0.1)' }}
             >
               <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <div style={{ width: '64px', height: '64px', background: 'rgba(6, 182, 212, 0.1)', color: '#0891b2', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
-                  <Lock size={32} strokeWidth={2.5} />
+                <div style={{ width: '60px', height: '60px', background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(6, 182, 212, 0.05))', color: '#0891b2', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
+                  <Lock size={30} strokeWidth={2.5} />
                 </div>
-                <h3 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>AES-256 Vault</h3>
-                <p style={{ color: '#475569', fontSize: '1rem', lineHeight: '1.6', flexGrow: 1 }}>Your health data is sealed with military-grade encryption within our secure vaults. Only physically verified scans can decrypt your vital info.</p>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>AES-256 Vault</h3>
+                <p style={{ color: '#475569', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1 }}>Your health data is sealed with military-grade encryption within our secure vaults. Only physically verified scans can decrypt your vital info.</p>
               </div>
-              <motion.div
-                animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                style={{ position: 'absolute', right: '-50px', bottom: '-50px', width: '200px', height: '200px', border: '2px dashed rgba(67, 56, 202, 0.15)', borderRadius: '50%', zIndex: 1 }}
+              <motion.div 
+                animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+                style={{ position: 'absolute', right: '-40px', bottom: '-40px', width: '180px', height: '180px', border: '2px dashed rgba(6, 182, 212, 0.1)', borderRadius: '50%', zIndex: 1 }}
               />
             </motion.div>
 
             {/* Box 3: NFC */}
-            <motion.div
-              style={{ background: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(24px)', borderRadius: '30px', padding: '40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.06), 0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.3s ease', cursor: 'default' }}
-              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
-              whileHover={{ y: -8, scale: 1.01, boxShadow: '0 30px 60px rgba(67, 56, 202, 0.12)' }}
+            <motion.div 
+              style={{ background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(30px)', borderRadius: '32px', padding: '48px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.04), 0 1px 3px rgba(0,0,0,0.01)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'default' }}
+              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUpVariant}
+              whileHover={{ y: -10, boxShadow: '0 40px 80px rgba(67, 56, 202, 0.1)' }}
             >
-              <div style={{ width: '64px', height: '64px', background: 'rgba(157, 80, 187, 0.1)', color: '#9D50BB', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
-                <Nfc size={32} strokeWidth={2.5} />
+              <div style={{ width: '60px', height: '60px', background: 'linear-gradient(135deg, rgba(157, 80, 187, 0.12), rgba(157, 80, 187, 0.05))', color: '#9D50BB', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
+                <Nfc size={30} strokeWidth={2.5} />
               </div>
-              <h3 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>NFC Smart Tags</h3>
-              <p style={{ color: '#475569', fontSize: '1rem', lineHeight: '1.6', flexGrow: 1 }}>Embed your profile into smart bracelets or wallet cards. A tap from any modern smartphone unlocks your emergency profile immediately.</p>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>NFC Smart Tags</h3>
+              <p style={{ color: '#475569', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1 }}>Embed your profile into smart bracelets or wallet cards. A tap from any modern smartphone unlocks your emergency profile immediately.</p>
             </motion.div>
 
             {/* Box 4: ABHA */}
-            <motion.div
-              style={{ background: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(24px)', borderRadius: '30px', padding: '40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.06), 0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.3s ease', cursor: 'default' }}
-              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
-              whileHover={{ y: -8, scale: 1.01, boxShadow: '0 30px 60px rgba(67, 56, 202, 0.12)' }}
+            <motion.div 
+              style={{ background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(30px)', borderRadius: '32px', padding: '48px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.04), 0 1px 3px rgba(0,0,0,0.01)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'default' }}
+              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUpVariant}
+              whileHover={{ y: -10, boxShadow: '0 40px 80px rgba(67, 56, 202, 0.1)' }}
             >
-              <div style={{ width: '64px', height: '64px', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
-                <Stethoscope size={32} strokeWidth={2.5} />
+              <div style={{ width: '60px', height: '60px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.05))', color: '#10b981', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
+                <Stethoscope size={30} strokeWidth={2.5} />
               </div>
-              <h3 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>ABHA Health Sync</h3>
-              <p style={{ color: '#475569', fontSize: '1rem', lineHeight: '1.6', flexGrow: 1 }}>Connect seamlessly with your official ABHA Health ID. First responders get highly comprehensive, authorized access to your verified medical records instantly.</p>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>ABHA Health Sync</h3>
+              <p style={{ color: '#475569', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1 }}>Connect seamlessly with your official ABHA Health ID. First responders get highly comprehensive, authorized access to your verified medical records instantly.</p>
             </motion.div>
 
           </div>
@@ -341,29 +342,30 @@ export default function Landing() {
 
       {/* How it Works Flowchart - Simplified & Cleaned */}
       <section id="how-it-works" style={{ padding: '100px 24px', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
-          <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-            <span style={{ color: '#0061FF', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.85rem' }}>Implementation</span>
-            <h2 style={{ fontSize: 'clamp(2.2rem, 4vw, 3rem)', color: '#0f172a', fontWeight: '900', marginTop: '16px', letterSpacing: '-0.02em' }}>3 Steps to Protection</h2>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+          <div style={{ textAlign: 'center', marginBottom: '70px' }}>
+            <span style={{ color: '#0061FF', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.8rem' }}>Implementation</span>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', color: '#0f172a', fontWeight: '900', marginTop: '12px', letterSpacing: '-0.02em', marginBottom: '16px' }}>3 Steps to Protection</h2>
+            <p style={{ color: '#64748b', fontSize: '1rem' }}>Our platform ensures a frictionless onboarding experience for lifecycle-long safety.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
             {[
               { num: '01', title: 'Create Profile', desc: 'Securely log your critical conditions, allergies, and emergency contacts.' },
               { num: '02', title: 'Link Identifier', desc: 'Get your unique cryptographic QR code, physical NFC tag, or link your ABHA card.' },
               { num: '03', title: 'Global Protection', desc: 'Responders globally can scan your SafeID to access data and trigger GPS alerts.' }
             ].map((step, idx) => (
-              <motion.div
+              <motion.div 
                 key={idx}
                 initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
-                whileHover={{ y: -6, scale: 1.01, boxShadow: '0 30px 60px rgba(67, 56, 202, 0.12)' }}
-                style={{ background: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255, 255, 255, 1)', padding: '40px', borderRadius: '24px', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.06), 0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: '100%', cursor: 'default' }}
+                whileHover={{ y: -10 }}
+                style={{ background: 'rgba(255, 255, 255, 0.4)', border: '1px solid rgba(255, 255, 255, 0.8)', padding: '48px 40px', borderRadius: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: '100%', cursor: 'default', transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
               >
-                <div style={{ width: '70px', height: '70px', borderRadius: '20px', background: 'linear-gradient(135deg, #0061FF 0%, #00E5FF 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', fontWeight: '900', color: 'white', marginBottom: '24px' }}>
+                <div style={{ width: '80px', height: '80px', borderRadius: '24px', background: 'linear-gradient(135deg, #0f172a, #1e293b)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: '900', color: 'white', marginBottom: '28px', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}>
                   {step.num}
                 </div>
-                <h3 style={{ fontSize: '1.4rem', color: '#0f172a', fontWeight: '800', marginBottom: '12px' }}>{step.title}</h3>
-                <p style={{ color: '#64748b', fontSize: '1rem', lineHeight: '1.6', margin: 0, flexGrow: 1 }}>{step.desc}</p>
+                <h3 style={{ fontSize: '1.4rem', color: '#0f172a', fontWeight: '800', marginBottom: '16px' }}>{step.title}</h3>
+                <p style={{ color: '#64748b', fontSize: '1.05rem', lineHeight: '1.6', margin: 0, flexGrow: 1, opacity: 0.9 }}>{step.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -395,25 +397,25 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer style={{ padding: '60px 40px 40px', background: 'transparent', position: 'relative', zIndex: 10, color: '#64748b', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
-        {/* Relocated Global Stats */}
-        <div style={{ maxWidth: '1200px', margin: '0 auto 60px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', padding: '0 24px' }}>
+      <footer style={{ padding: '80px 40px 40px', background: 'rgba(255, 255, 255, 0.3)', backdropFilter: 'blur(10px)', position: 'relative', zIndex: 10, color: '#64748b', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+        {/* Relocated Global Stats - Information Bar Style */}
+        <div style={{ maxWidth: '1200px', margin: '0 auto 80px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '40px', padding: '40px', background: 'rgba(255, 255, 255, 0.5)', borderRadius: '32px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
           <AnimatedCounter end="AES-256" label="Encryption Standard" />
           <AnimatedCounter end={1} suffix="s" label="Scan to Alert Time" />
           <AnimatedCounter end={99} suffix=".9%" label="System Reliability" />
           <AnimatedCounter end="24/7" label="Secure Availability" />
         </div>
 
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '30px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '40px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '1.5rem' }}>🛡️</span>
-            <span style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>SafeID</span>
+            <span style={{ fontSize: '1.8rem' }}>🛡️</span>
+            <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.8px' }}>SafeID</span>
           </div>
-
-          <div style={{ display: 'flex', gap: '32px', fontSize: '0.95rem', fontWeight: '500', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Privacy Policy</a>
-            <a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
-            <a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Contact Support</a>
+          
+          <div style={{ display: 'flex', gap: '40px', fontSize: '1rem', fontWeight: '600', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <a href="#" style={{ color: '#64748b', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#0061FF'} onMouseOut={e=>e.currentTarget.style.color='#64748b'}>Privacy Policy</a>
+            <a href="#" style={{ color: '#64748b', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#0061FF'} onMouseOut={e=>e.currentTarget.style.color='#64748b'}>Terms of Service</a>
+            <a href="#" style={{ color: '#64748b', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#0061FF'} onMouseOut={e=>e.currentTarget.style.color='#64748b'}>Contact Support</a>
           </div>
 
           <div style={{ display: 'flex', gap: '16px', fontSize: '1.2rem' }}>
