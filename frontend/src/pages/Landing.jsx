@@ -241,7 +241,7 @@ export default function Landing() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', color: '#475569', maxWidth: '820px', lineHeight: '1.5', marginBottom: '28px', opacity: 0.9 }}>
+          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', color: '#1e293b', maxWidth: '820px', lineHeight: '1.5', marginBottom: '28px', fontWeight: '500' }}>
             SafeID uses advanced QR and NFC technology to instantly provide first responders with your life-saving medical data and alert your emergency contacts.
           </motion.p>
 
@@ -282,7 +282,7 @@ export default function Landing() {
                 <Wifi size={30} strokeWidth={2.5} />
               </div>
               <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>Instant Alerts</h3>
-              <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: '1.6', flexGrow: 1 }}>When your QR code or NFC tag is scanned, SafeID instantly dispatches a high-priority SMS and WhatsApp alert to your contacts.</p>
+              <p style={{ fontSize: '1.05rem', color: '#334155', lineHeight: '1.6', flexGrow: 1, fontWeight: '500' }}>When your QR code or NFC tag is scanned, SafeID instantly dispatches a high-priority SMS and WhatsApp alert to your contacts.</p>
             </motion.div>
 
             {/* Box 2: Encryption */}
@@ -296,7 +296,7 @@ export default function Landing() {
                   <Lock size={30} strokeWidth={2.5} />
                 </div>
                 <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>AES-256 Vault</h3>
-                <p style={{ color: '#475569', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1 }}>Your health data is sealed with military-grade encryption within our secure vaults. Only physically verified scans can decrypt your vital info.</p>
+                <p style={{ color: '#334155', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1, fontWeight: '500' }}>Your health data is sealed with military-grade encryption within our secure vaults. Only physically verified scans can decrypt your vital info.</p>
               </div>
               <motion.div 
                 animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
@@ -314,7 +314,7 @@ export default function Landing() {
                 <Nfc size={30} strokeWidth={2.5} />
               </div>
               <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>NFC Smart Tags</h3>
-              <p style={{ color: '#475569', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1 }}>Embed your profile into smart bracelets or wallet cards. A tap from any modern smartphone unlocks your emergency profile immediately.</p>
+              <p style={{ color: '#334155', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1, fontWeight: '500' }}>Embed your profile into smart bracelets or wallet cards. A tap from any modern smartphone unlocks your emergency profile immediately.</p>
             </motion.div>
 
             {/* Box 4: ABHA */}
@@ -327,7 +327,7 @@ export default function Landing() {
                 <Stethoscope size={30} strokeWidth={2.5} />
               </div>
               <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>ABHA Health Sync</h3>
-              <p style={{ color: '#475569', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1 }}>Connect seamlessly with your official ABHA Health ID. First responders get highly comprehensive, authorized access to your verified medical records instantly.</p>
+              <p style={{ color: '#334155', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1, fontWeight: '500' }}>Connect seamlessly with your official ABHA Health ID. First responders get highly comprehensive, authorized access to your verified medical records instantly.</p>
             </motion.div>
 
           </div>
