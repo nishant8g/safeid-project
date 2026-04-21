@@ -35,8 +35,10 @@ export default function Navbar() {
 
   const isActive = (path) => location.pathname === path ? 'active' : '';
 
+  const isPublicLightPage = ['/', '/login', '/register'].includes(location.pathname);
+
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isPublicLightPage ? 'navbar-light' : ''}`}>
       <div className="navbar-inner">
         <Link to="/" className="navbar-logo">
           <span className="logo-icon">🛡️</span>
