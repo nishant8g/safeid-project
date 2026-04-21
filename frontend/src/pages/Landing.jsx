@@ -268,14 +268,8 @@ export default function Landing() {
       </section>
 
       {/* High-Tech Grid Features - Balanced and Premium */}
-      <section style={{ padding: '60px 24px 100px', position: 'relative', zIndex: 10 }}>
+      <section style={{ padding: '20px 24px 60px', position: 'relative', zIndex: 10 }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '70px' }}>
-            <span style={{ color: '#0061FF', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.8rem' }}>Core Capabilities</span>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em', marginBottom: '16px', marginTop: '12px' }}>Enterprise-Grade Security</h2>
-            <p style={{ color: '#64748b', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>Combining robust encryption with seamless accessibility to ensure your data is strictly safe, yet instantly available when it matters.</p>
-          </div>
-
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '30px' }}>
             
             {/* Box 1: Alerts */}
