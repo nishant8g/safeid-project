@@ -353,7 +353,7 @@ export default function Landing() {
                 key={idx}
                 initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
                 whileHover={{ y: -10 }}
-                style={{ background: 'rgba(255, 255, 255, 0.4)', border: '1px solid rgba(255, 255, 255, 0.8)', padding: '48px 40px', borderRadius: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: '100%', cursor: 'default', transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
+                style={{ background: 'rgba(255, 255, 255, 0.7)', border: '2px solid rgba(255, 255, 255, 0.9)', padding: '48px 40px', borderRadius: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: '100%', cursor: 'default', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', boxShadow: '0 10px 30px rgba(255,255,255,0.4), 0 4px 12px rgba(0,0,0,0.02)' }}
               >
                 <div style={{ width: '80px', height: '80px', borderRadius: '24px', background: 'linear-gradient(135deg, #0f172a, #1e293b)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: '900', color: 'white', marginBottom: '28px', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}>
                   {step.num}
