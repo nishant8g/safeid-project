@@ -5,8 +5,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function Login() {
   const [error, setError] = useState('');
@@ -40,6 +41,16 @@ export default function Login() {
       {/* Absolute Ambient Background matching Landing page */}
       <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: '800px', height: '800px', background: 'radial-gradient(circle, rgba(0, 97, 255, 0.1) 0%, rgba(255,255,255,0) 70%)', filter: 'blur(60px)', borderRadius: '50%', zIndex: 0 }} />
       <div style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(157, 80, 187, 0.1) 0%, rgba(255,255,255,0) 70%)', filter: 'blur(60px)', borderRadius: '50%', zIndex: 0 }} />
+
+      {/* Back to Home Button */}
+      <Link 
+        to="/" 
+        style={{ position: 'absolute', top: '24px', left: '24px', display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', textDecoration: 'none', fontWeight: '600', fontSize: '0.95rem', zIndex: 100, padding: '10px 18px', background: 'rgba(255, 255, 255, 0.4)', backdropFilter: 'blur(10px)', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.5)', transition: 'all 0.2s ease' }}
+        onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)'; e.currentTarget.style.transform = 'translateX(-3px)'; }}
+        onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.4)'; e.currentTarget.style.transform = 'translateX(0)'; }}
+      >
+        <ArrowLeft size={18} /> Back to Home
+      </Link>
 
       {/* Foreground Content */}
       <div style={{ width: '100%', padding: '24px', display: 'flex', justifyContent: 'center', zIndex: 10 }}>
