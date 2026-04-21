@@ -189,7 +189,7 @@ export default function Landing() {
   };
 
   return (
-    <div style={{ position: 'relative', overflowX: 'hidden', minHeight: '100vh', background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%)', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ position: 'relative', overflowX: 'hidden', minHeight: '100vh', background: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%)', fontFamily: "'Inter', sans-serif" }}>
 
       {/* Global CSS override just for this page to make navbar NOT fixed */}
       <style>{`
