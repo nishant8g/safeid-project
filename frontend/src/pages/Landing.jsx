@@ -24,7 +24,7 @@ function MeshBackground() {
     window.addEventListener('resize', resize);
 
     // Nodes
-    const NODE_COUNT = 90;
+    const NODE_COUNT = 55; // Reduced from 90 to optimize performance
     const nodes = [];
     for (let i = 0; i < NODE_COUNT; i++) {
       nodes.push({
@@ -82,7 +82,7 @@ function MeshBackground() {
             ctx.beginPath();
             ctx.moveTo(a.px, a.py);
             ctx.lineTo(b.px, b.py);
-            ctx.strokeStyle = `rgba(0, 97, 255, ${opacity})`;
+            ctx.strokeStyle = `rgba(96, 165, 250, ${opacity})`;
             ctx.lineWidth = 1 * Math.min(a.scale, b.scale);
             ctx.stroke();
           }
@@ -96,14 +96,14 @@ function MeshBackground() {
         ctx.beginPath();
         ctx.arc(p.px, p.py, r * 2.5, 0, Math.PI * 2);
         const gradient = ctx.createRadialGradient(p.px, p.py, 0, p.px, p.py, r * 2.5);
-        gradient.addColorStop(0, `rgba(0, 97, 255, ${0.7 * p.scale})`);
-        gradient.addColorStop(1, 'rgba(0, 97, 255, 0)');
+        gradient.addColorStop(0, `rgba(59, 130, 246, ${0.7 * p.scale})`);
+        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
         ctx.fillStyle = gradient;
         ctx.fill();
 
         ctx.beginPath();
         ctx.arc(p.px, p.py, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 229, 255, ${0.9 * p.scale})`;
+        ctx.fillStyle = `rgba(6, 182, 212, ${0.9 * p.scale})`;
         ctx.fill();
       }
 
@@ -189,7 +189,7 @@ export default function Landing() {
   };
 
   return (
-    <div style={{ position: 'relative', overflowX: 'hidden', minHeight: '100vh', background: 'linear-gradient(135deg, #eef2ff 0%, #f8fafc 50%, #e0e7ff 100%)', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ position: 'relative', overflowX: 'hidden', minHeight: '100vh', background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%)', fontFamily: "'Inter', sans-serif" }}>
 
       {/* Global CSS override just for this page to make navbar NOT fixed */}
       <style>{`
@@ -198,23 +198,28 @@ export default function Landing() {
         }
       `}</style>
       
-      {/* Ambient background blur circles with Emergency Pulse Effect */}
+      {/* Ambient background blur circles with Emergency Pulse Effect (Optimized for Performance) */}
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', zIndex: 0, pointerEvents: 'none' }}>
+        <MeshBackground />
         <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.5, 0.1], background: ['radial-gradient(circle, rgba(0, 97, 255, 0.15) 0%, rgba(255,255,255,0) 70%)', 'radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, rgba(255,255,255,0) 70%)', 'radial-gradient(circle, rgba(0, 97, 255, 0.15) 0%, rgba(255,255,255,0) 70%)'] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          style={{ position: 'absolute', top: '-10%', right: '-5%', width: '800px', height: '800px', filter: 'blur(60px)', borderRadius: '50%' }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4], background: ['radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(255,255,255,0) 60%)', 'radial-gradient(circle, rgba(96, 165, 250, 0.2) 0%, rgba(255,255,255,0) 60%)', 'radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(255,255,255,0) 60%)'] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          style={{ position: 'absolute', top: '-10%', right: '-10%', width: '1000px', height: '1000px', borderRadius: '50%', willChange: 'transform, opacity' }}
         />
         <motion.div
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.5, 0.1], background: ['radial-gradient(circle, rgba(157, 80, 187, 0.15) 0%, rgba(255,255,255,0) 70%)', 'radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(255,255,255,0) 70%)', 'radial-gradient(circle, rgba(157, 80, 187, 0.15) 0%, rgba(255,255,255,0) 70%)'] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '600px', height: '600px', filter: 'blur(60px)', borderRadius: '50%' }}
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3], background: ['radial-gradient(circle, rgba(129, 140, 248, 0.2) 0%, rgba(255,255,255,0) 60%)', 'radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, rgba(255,255,255,0) 60%)', 'radial-gradient(circle, rgba(129, 140, 248, 0.2) 0%, rgba(255,255,255,0) 60%)'] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          style={{ position: 'absolute', bottom: '-10%', left: '-10%', width: '800px', height: '800px', borderRadius: '50%', willChange: 'transform, opacity' }}
+        />
+        <motion.div
+          animate={{ y: [-20, 20, -20], opacity: [0.2, 0.4, 0.2], background: ['radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(255,255,255,0) 50%)', 'radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, rgba(255,255,255,0) 50%)', 'radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(255,255,255,0) 50%)'] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          style={{ position: 'absolute', top: '30%', left: '20%', width: '100vw', height: '800px', borderRadius: '50%', willChange: 'transform, opacity' }}
         />
       </div>
 
       {/* Hero Section */}
       <section style={{ position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '100px', paddingBottom: '60px' }}>
-        <MeshBackground />
         
         <motion.div 
           className="container"
@@ -314,7 +319,7 @@ export default function Landing() {
       </section>
 
       {/* Global Stats - Updated to reflect capability rather than inflated user counts */}
-      <section style={{ borderTop: '1px solid rgba(0,0,0,0.05)', borderBottom: '1px solid rgba(0,0,0,0.05)', background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', padding: '60px 0', position: 'relative', zIndex: 10 }}>
+      <section style={{ borderTop: '1px solid rgba(0,0,0,0.05)', borderBottom: '1px solid rgba(0,0,0,0.05)', background: 'rgba(240,249,255,0.8)', backdropFilter: 'blur(10px)', padding: '60px 0', position: 'relative', zIndex: 10 }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', padding: '0 24px' }}>
           <AnimatedCounter end="AES-256" label="Encryption Standard" />
           <AnimatedCounter end={1} suffix="s" label="Scan to Alert Time" />
@@ -430,7 +435,7 @@ export default function Landing() {
       <section style={{ padding: '80px 24px 120px', textAlign: 'center', position: 'relative', zIndex: 10 }}>
         <motion.div 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
-          style={{ maxWidth: '800px', margin: '0 auto', background: 'linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%)', border: '1px solid #e2e8f0', borderRadius: '32px', padding: '60px 40px', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}
+          style={{ maxWidth: '800px', margin: '0 auto', background: 'linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%)', border: '1px solid #bae6fd', borderRadius: '32px', padding: '60px 40px', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}
         >
           <div style={{ width: '80px', height: '80px', background: '#0f172a', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 30px', boxShadow: '0 10px 25px rgba(15, 23, 42, 0.3)' }}>
             <Zap color="white" size={36} />
@@ -451,7 +456,7 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer style={{ padding: '60px 40px 40px', background: 'white', position: 'relative', zIndex: 10, color: '#64748b', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+      <footer style={{ padding: '60px 40px 40px', background: 'transparent', position: 'relative', zIndex: 10, color: '#64748b', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '30px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '1.5rem' }}>🛡️</span>

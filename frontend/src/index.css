@@ -340,13 +340,13 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
 
 /* ──── Navbar ──── */
 .navbar {
-  position: sticky;
+  position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
-  background: rgba(5, 5, 5, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: transparent;
+  border: none;
 }
 
 .navbar-inner {
@@ -364,7 +364,7 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   gap: var(--space-sm);
   font-size: 1.3rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: #0f172a;
   letter-spacing: -0.03em;
 }
 
@@ -393,7 +393,7 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: #475569;
   background: none;
   border: none;
   cursor: pointer;
@@ -402,8 +402,8 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
 }
 
 .navbar-links a:hover, .navbar-links button:hover {
-  color: var(--text-primary);
-  background: var(--bg-glass);
+  color: #0f172a;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .navbar-links a.active {
@@ -1351,17 +1351,18 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
 }
 
 .btn-nav-outline {
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(15, 23, 42, 0.2);
+  background: rgba(15, 23, 42, 0.05);
   border-radius: 12px;
   padding: 0.5rem 1.2rem;
-  color: white;
+  color: #0f172a;
+  font-weight: 600;
   transition: all 0.2s;
   font-size: 0.9rem;
 }
 .btn-nav-outline:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.3);
+  background: rgba(15, 23, 42, 0.1);
+  border-color: rgba(15, 23, 42, 0.3);
 }
 
 .login-card-wrapper {
