@@ -42,16 +42,6 @@ export default function Login() {
       <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: '800px', height: '800px', background: 'radial-gradient(circle, rgba(0, 97, 255, 0.1) 0%, rgba(255,255,255,0) 70%)', filter: 'blur(60px)', borderRadius: '50%', zIndex: 0 }} />
       <div style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(157, 80, 187, 0.1) 0%, rgba(255,255,255,0) 70%)', filter: 'blur(60px)', borderRadius: '50%', zIndex: 0 }} />
 
-      {/* Back to Home Button */}
-      <Link 
-        to="/" 
-        style={{ position: 'absolute', top: '24px', left: '24px', display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', textDecoration: 'none', fontWeight: '600', fontSize: '0.95rem', zIndex: 100, padding: '10px 18px', background: 'rgba(255, 255, 255, 0.4)', backdropFilter: 'blur(10px)', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.5)', transition: 'all 0.2s ease' }}
-        onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)'; e.currentTarget.style.transform = 'translateX(-3px)'; }}
-        onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.4)'; e.currentTarget.style.transform = 'translateX(0)'; }}
-      >
-        <ArrowLeft size={18} /> Back to Home
-      </Link>
-
       {/* Foreground Content */}
       <div style={{ width: '100%', padding: '24px', display: 'flex', justifyContent: 'center', zIndex: 10 }}>
         <motion.div 
@@ -59,6 +49,15 @@ export default function Login() {
           style={{ background: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(20px)', borderRadius: '32px', padding: '60px 40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 40px 80px rgba(67, 56, 202, 0.15), 0 0 0 8px rgba(255, 255, 255, 0.4)', width: '100%', maxWidth: '420px', textAlign: 'center' }}
         >
           
+          <Link 
+            to="/" 
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#64748b', textDecoration: 'none', fontWeight: '600', fontSize: '0.85rem', marginBottom: '24px', padding: '8px 16px', background: 'rgba(0, 0, 0, 0.03)', borderRadius: '12px', alignSelf: 'flex-start', transition: 'all 0.2s ease' }}
+            onMouseOver={(e) => { e.currentTarget.style.color = '#0061FF'; e.currentTarget.style.background = 'rgba(0, 97, 255, 0.05)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.background = 'rgba(0, 0, 0, 0.03)'; }}
+          >
+            <ArrowLeft size={14} /> Back to Home
+          </Link>
+
           <div style={{ width: '80px', height: '80px', background: 'rgba(0, 97, 255, 0.1)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}>
             <ShieldCheck size={40} color="#0061FF" strokeWidth={2.5} />
           </div>
