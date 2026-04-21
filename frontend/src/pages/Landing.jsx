@@ -233,7 +233,7 @@ export default function Landing() {
           </motion.div>
 
           {/* Title */}
-          <motion.h1 variants={fadeUpVariant} style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: '900', color: '#0f172a', lineHeight: '1.1', letterSpacing: '-0.04em', maxWidth: '800px', marginBottom: '24px' }}>
+          <motion.h1 variants={fadeUpVariant} style={{ fontSize: 'clamp(2rem, 4.5vw, 3.2rem)', fontWeight: '900', color: '#0f172a', lineHeight: '1.2', letterSpacing: '-0.03em', maxWidth: '800px', marginBottom: '24px' }}>
             Your Digital Shield in <br/>
             <span style={{ background: 'linear-gradient(135deg, #0061FF 0%, #9D50BB 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Critical Moments
@@ -241,7 +241,7 @@ export default function Landing() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.25rem)', color: '#475569', maxWidth: '600px', lineHeight: '1.6', marginBottom: '40px' }}>
+          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(0.95rem, 1.6vw, 1.15rem)', color: '#475569', maxWidth: '800px', lineHeight: '1.6', marginBottom: '40px' }}>
             SafeID uses advanced QR and NFC technology to instantly provide first responders with your life-saving medical data and alert your emergency contacts.
           </motion.p>
 
