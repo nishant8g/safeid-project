@@ -227,13 +227,13 @@ export default function Landing() {
           initial="hidden" animate="visible" variants={staggerContainer}
         >
           {/* Badge */}
-          <motion.div variants={fadeUpVariant} style={{ display: 'inline-flex', alignItems: 'center', padding: '10px 24px', background: 'rgba(255, 255, 255, 0.6)', backdropFilter: 'blur(12px)', border: '1px solid rgba(0, 97, 255, 0.2)', borderRadius: '100px', marginBottom: '16px', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)' }}>
-            <span style={{ display: 'block', width: '8px', height: '8px', background: '#0061FF', borderRadius: '50%', marginRight: '10px', boxShadow: '0 0 10px #0061FF' }} />
-            <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#0061FF', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Next-Gen Emergency Response</span>
+          <motion.div variants={fadeUpVariant} style={{ display: 'inline-flex', alignItems: 'center', padding: '8px 20px', background: 'rgba(255, 255, 255, 0.6)', backdropFilter: 'blur(12px)', border: '1px solid rgba(0, 97, 255, 0.2)', borderRadius: '100px', marginBottom: '12px', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)' }}>
+            <span style={{ display: 'block', width: '6px', height: '6px', background: '#0061FF', borderRadius: '50%', marginRight: '8px', boxShadow: '0 0 10px #0061FF' }} />
+            <span style={{ fontWeight: '700', fontSize: '0.8rem', color: '#0061FF', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Next-Gen Emergency Response</span>
           </motion.div>
 
           {/* Title */}
-          <motion.h1 variants={fadeUpVariant} style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: '900', color: '#0f172a', lineHeight: '1.1', letterSpacing: '-0.04em', maxWidth: '800px', marginBottom: '12px' }}>
+          <motion.h1 variants={fadeUpVariant} style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: '900', color: '#0f172a', lineHeight: '1.05', letterSpacing: '-0.04em', maxWidth: '900px', marginBottom: '8px' }}>
             Your Digital Shield in <br />
             <span style={{ background: 'linear-gradient(135deg, #0061FF 0%, #9D50BB 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Critical Moments
@@ -241,7 +241,7 @@ export default function Landing() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.25rem)', color: '#475569', maxWidth: '750px', lineHeight: '1.5', marginBottom: '30px' }}>
+          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', color: '#475569', maxWidth: '850px', lineHeight: '1.4', marginBottom: '24px' }}>
             SafeID uses advanced QR and NFC technology to instantly provide first responders with your life-saving medical data and alert your emergency contacts.
           </motion.p>
 
