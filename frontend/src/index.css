@@ -345,8 +345,10 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   left: 0;
   right: 0;
   z-index: 1000;
-  background: transparent;
-  border: none;
+  background: rgba(240, 249, 255, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .navbar-inner {
