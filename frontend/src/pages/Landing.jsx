@@ -233,7 +233,7 @@ export default function Landing() {
           </motion.div>
 
           {/* Title */}
-          <motion.h1 variants={fadeUpVariant} style={{ fontSize: 'clamp(2.8rem, 6vw, 5rem)', fontWeight: '900', color: '#0f172a', lineHeight: '1.1', letterSpacing: '-0.04em', maxWidth: '900px', marginBottom: '24px' }}>
+          <motion.h1 variants={fadeUpVariant} style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: '900', color: '#0f172a', lineHeight: '1.1', letterSpacing: '-0.04em', maxWidth: '800px', marginBottom: '24px' }}>
             Your Digital Shield in <br/>
             <span style={{ background: 'linear-gradient(135deg, #0061FF 0%, #9D50BB 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Critical Moments
@@ -241,7 +241,7 @@ export default function Landing() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1.1rem, 2vw, 1.4rem)', color: '#475569', maxWidth: '700px', lineHeight: '1.6', marginBottom: '40px' }}>
+          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.25rem)', color: '#475569', maxWidth: '600px', lineHeight: '1.6', marginBottom: '40px' }}>
             SafeID uses advanced QR and NFC technology to instantly provide first responders with your life-saving medical data and alert your emergency contacts.
           </motion.p>
 
@@ -264,68 +264,7 @@ export default function Landing() {
           </motion.div>
 
           {/* High-End DOM UI Hero Mockup replacing Abstract Graphics */}
-          <motion.div
-            variants={fadeUpVariant}
-            style={{ marginTop: '70px', width: '100%', maxWidth: '380px', margin: '70px auto 0', position: 'relative', perspective: '1000px' }}
-          >
-            <motion.div 
-              style={{ background: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(20px)', borderRadius: '32px', padding: '24px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 40px 80px rgba(67, 56, 202, 0.15), 0 0 0 8px rgba(255, 255, 255, 0.4)' }}
-              animate={{ y: [0, -10, 0], rotateX: [0, 2, 0] }}
-              transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                <ShieldCheck size={28} color="#0061FF" />
-                <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', padding: '4px 10px', borderRadius: '100px', display: 'flex', alignItems: 'center', gap: '6px' }}><div style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%' }}></div> Live</span>
-              </div>
-              <div style={{ background: '#f8fafc', borderRadius: '20px', padding: '20px', marginBottom: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-                  <div style={{ width: '50px', height: '50px', borderRadius: '14px', background: 'linear-gradient(135deg, #0f172a, #334155)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Activity color="white" size={24} />
-                  </div>
-                  <div>
-                    <h4 style={{ margin: 0, fontSize: '1.1rem', color: '#0f172a', fontWeight: '800' }}>Emergency Profile</h4>
-                    <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b', fontWeight: '500' }}>Scanned 1s ago</p>
-                  </div>
-                </div>
-                <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-                  <motion.div initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 2, ease: "easeOut" }} style={{ height: '100%', background: '#0061FF' }} />
-                </div>
-              </div>
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <div style={{ flex: 1, background: 'rgba(157, 80, 187, 0.05)', borderRadius: '16px', padding: '16px', textAlign: 'center', border: '1px solid rgba(157, 80, 187, 0.1)' }}>
-                  <Nfc size={20} color="#9D50BB" style={{ marginBottom: '8px' }} />
-                  <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '700', color: '#9D50BB' }}>NFC Read</p>
-                </div>
-                <div style={{ flex: 1, background: 'rgba(0, 97, 255, 0.05)', borderRadius: '16px', padding: '16px', textAlign: 'center', border: '1px solid rgba(0, 97, 255, 0.1)' }}>
-                  <Navigation size={20} color="#0061FF" style={{ marginBottom: '8px' }} />
-                  <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '700', color: '#0061FF' }}>GPS Sent</p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-
         </motion.div>
-        
-        {/* Trusted By Banner directly under Hero */}
-        <div style={{ width: '100%', maxWidth: '900px', margin: '100px auto 0', textAlign: 'center', position: 'relative', zIndex: 10, padding: '0 24px' }}>
-          <p style={{ fontSize: '0.85rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '24px' }}>Enterprise Integrations & Standards</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'clamp(20px, 5vw, 60px)', opacity: 0.5, filter: 'grayscale(100%)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '800', fontSize: '1.2rem', color: '#0f172a' }}><Stethoscope size={24} /> ABHA Sync</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '800', fontSize: '1.2rem', color: '#0f172a' }}><Lock size={24} /> AES-256</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '800', fontSize: '1.2rem', color: '#0f172a' }}><BriefcaseMedical size={24} /> HIPAA Ready</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '800', fontSize: '1.2rem', color: '#0f172a' }}><Smartphone size={24} /> NFC Forum</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Global Stats - Updated to reflect capability rather than inflated user counts */}
-      <section style={{ borderTop: '1px solid rgba(0,0,0,0.05)', borderBottom: '1px solid rgba(0,0,0,0.05)', background: 'rgba(240,249,255,0.8)', backdropFilter: 'blur(10px)', padding: '60px 0', position: 'relative', zIndex: 10 }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', padding: '0 24px' }}>
-          <AnimatedCounter end="AES-256" label="Encryption Standard" />
-          <AnimatedCounter end={1} suffix="s" label="Scan to Alert Time" />
-          <AnimatedCounter end={99} suffix=".9%" label="System Reliability" />
-          <AnimatedCounter end="24/7" label="Secure Availability" />
-        </div>
       </section>
 
       {/* High-Tech Grid Features - Neat and equal sizing */}
@@ -457,6 +396,14 @@ export default function Landing() {
 
       {/* Footer */}
       <footer style={{ padding: '60px 40px 40px', background: 'transparent', position: 'relative', zIndex: 10, color: '#64748b', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+        {/* Relocated Global Stats */}
+        <div style={{ maxWidth: '1200px', margin: '0 auto 60px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', padding: '0 24px' }}>
+          <AnimatedCounter end="AES-256" label="Encryption Standard" />
+          <AnimatedCounter end={1} suffix="s" label="Scan to Alert Time" />
+          <AnimatedCounter end={99} suffix=".9%" label="System Reliability" />
+          <AnimatedCounter end="24/7" label="Secure Availability" />
+        </div>
+
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '30px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '1.5rem' }}>🛡️</span>
