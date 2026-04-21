@@ -221,18 +221,21 @@ export default function ScanPage() {
     return (
       <div className="scan-page">
         <div className="loading-overlay" style={{ minHeight: '100vh', padding: '2rem' }}>
-          <div style={{ fontSize: '4rem' }}>📸</div>
-          <h2>Accident Evidence</h2>
-          <p className="text-muted" style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{ fontSize: '4.5rem', marginBottom: '1.5rem' }}>📸</div>
+          <h2 style={{ fontSize: '2rem', fontWeight: '900', color: '#0f172a', marginBottom: '0.5rem' }}>Accident Evidence</h2>
+          <p style={{ textAlign: 'center', marginBottom: '2.5rem', color: '#475569', fontWeight: '500', maxWidth: '400px' }}>
             <strong>Mandatory:</strong> Please take a live photo of the accident scene to help the family understand the situation.
           </p>
           <label 
-            className={`btn ${(isUploading || (!isGPSReady && !showGpsBypass)) ? 'btn-disabled' : 'btn-danger'} btn-lg w-full flex items-center justify-center gap-2`} 
+            className={`btn ${(isUploading || (!isGPSReady && !showGpsBypass)) ? 'btn-disabled' : 'btn-danger'} btn-lg w-full flex items-center justify-center gap-3`} 
             style={{ 
-                maxWidth: '300px', 
+                maxWidth: '340px', 
                 cursor: (isUploading || (!isGPSReady && !showGpsBypass)) ? 'not-allowed' : 'pointer', 
-                padding: '1.25rem', 
-                fontSize: '1.1rem',
+                padding: '1.5rem', 
+                fontSize: '1.2rem',
+                fontWeight: '800',
+                borderRadius: '20px',
+                boxShadow: (isUploading || (!isGPSReady && !showGpsBypass)) ? 'none' : '0 15px 35px rgba(220, 38, 38, 0.25)',
                 opacity: (isUploading || (!isGPSReady && !showGpsBypass)) ? 0.7 : 1
             }}
           >
@@ -245,17 +248,17 @@ export default function ScanPage() {
               style={{ display: 'none' }} 
             />
             {isUploading ? (
-              <><span className="spinner-small"></span> 📡 Uploading Incident Report...</>
+              <><span className="spinner-small"></span> 📡 Broadcasting Incident...</>
             ) : (!isGPSReady && !showGpsBypass) ? (
-              <>🛰️ Acquiring GPS...</>
+              <>🛰️ Locking Signal...</>
             ) : (
-              <>{!isGPSReady ? '📷 Continue without GPS' : '📷 Capture & Unlock Profile'}</>
+              <>{!isGPSReady ? '📷 Continue without GPS' : '📷 Capture & Unlock Link'}</>
             )}
           </label>
           
           {showGpsBypass && !isGPSReady && !isUploading && (
-            <p className="text-muted" style={{ fontSize: '0.8rem', marginTop: '1rem', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setLocation({ lat: 0, lng: 0 })}>
-              Skip GPS & Unlock Profile Anyway
+            <p style={{ fontSize: '0.85rem', color: '#0061FF', marginTop: '1.5rem', cursor: 'pointer', textDecoration: 'underline', fontWeight: '700' }} onClick={() => setLocation({ lat: 0, lng: 0 })}>
+              Skip GPS & View Profile
             </p>
           )}
         </div>
@@ -283,65 +286,64 @@ export default function ScanPage() {
 
 
         {/* Header */}
-        <div className="scan-header">
-          <div className="safeid-badge">🛡️ SafeID Emergency Profile</div>
-          <h1 style={{ fontSize: '1.8rem', marginBottom: '0.25rem' }}>
+        <div className="scan-header" style={{ paddingTop: '2.5rem', marginBottom: '2.5rem' }}>
+          <div className="safeid-badge" style={{ background: 'rgba(0, 97, 255, 0.1)', color: '#0061FF', fontWeight: '800', display: 'inline-block', padding: '6px 16px', borderRadius: '50px', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>🛡️ SafeID Live Pulse</div>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#0f172a', marginTop: '0.75rem', marginBottom: '0.5rem', letterSpacing: '-0.03em' }}>
             {userData.full_name}
           </h1>
-          <p className="text-muted">{t.scanProfile}</p>
+          <p style={{ color: '#475569', fontWeight: '600', fontSize: '1.1rem' }}>{t.scanProfile}</p>
         </div>
 
         {error && <div className="alert alert-error">{error}</div>}
 
         {/* Medical Info */}
-        <div className="glass-card emergency animate-slide-up">
-          {/* ... existing medical grid content ... */}
-          <div className="medical-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-            <div className="medical-item highlight">
-              <div className="item-label">🩸 {t.blood}</div>
-              <div className="item-value" style={{ fontSize: '1.5rem', color: 'var(--accent-red)' }}>
+        <div className="glass-card emergency animate-slide-up" style={{ background: 'rgba(255, 255, 255, 0.85)', border: '1px solid rgba(255, 255, 255, 1)', borderRadius: '24px', padding: '24px', boxShadow: 'var(--shadow-xl)' }}>
+          <div className="medical-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+            <div className="medical-item highlight" style={{ background: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.1)' }}>
+              <div className="item-label" style={{ color: '#991b1b', fontWeight: '700' }}>🩸 {t.blood}</div>
+              <div className="item-value" style={{ fontSize: '1.75rem', color: '#dc2626', fontWeight: '900' }}>
                 {userData.blood_group || '—'}
               </div>
             </div>
-            <div className="medical-item">
-              <div className="item-label">💊 {t.donor}</div>
-              <div className="item-value">
-                {userData.organ_donor ? '✅ Yes' : '❌ No'}
+            <div className="medical-item" style={{ background: 'rgba(255, 255, 255, 0.5)', border: '1px solid rgba(255, 255, 255, 1)' }}>
+              <div className="item-label" style={{ color: '#64748b', fontWeight: '700' }}>💊 {t.donor}</div>
+              <div className="item-value" style={{ fontWeight: '800', color: '#0f172a' }}>
+                {userData.organ_donor ? '✅ Donor' : '❌ No'}
               </div>
             </div>
           </div>
 
           {userData.allergies && (
-            <div className="medical-item" style={{ marginTop: '0.75rem' }}>
-              <div className="item-label">⚠️ {t.allergies}</div>
-              <div className="item-value" style={{ fontSize: '1rem', color: '#f87171' }}>
+            <div className="medical-item" style={{ marginTop: '1rem', background: 'rgba(255, 255, 255, 0.5)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 1)' }}>
+              <div className="item-label" style={{ color: '#991b1b', fontWeight: '700' }}>⚠️ {t.allergies}</div>
+              <div className="item-value" style={{ fontSize: '1.1rem', color: '#dc2626', fontWeight: '700' }}>
                 {userData.allergies}
               </div>
             </div>
           )}
 
           {userData.conditions && (
-            <div className="medical-item" style={{ marginTop: '0.75rem' }}>
-              <div className="item-label">🏥 {t.conditions}</div>
-              <div className="item-value" style={{ fontSize: '1rem' }}>
+            <div className="medical-item" style={{ marginTop: '1rem', background: 'rgba(255, 255, 255, 0.5)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 1)' }}>
+              <div className="item-label" style={{ color: '#64748b', fontWeight: '700' }}>🏥 {t.conditions}</div>
+              <div className="item-value" style={{ fontSize: '1.1rem', color: '#0f172a', fontWeight: '700' }}>
                 {userData.conditions}
               </div>
             </div>
           )}
 
           {userData.medications && (
-            <div className="medical-item" style={{ marginTop: '0.75rem' }}>
-              <div className="item-label">💊 {t.medications}</div>
-              <div className="item-value" style={{ fontSize: '0.95rem' }}>
+            <div className="medical-item" style={{ marginTop: '1rem', background: 'rgba(255, 255, 255, 0.5)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 1)' }}>
+              <div className="item-label" style={{ color: '#64748b', fontWeight: '700' }}>💊 {t.medications}</div>
+              <div className="item-value" style={{ fontSize: '1.05rem', color: '#0f172a', fontWeight: '700' }}>
                 {userData.medications}
               </div>
             </div>
           )}
 
           {userData.special_notes && (
-            <div className="medical-item" style={{ marginTop: '0.75rem' }}>
-              <div className="item-label">📝 {t.notes}</div>
-              <div className="item-value" style={{ fontSize: '0.95rem' }}>
+            <div className="medical-item" style={{ marginTop: '1rem', background: 'rgba(255, 255, 255, 0.5)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 1)' }}>
+              <div className="item-label" style={{ color: '#64748b', fontWeight: '700' }}>📝 {t.notes}</div>
+              <div className="item-value" style={{ fontSize: '1rem', color: '#475569', fontWeight: '600' }}>
                 {userData.special_notes}
               </div>
             </div>
@@ -349,34 +351,34 @@ export default function ScanPage() {
         </div>
 
         {/* Final Emergency Actions */}
-        <div className="animate-slide-up" style={{ marginTop: '2rem' }}>
-          <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Family Notification</h3>
+        <div className="animate-slide-up" style={{ marginTop: '2.5rem' }}>
+          <h3 style={{ marginBottom: '1.25rem', fontSize: '1.2rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em' }}>Family Notification</h3>
 
           {!isConfirmed ? (
-            <div className="glass-card" style={{ padding: '1.5rem', border: '2px solid rgba(239, 68, 68, 0.4)', textAlign: 'center' }}>
-              <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-                {isUploading ? 'Please wait while we secure the incident photo...' : 'Tap the button below to instantly broadcast the emergency alert.'}
+            <div className="glass-card" style={{ padding: '24px', border: '1px solid rgba(220, 38, 38, 1)', background: 'rgba(255, 255, 255, 0.9)', textAlign: 'center', borderRadius: '24px' }}>
+              <p style={{ fontSize: '0.95rem', marginBottom: '1.5rem', color: '#475569', fontWeight: '500' }}>
+                {isUploading ? 'Securing incident capture...' : 'Tap below to instantly alert emergency primary contacts.'}
               </p>
               <button
                 onClick={() => {
                   if (isUploading) return;
-                  console.log("SOS TRIGGERED - DIRECT BUTTON");
                   handleDirectAlert();
                 }}
                 disabled={isUploading}
                 className={`btn ${isUploading ? 'btn-disabled' : 'btn-danger'} btn-lg w-full ${!isUploading && 'animate-pulse'}`}
                 style={{
-                  padding: '1.25rem',
-                  fontSize: '1.25rem',
-                  fontWeight: '800',
-                  boxShadow: isUploading ? 'none' : '0 0 30px rgba(220, 38, 38, 0.4)',
+                  padding: '1.5rem',
+                  fontSize: '1.3rem',
+                  fontWeight: '900',
+                  borderRadius: '18px',
+                  boxShadow: isUploading ? 'none' : '0 10px 40px rgba(220, 38, 38, 0.3)',
                   opacity: isUploading ? 0.7 : 1
                 }}
               >
                 {isUploading ? (
-                  <><span className="spinner-small"></span> 📸 PROCESSING PHOTO...</>
+                  <><span className="spinner-small"></span> UPLOADING...</>
                 ) : (
-                  '🚨 NOTIFY FAMILY NOW'
+                  '🚨 NOTIFY FAMILY'
                 )}
               </button>
             </div>

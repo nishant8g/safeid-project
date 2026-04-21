@@ -60,10 +60,14 @@ export default function Dashboard() {
   return (
     <div className="page-container animate-fade-in">
       {/* Welcome Header */}
-      <div className="section-header">
-        <div className="section-tag">Dashboard</div>
-        <h2>Welcome, {user?.full_name?.split(' ')[0]} 👋</h2>
-        <p>Manage your SafeID profile and stay prepared.</p>
+      <div className="section-header" style={{ marginBottom: '3rem' }}>
+        <div className="section-tag" style={{ background: 'rgba(0, 97, 255, 0.1)', color: '#0061FF', fontWeight: '700' }}>Overview</div>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em' }}>
+          Welcome, {user?.full_name?.split(' ')[0]} 👋
+        </h2>
+        <p style={{ color: '#475569', fontSize: '1.1rem', fontWeight: '500' }}>
+          Manage your SafeID profile and stay prepared.
+        </p>
       </div>
 
       <AnalyticsDashboard completionPercent={completionPercent} />
@@ -114,18 +118,18 @@ export default function Dashboard() {
               }} />
             </div>
           </div>
-          <div className="stat-label">{qrInfo?.is_active ? 'QR Working' : 'QR Privacy'}</div>
+          <div className="stat-label" style={{ color: '#64748b', fontWeight: '600' }}>{qrInfo?.is_active ? 'QR Working' : 'QR Privacy'}</div>
         </div>
       </div>
 
       {/* Dashboard Grid */}
       <div className="dashboard-grid">
         {/* Medical Summary */}
-        <div className="glass-card">
-          <div className="flex justify-between items-center" style={{ marginBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1.1rem' }}>🩺 Medical Info</h3>
-            <Link to="/profile" className="btn btn-ghost" style={{ fontSize: '0.8rem', padding: '0.3rem 0.7rem' }}>
-              Edit
+        <div className="glass-card" style={{ border: '1px solid rgba(255, 255, 255, 1)' }}>
+          <div className="flex justify-between items-center" style={{ marginBottom: '1.5rem' }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a' }}>🩺 Medical Info</h3>
+            <Link to="/profile" className="btn btn-ghost" style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0061FF' }}>
+              Edit Profile
             </Link>
           </div>
           {medical ? (
@@ -139,8 +143,8 @@ export default function Dashboard() {
                 <div className="item-value" style={{ fontSize: '0.9rem' }}>{medical.allergies || 'None'}</div>
               </div>
               <div className="medical-item">
-                <div className="item-label">Conditions</div>
-                <div className="item-value" style={{ fontSize: '0.9rem' }}>{medical.conditions || 'None'}</div>
+                <div className="item-label" style={{ color: '#64748b' }}>Conditions</div>
+                <div className="item-value" style={{ fontSize: '0.95rem', color: '#0f172a', fontWeight: '600' }}>{medical.conditions || 'None'}</div>
               </div>
               <div className="medical-item">
                 <div className="item-label">Organ Donor</div>
@@ -153,10 +157,10 @@ export default function Dashboard() {
         </div>
 
         {/* Emergency Contacts */}
-        <div className="glass-card">
-          <div className="flex justify-between items-center" style={{ marginBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1.1rem' }}>👥 Emergency Contacts</h3>
-            <Link to="/contacts" className="btn btn-ghost" style={{ fontSize: '0.8rem', padding: '0.3rem 0.7rem' }}>
+        <div className="glass-card" style={{ border: '1px solid rgba(255, 255, 255, 1)' }}>
+          <div className="flex justify-between items-center" style={{ marginBottom: '1.5rem' }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a' }}>👥 Emergency Contacts</h3>
+            <Link to="/contacts" className="btn btn-ghost" style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0061FF' }}>
               Manage
             </Link>
           </div>

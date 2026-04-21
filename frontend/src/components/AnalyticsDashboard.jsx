@@ -69,10 +69,10 @@ export default function AnalyticsDashboard({ completionPercent }) {
 
   if (error && !data) {
     return (
-      <div className="glass-card text-center" style={{ padding: '2rem', border: '1px solid rgba(59, 130, 246, 0.3)', background: 'var(--bg-glass)' }}>
+      <div className="glass-card text-center" style={{ padding: '2rem', border: '1px solid rgba(0, 97, 255, 0.3)' }}>
         <div className="spinner" style={{ margin: '0 auto 1rem auto' }}></div>
-        <h3 style={{ color: '#60a5fa', marginBottom: '0.5rem' }}>Secure Sync in Progress</h3>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+        <h3 style={{ color: '#0061FF', marginBottom: '0.5rem' }}>Secure Sync in Progress</h3>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
           The backend is currently connecting to your secure vault.
           <br/><strong>Auto-refreshing... stay on this page!</strong>
         </p>
@@ -86,8 +86,8 @@ export default function AnalyticsDashboard({ completionPercent }) {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{ background: '#1e293b', padding: '0.5rem 1rem', border: '1px solid #3b82f6', borderRadius: '8px', color: 'white' }}>
-          <p style={{ margin: 0 }}>{label}: <b>{payload[0].value} scans</b></p>
+        <div style={{ background: 'white', padding: '0.5rem 1rem', border: '1px solid #0061FF', borderRadius: '12px', color: '#0f172a', boxShadow: 'var(--shadow-md)' }}>
+          <p style={{ margin: 0, fontWeight: '700' }}>{label}: <span style={{color: '#0061FF'}}>{payload[0].value} scans</span></p>
         </div>
       );
     }
@@ -105,11 +105,11 @@ export default function AnalyticsDashboard({ completionPercent }) {
       <div className="stats-grid">
         
         {/* Profile Health Circle */}
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1rem', textTransform: 'uppercase' }}>Profile Health</h3>
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255, 255, 255, 1)' }}>
+          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1rem', textTransform: 'uppercase', fontWeight: '700', letterSpacing: '0.05em' }}>Profile Health</h3>
           <div style={{ position: 'relative', width: '100px', height: '100px' }}>
             <svg width="100" height="100" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="10" />
+              <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(0,0,0,0.05)" strokeWidth="10" />
               <circle cx="50" cy="50" r="40" fill="none" 
                 stroke={completionPercent === 100 ? "#10b981" : "#f59e0b"} 
                 strokeWidth="10" 
@@ -127,12 +127,12 @@ export default function AnalyticsDashboard({ completionPercent }) {
         </div>
 
         {/* Total Scans Card */}
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)' }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Total QR Scans</h3>
-          <div style={{ fontSize: '3.5rem', fontWeight: '900', color: 'var(--text-primary)', textShadow: '0 0 20px rgba(59, 130, 246, 0.5)' }}>
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(255, 255, 255, 0.9)', border: '1px solid rgba(0, 97, 255, 0.1)' }}>
+          <h3 style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase', fontWeight: '700', letterSpacing: '0.05em' }}>Total QR Scans</h3>
+          <div style={{ fontSize: '3.5rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em' }}>
             {data?.total_scans || 0}
           </div>
-          <p style={{ fontSize: '0.8rem', color: 'var(--accent-blue)' }}>Lifetime Views</p>
+          <p style={{ fontSize: '0.85rem', color: '#0061FF', fontWeight: '600' }}>Lifetime Views</p>
         </div>
 
         {/* Global Protection Card */}
@@ -157,26 +157,26 @@ export default function AnalyticsDashboard({ completionPercent }) {
               <AreaChart data={data?.scan_history || []}>
                 <defs>
                   <linearGradient id="colorScans" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#0061FF" stopOpacity={0.2}/>
+                    <stop offset="95%" stopColor="#0061FF" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="date" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
                 <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="scans" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorScans)" />
+                <Area type="monotone" dataKey="scans" stroke="#0061FF" strokeWidth={4} fillOpacity={1} fill="url(#colorScans)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Live GPS Map */}
-        <div className="glass-card" style={{ padding: 0, height: '350px', overflow: 'hidden', position: 'relative' }}>
-          <div style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 1000, background: 'rgba(10, 14, 26, 0.8)', backdropFilter: 'blur(10px)', padding: '0.5rem 1rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <h3 style={{ fontSize: '0.9rem', margin: 0 }}>📍 SOS History Map</h3>
+        <div className="glass-card" style={{ padding: 0, height: '350px', overflow: 'hidden', position: 'relative', border: '1px solid rgba(255, 255, 255, 1)' }}>
+          <div style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 1000, background: 'rgba(255, 255, 255, 0.8)', backdropFilter: 'blur(10px)', padding: '0.6rem 1.2rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,1)', boxShadow: 'var(--shadow-md)' }}>
+            <h3 style={{ fontSize: '0.9rem', margin: 0, color: '#0f172a', fontWeight: '700' }}>📍 SOS History Map</h3>
           </div>
           <MapContainer center={center} zoom={data?.alert_locations?.length > 0 ? 13 : 4} style={{ height: '100%', width: '100%', zIndex: 1 }}>
             <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
             {(data?.alert_locations || []).map((loc, idx) => (

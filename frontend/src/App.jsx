@@ -1,7 +1,7 @@
 /**
  * App.jsx — Router and main application layout.
  */
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -16,18 +16,40 @@ import Contacts from './pages/Contacts';
 import QRPage from './pages/QRPage';
 import ScanPage from './pages/ScanPage';
 import History from './pages/History';
-import NFCPortal from './pages/NFCPortal';
+import MeshBackground from './components/MeshBackground';
 
-import { Analytics } from "@vercel/analytics/react";
+function AppLayout({ children }) {
+  const location = useLocation();
+  const isLanding = location.pathname === '/';
+
+  if (isLanding) {
+    return (
+      <>
+        <Navbar />
+        {children}
+      </>
+    );
+  }
+
+  return (
+    <div style={{ position: 'relative', minHeight: '100vh', background: 'var(--gradient-sky)', overflowX: 'hidden' }}>
+      <MeshBackground />
+      <Navbar />
+      <div style={{ position: 'relative', zIndex: 10 }}>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   return (
     <AuthProvider>
       <Router>
-        <Navbar />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Landing />} />
+        <AppLayout>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
@@ -62,10 +84,14 @@ export default function App() {
               <p className="text-muted">The page you're looking for doesn't exist.</p>
               <a href="/" className="btn btn-primary" style={{ marginTop: '1rem' }}>Go Home</a>
             </div>
-          } />
-        </Routes>
+            } />
+          </Routes>
+        </AppLayout>
       </Router>
       <Analytics />
     </AuthProvider>
   );
 }
+
+import { Analytics } from "@vercel/analytics/react";
+import NFCPortal from './pages/NFCPortal';
