@@ -92,7 +92,7 @@ function MeshBackground() {
       // Draw nodes
       for (const p of projected) {
         const r = p.baseRadius * p.scale;
-        
+
         ctx.beginPath();
         ctx.arc(p.px, p.py, r * 2.5, 0, Math.PI * 2);
         const gradient = ctx.createRadialGradient(p.px, p.py, 0, p.px, p.py, r * 2.5);
@@ -143,7 +143,7 @@ function AnimatedCounter({ end, suffix = '', label }) {
         setCount(end);
         return;
       }
-      
+
       let start = 0;
       const duration = 2000;
       const startTime = performance.now();
@@ -197,7 +197,7 @@ export default function Landing() {
           position: absolute !important;
         }
       `}</style>
-      
+
       {/* Ambient background blur circles with Emergency Pulse Effect (Optimized for Performance) */}
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', zIndex: 0, pointerEvents: 'none' }}>
         <MeshBackground />
@@ -220,28 +220,28 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section style={{ position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '100px', paddingBottom: '60px' }}>
-        
-        <motion.div 
+
+        <motion.div
           className="container"
           style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}
           initial="hidden" animate="visible" variants={staggerContainer}
         >
           {/* Badge */}
-          <motion.div variants={fadeUpVariant} style={{ display: 'inline-flex', alignItems: 'center', padding: '10px 24px', background: 'rgba(255, 255, 255, 0.6)', backdropFilter: 'blur(12px)', border: '1px solid rgba(0, 97, 255, 0.2)', borderRadius: '100px', marginBottom: '32px', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)' }}>
+          <motion.div variants={fadeUpVariant} style={{ display: 'inline-flex', alignItems: 'center', padding: '10px 24px', background: 'rgba(255, 255, 255, 0.6)', backdropFilter: 'blur(12px)', border: '1px solid rgba(0, 97, 255, 0.2)', borderRadius: '100px', marginBottom: '16px', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)' }}>
             <span style={{ display: 'block', width: '8px', height: '8px', background: '#0061FF', borderRadius: '50%', marginRight: '10px', boxShadow: '0 0 10px #0061FF' }} />
             <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#0061FF', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Next-Gen Emergency Response</span>
           </motion.div>
 
           {/* Title */}
-          <motion.h1 variants={fadeUpVariant} style={{ fontSize: 'clamp(2rem, 4.5vw, 3.2rem)', fontWeight: '900', color: '#0f172a', lineHeight: '1.2', letterSpacing: '-0.03em', maxWidth: '800px', marginBottom: '24px' }}>
-            Your Digital Shield in <br/>
+          <motion.h1 variants={fadeUpVariant} style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: '900', color: '#0f172a', lineHeight: '1.1', letterSpacing: '-0.04em', maxWidth: '800px', marginBottom: '12px' }}>
+            Your Digital Shield in <br />
             <span style={{ background: 'linear-gradient(135deg, #0061FF 0%, #9D50BB 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Critical Moments
             </span>
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(0.95rem, 1.6vw, 1.15rem)', color: '#475569', maxWidth: '800px', lineHeight: '1.6', marginBottom: '40px' }}>
+          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.25rem)', color: '#475569', maxWidth: '750px', lineHeight: '1.5', marginBottom: '30px' }}>
             SafeID uses advanced QR and NFC technology to instantly provide first responders with your life-saving medical data and alert your emergency contacts.
           </motion.p>
 
@@ -254,10 +254,10 @@ export default function Landing() {
               {isAuthenticated ? 'Enter Dashboard' : 'Protect Yourself Now'}
               <span>&rarr;</span>
             </Link>
-            
+
             <a href="#how-it-works" style={{ padding: '16px 36px', background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(10px)', color: '#0f172a', border: '1px solid rgba(15, 23, 42, 0.1)', borderRadius: '14px', fontSize: '1.1rem', fontWeight: '700', textDecoration: 'none', transition: 'all 0.3s ease' }}
-               onMouseOver={(e) => { e.currentTarget.style.background = 'white'; e.currentTarget.style.borderColor = 'rgba(0, 97, 255, 0.3)'; }}
-               onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)'; e.currentTarget.style.borderColor = 'rgba(15, 23, 42, 0.1)'; }}
+              onMouseOver={(e) => { e.currentTarget.style.background = 'white'; e.currentTarget.style.borderColor = 'rgba(0, 97, 255, 0.3)'; }}
+              onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.7)'; e.currentTarget.style.borderColor = 'rgba(15, 23, 42, 0.1)'; }}
             >
               See How It Works
             </a>
@@ -276,9 +276,9 @@ export default function Landing() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '30px' }}>
-            
+
             {/* Box 1: Alerts */}
-            <motion.div 
+            <motion.div
               style={{ background: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(24px)', borderRadius: '30px', padding: '40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.06), 0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.3s ease', cursor: 'default' }}
               initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
               whileHover={{ y: -8, scale: 1.01, boxShadow: '0 30px 60px rgba(67, 56, 202, 0.12)' }}
@@ -291,7 +291,7 @@ export default function Landing() {
             </motion.div>
 
             {/* Box 2: Encryption */}
-            <motion.div 
+            <motion.div
               style={{ background: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(24px)', borderRadius: '30px', padding: '40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.06), 0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', overflow: 'hidden', transition: 'all 0.3s ease', cursor: 'default' }}
               initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
               whileHover={{ y: -8, scale: 1.01, boxShadow: '0 30px 60px rgba(67, 56, 202, 0.12)' }}
@@ -303,14 +303,14 @@ export default function Landing() {
                 <h3 style={{ fontSize: '1.6rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>AES-256 Vault</h3>
                 <p style={{ color: '#475569', fontSize: '1rem', lineHeight: '1.6', flexGrow: 1 }}>Your health data is sealed with military-grade encryption within our secure vaults. Only physically verified scans can decrypt your vital info.</p>
               </div>
-              <motion.div 
+              <motion.div
                 animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
                 style={{ position: 'absolute', right: '-50px', bottom: '-50px', width: '200px', height: '200px', border: '2px dashed rgba(67, 56, 202, 0.15)', borderRadius: '50%', zIndex: 1 }}
               />
             </motion.div>
 
             {/* Box 3: NFC */}
-            <motion.div 
+            <motion.div
               style={{ background: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(24px)', borderRadius: '30px', padding: '40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.06), 0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.3s ease', cursor: 'default' }}
               initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
               whileHover={{ y: -8, scale: 1.01, boxShadow: '0 30px 60px rgba(67, 56, 202, 0.12)' }}
@@ -323,7 +323,7 @@ export default function Landing() {
             </motion.div>
 
             {/* Box 4: ABHA */}
-            <motion.div 
+            <motion.div
               style={{ background: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(24px)', borderRadius: '30px', padding: '40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.06), 0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.3s ease', cursor: 'default' }}
               initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
               whileHover={{ y: -8, scale: 1.01, boxShadow: '0 30px 60px rgba(67, 56, 202, 0.12)' }}
@@ -353,7 +353,7 @@ export default function Landing() {
               { num: '02', title: 'Link Identifier', desc: 'Get your unique cryptographic QR code, physical NFC tag, or link your ABHA card.' },
               { num: '03', title: 'Global Protection', desc: 'Responders globally can scan your SafeID to access data and trigger GPS alerts.' }
             ].map((step, idx) => (
-              <motion.div 
+              <motion.div
                 key={idx}
                 initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
                 whileHover={{ y: -6, scale: 1.01, boxShadow: '0 30px 60px rgba(67, 56, 202, 0.12)' }}
@@ -372,7 +372,7 @@ export default function Landing() {
 
       {/* Modern CTA Section */}
       <section style={{ padding: '80px 24px 120px', textAlign: 'center', position: 'relative', zIndex: 10 }}>
-        <motion.div 
+        <motion.div
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
           style={{ maxWidth: '800px', margin: '0 auto', background: 'linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%)', border: '1px solid #bae6fd', borderRadius: '32px', padding: '60px 40px', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}
         >
@@ -380,7 +380,7 @@ export default function Landing() {
             <Zap color="white" size={36} />
           </div>
           <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: '900', color: '#0f172a', marginBottom: '20px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>
-            Don't leave your <br/> safety to chance.
+            Don't leave your <br /> safety to chance.
           </h2>
           <p style={{ color: '#64748b', fontSize: '1.1rem', marginBottom: '40px', maxWidth: '400px', margin: '0 auto 40px' }}>
             Set up your digital medical identity in under 2 minutes. Free and straightforward.
@@ -409,7 +409,7 @@ export default function Landing() {
             <span style={{ fontSize: '1.5rem' }}>🛡️</span>
             <span style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>SafeID</span>
           </div>
-          
+
           <div style={{ display: 'flex', gap: '32px', fontSize: '0.95rem', fontWeight: '500', flexWrap: 'wrap', justifyContent: 'center' }}>
             <a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Privacy Policy</a>
             <a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
@@ -417,9 +417,9 @@ export default function Landing() {
           </div>
 
           <div style={{ display: 'flex', gap: '16px', fontSize: '1.2rem' }}>
-            <a href="#" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#0f172a'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>𝕏</a>
-            <a href="#" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#0f172a'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>in</a>
-            <a href="#" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e=>e.currentTarget.style.color='#0f172a'} onMouseOut={e=>e.currentTarget.style.color='#94a3b8'}>IG</a>
+            <a href="#" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e => e.currentTarget.style.color = '#0f172a'} onMouseOut={e => e.currentTarget.style.color = '#94a3b8'}>𝕏</a>
+            <a href="#" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e => e.currentTarget.style.color = '#0f172a'} onMouseOut={e => e.currentTarget.style.color = '#94a3b8'}>in</a>
+            <a href="#" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }} onMouseOver={e => e.currentTarget.style.color = '#0f172a'} onMouseOut={e => e.currentTarget.style.color = '#94a3b8'}>IG</a>
           </div>
         </div>
         <div style={{ maxWidth: '1200px', margin: '40px auto 0', textAlign: 'center', fontSize: '0.85rem' }}>
