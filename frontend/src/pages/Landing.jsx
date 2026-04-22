@@ -189,7 +189,7 @@ export default function Landing() {
   };
 
   return (
-    <div style={{ position: 'relative', overflowX: 'hidden', minHeight: '100vh', background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%)', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ position: 'relative', overflowX: 'hidden', minHeight: '100vh', background: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%)', fontFamily: "'Inter', sans-serif" }}>
 
       {/* Global CSS override just for this page to make navbar NOT fixed */}
       <style>{`
@@ -376,7 +376,7 @@ export default function Landing() {
       <section style={{ padding: '80px 24px 120px', textAlign: 'center', position: 'relative', zIndex: 10 }}>
         <motion.div
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUpVariant}
-          style={{ maxWidth: '800px', margin: '0 auto', background: 'linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%)', border: '1px solid #bae6fd', borderRadius: '32px', padding: '60px 40px', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}
+          style={{ maxWidth: '800px', margin: '0 auto', background: 'linear-gradient(135deg, #f0f9ff 0%, #bae6fd 100%)', border: '1px solid #7dd3fc', borderRadius: '32px', padding: '60px 40px', boxShadow: '0 20px 50px rgba(0,0,0,0.05)' }}
         >
           <div style={{ width: '80px', height: '80px', background: '#0f172a', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 30px', boxShadow: '0 10px 25px rgba(15, 23, 42, 0.3)' }}>
             <Zap color="white" size={36} />
@@ -399,7 +399,7 @@ export default function Landing() {
       {/* Footer */}
       <footer style={{ padding: '80px 40px 40px', background: 'rgba(255, 255, 255, 0.3)', backdropFilter: 'blur(10px)', position: 'relative', zIndex: 10, color: '#64748b', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
         {/* Relocated Global Stats - Information Bar Style */}
-        <div style={{ maxWidth: '1200px', margin: '0 auto 80px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '40px', padding: '40px', background: 'rgba(255, 255, 255, 0.5)', borderRadius: '32px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto 80px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '40px', padding: '40px', background: 'rgba(186, 230, 253, 0.4)', borderRadius: '32px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
           <AnimatedCounter end="AES-256" label="Encryption Standard" />
           <AnimatedCounter end={1} suffix="s" label="Scan to Alert Time" />
           <AnimatedCounter end={99} suffix=".9%" label="System Reliability" />
