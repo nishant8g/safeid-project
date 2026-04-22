@@ -19,6 +19,21 @@
       "dest": "/api/index.py"
     },
     {
+      "src": "/sw.js",
+      "dest": "/frontend/sw.js",
+      "continue": true
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/frontend/manifest.json",
+      "continue": true
+    },
+    {
+      "src": "/safeid-logo-(.*).png",
+      "dest": "/frontend/safeid-logo-$1.png",
+      "continue": true
+    },
+    {
       "handle": "filesystem"
     },
     {
