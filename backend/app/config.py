@@ -37,7 +37,10 @@ class Settings(BaseSettings):
     BASE_URL: str = os.getenv("BASE_URL", "https://safeid-project.vercel.app")
 
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./safeid.db")
+    DATABASE_URL: str = os.getenv(
+        "DATABASE_URL", 
+        "sqlite:////tmp/safeid.db" if os.environ.get("VERCEL") else "sqlite:///./safeid.db"
+    )
     AI_SERVICE_URL: str = os.getenv("AI_SERVICE_URL", "http://localhost:8001")
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "963876569237-9osij8medcclsjr52ehr7mb4vs2fluq7.apps.googleusercontent.com")
 
