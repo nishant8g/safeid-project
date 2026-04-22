@@ -20,18 +20,23 @@
     },
     {
       "src": "/sw.js",
-      "dest": "/frontend/sw.js",
-      "continue": true
+      "dest": "/sw.js",
+      "headers": {
+        "cache-control": "no-cache, no-store, must-revalidate",
+        "content-type": "application/javascript"
+      }
     },
     {
       "src": "/manifest.json",
-      "dest": "/frontend/manifest.json",
-      "continue": true
+      "dest": "/manifest.json",
+      "headers": {
+        "cache-control": "no-cache, no-store, must-revalidate",
+        "content-type": "application/json"
+      }
     },
     {
       "src": "/safeid-logo-(.*).png",
-      "dest": "/frontend/safeid-logo-$1.png",
-      "continue": true
+      "dest": "/safeid-logo-$1.png"
     },
     {
       "handle": "filesystem"
