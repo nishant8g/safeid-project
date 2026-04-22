@@ -3,10 +3,14 @@
  */
 import { useState, useEffect } from 'react';
 import { userAPI } from '../api/client';
+import { useAuth } from '../context/AuthContext';
+import ABHACard from '../components/ABHACard';
+import { Shield } from 'lucide-react';
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
 export default function Profile() {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     blood_group: '',
     allergies: '',
@@ -17,6 +21,7 @@ export default function Profile() {
     date_of_birth: '',
     height: '',
     weight: '',
+    abha_id: '',
   });
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState('');
@@ -214,6 +219,54 @@ export default function Profile() {
                 </div>
               </div>
             </label>
+          </div>
+
+          <div className="section-divider" style={{ 
+            height: '1px', 
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+            margin: '2rem 0'
+          }}></div>
+
+          <div className="abha-sync-section" style={{ marginBottom: '2.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              <div style={{ padding: '6px', background: 'var(--accent-cyan)', borderRadius: '6px' }}>
+                <Shield size={18} color="#0f172a" />
+              </div>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-primary)', margin: 0 }}>ABHA Health ID Sync</h3>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', alignItems: 'start' }}>
+              <div className="form-group" style={{ margin: 0 }}>
+                <label className="form-label" style={{ color: 'var(--accent-cyan)' }}>Official Health ID Number</label>
+                <input
+                  type="text"
+                  name="abha_id"
+                  className="form-input"
+                  placeholder="XX-XXXX-XXXX-XXXX"
+                  value={formData.abha_id || ''}
+                  onChange={handleChange}
+                  id="medical-abha-id"
+                  style={{ 
+                    border: '1.5px solid rgba(34, 211, 238, 0.3)', 
+                    fontSize: '1.2rem', 
+                    letterSpacing: '0.1em',
+                    fontWeight: '800',
+                    color: 'var(--accent-cyan)'
+                  }}
+                />
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem', lineHeight: '1.4' }}>
+                  Syncing your ABHA ID allows first responders to access your verified Indian national health records instantly.
+                </p>
+              </div>
+
+              <div className="abha-preview" style={{ opacity: formData.abha_id ? 1 : 0.6, filter: formData.abha_id ? 'none' : 'grayscale(0.5)', transition: 'all 0.3s ease' }}>
+                <ABHACard 
+                  abhaId={formData.abha_id} 
+                  fullName={user?.full_name} 
+                  dob={formData.date_of_birth}
+                />
+              </div>
+            </div>
           </div>
 
           <button type="submit" className="btn btn-primary btn-full btn-lg" disabled={saving} id="save-medical" style={{ padding: '1rem', borderRadius: '16px', fontSize: '1.1rem', fontWeight: '700' }}>

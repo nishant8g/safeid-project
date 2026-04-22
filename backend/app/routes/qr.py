@@ -61,8 +61,8 @@ def get_qr_image(user_id: str):
         raise HTTPException(status_code=404, detail="QR code not found")
     return FileResponse(
         image_path,
-        media_type="image/png",
-        filename=f"safeid_qr_{user_id[:8]}.png",
+        media_type="image/svg+xml",
+        filename=f"safeid_qr_{user_id[:8]}.svg",
     )
 
 

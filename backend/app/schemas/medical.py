@@ -14,6 +14,7 @@ class MedicalInfoCreate(BaseModel):
     date_of_birth: Optional[str] = None
     height: Optional[str] = None
     weight: Optional[str] = None
+    abha_id: Optional[str] = None
 
 
 class MedicalInfoResponse(BaseModel):
@@ -27,7 +28,9 @@ class MedicalInfoResponse(BaseModel):
     special_notes: Optional[str] = None
     date_of_birth: Optional[str] = None
     height: Optional[str] = None
+    height: Optional[str] = None
     weight: Optional[str] = None
+    abha_id: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -42,3 +45,4 @@ class PublicMedicalInfo(BaseModel):
     medications: Optional[str] = None
     organ_donor: bool = False
     special_notes: Optional[str] = None
+    abha_id: Optional[str] = None

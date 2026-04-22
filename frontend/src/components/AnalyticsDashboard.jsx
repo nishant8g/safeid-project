@@ -25,7 +25,7 @@ const emergencyIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-const COLORS = ['#22d3ee', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+const COLORS = ['#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#a855f7'];
 
 export default function AnalyticsDashboard({ completionPercent }) {
   const [data, setData] = useState(() => {
@@ -94,45 +94,45 @@ export default function AnalyticsDashboard({ completionPercent }) {
       <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         
         {/* Profile Health Radial */}
-        <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', padding: '1.5rem' }}>
+        <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', padding: '1.5rem', border: '1px solid rgba(6, 182, 212, 0.1)' }}>
           <div style={{ width: '120px', height: '120px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <RadialBarChart 
                 cx="50%" cy="50%" innerRadius="70%" outerRadius="100%" 
                 barSize={12} data={radialData} startAngle={90} endAngle={450}
               >
-                <RadialBar background dataKey="value" cornerRadius={10} />
+                <RadialBar background dataKey="value" cornerRadius={10} fill="#06b6d4" />
               </RadialBarChart>
             </ResponsiveContainer>
-            <div style={{ position: 'relative', top: '-75px', textAlign: 'center', fontSize: '1.4rem', fontWeight: '900' }}>
+            <div style={{ position: 'relative', top: '-75px', textAlign: 'center', fontSize: '1.4rem', fontWeight: '900', color: 'white' }}>
               {completionPercent}%
             </div>
           </div>
           <div>
             <h3 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>Identity Health</h3>
-            <p style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-primary)' }}>
+            <p style={{ fontSize: '1.1rem', fontWeight: '700', color: 'white' }}>
               {completionPercent === 100 ? 'Fully Shielded' : 'Action Required'}
             </p>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Security score based on profile completion.</p>
+            <p style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Security score based on profile completion.</p>
           </div>
         </div>
 
         {/* Scan Bar Highlight */}
-        <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: '1rem' }}>
             <div>
               <h3 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total Scans</h3>
-              <div style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', lineHeight: 1 }}>{data?.total_scans || 0}</div>
+              <div style={{ fontSize: '2.5rem', fontWeight: '900', color: 'white', lineHeight: 1 }}>{data?.total_scans || 0}</div>
             </div>
             <div style={{ height: '60px', width: '120px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data?.scan_history?.slice(-5)}>
-                  <Bar dataKey="scans" fill="var(--accent-cyan)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="scans" fill="#06b6d4" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
-          <div style={{ padding: '0.5rem', background: 'rgba(34, 211, 238, 0.05)', borderRadius: '8px', border: '1px solid rgba(34, 211, 238, 0.1)', fontSize: '0.75rem', color: 'var(--accent-cyan)', fontWeight: '600' }}>
+          <div style={{ padding: '0.5rem', background: 'rgba(6, 182, 212, 0.05)', borderRadius: '8px', border: '1px solid rgba(6, 182, 212, 0.1)', fontSize: '0.75rem', color: '#06b6d4', fontWeight: '600' }}>
             ⚡ Activity Detected in Last 7 Days
           </div>
         </div>
@@ -154,23 +154,23 @@ export default function AnalyticsDashboard({ completionPercent }) {
       <div className="dashboard-grid" style={{ gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
         
         {/* Main Velocity Area Chart */}
-        <div className="glass-card" style={{ padding: '2rem', height: '400px', display: 'flex', flexDirection: 'column' }}>
+        <div className="glass-card" style={{ padding: '2rem', height: '400px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
           <div style={{ marginBottom: '2rem' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-primary)' }}>Scan Velocity Architecture</h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Temporal heat distribution of identity access.</p>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'white' }}>Scan Velocity Architecture</h3>
+            <p style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Temporal heat distribution of identity access.</p>
           </div>
           <div style={{ flex: 1, minHeight: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data?.scan_history || []}>
                 <defs>
                   <linearGradient id="colorScans" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--accent-cyan)" stopOpacity={0.6}/>
-                    <stop offset="95%" stopColor="var(--accent-cyan)" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.6}/>
+                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <XAxis 
                   dataKey="date" 
-                  stroke="var(--text-muted)" 
+                  stroke="#64748b" 
                   fontSize={10} 
                   tickLine={false} 
                   axisLine={false} 
@@ -181,7 +181,7 @@ export default function AnalyticsDashboard({ completionPercent }) {
                 <Area 
                   type="monotone" 
                   dataKey="scans" 
-                  stroke="var(--accent-cyan)" 
+                  stroke="#06b6d4" 
                   strokeWidth={5} 
                   fillOpacity={1} 
                   fill="url(#colorScans)" 
