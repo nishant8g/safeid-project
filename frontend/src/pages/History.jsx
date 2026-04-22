@@ -69,7 +69,7 @@ export default function History() {
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-ghost"
-            style={{ justifyContent: 'flex-start', background: 'rgba(0, 97, 255, 0.05)', color: '#0061FF', borderRadius: '12px', fontWeight: '700' }}
+            style={{ justifyContent: 'flex-start', background: 'rgba(255, 255, 255, 0.03)', color: 'var(--accent-cyan)', borderRadius: '12px', fontWeight: '700', border: '1px solid var(--border-subtle)' }}
           >
             📚 API Documentation (Swagger)
           </a>
@@ -78,7 +78,7 @@ export default function History() {
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-ghost"
-            style={{ justifyContent: 'flex-start', background: 'rgba(0, 97, 255, 0.05)', color: '#0061FF', borderRadius: '12px', fontWeight: '700' }}
+            style={{ justifyContent: 'flex-start', background: 'rgba(255, 255, 255, 0.03)', color: 'var(--accent-cyan)', borderRadius: '12px', fontWeight: '700', border: '1px solid var(--border-subtle)' }}
           >
             📖 API Reference (ReDoc)
           </a>
@@ -87,7 +87,7 @@ export default function History() {
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-ghost"
-            style={{ justifyContent: 'flex-start', background: 'rgba(0, 97, 255, 0.05)', color: '#0061FF', borderRadius: '12px', fontWeight: '700' }}
+            style={{ justifyContent: 'flex-start', background: 'rgba(255, 255, 255, 0.03)', color: 'var(--accent-cyan)', borderRadius: '12px', fontWeight: '700', border: '1px solid var(--border-subtle)' }}
           >
             🏥 System Service Health
           </a>

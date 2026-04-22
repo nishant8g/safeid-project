@@ -46,9 +46,9 @@ export default function NFCPortal() {
   return (
     <div className="page-container medium animate-fade-in">
       <div className="section-header text-center" style={{ marginBottom: '3rem' }}>
-        <div className="section-tag" style={{ background: 'rgba(0, 97, 255, 0.1)', color: '#0061FF', fontWeight: '700' }}>Smart Hardware</div>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em' }}>📡 Tap-to-Scan NFC</h2>
-        <p style={{ color: '#475569', fontSize: '1.1rem', fontWeight: '500' }}>Program a physical NFC sticker with your SafeID. Rescuers can just tap their phone to your helmet to view your emergency profile!</p>
+        <div className="section-tag">Smart Hardware</div>
+        <h2 className="text-glow" style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>📡 Tap-to-Scan NFC</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '500' }}>Program a physical NFC sticker with your SafeID. Rescuers can just tap their phone to your helmet to view your emergency profile!</p>
       </div>
 
       <div className="glass-card text-center" style={{ maxWidth: '500px', margin: '0 auto', padding: '40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: 'var(--shadow-xl)' }}>
@@ -59,7 +59,7 @@ export default function NFCPortal() {
         </div>
 
         {/* Status Text */}
-        <h3 style={{ marginBottom: '1.5rem', fontWeight: '800', color: '#0f172a' }}>
+        <h3 style={{ marginBottom: '1.5rem', fontWeight: '800', color: 'var(--text-primary)' }}>
           {status === 'idle' && 'Ready to Program'}
           {status === 'scanning' && 'Hold NFC Tag near Phone...'}
           {status === 'success' && 'Successfully Programmed!'}
@@ -72,9 +72,9 @@ export default function NFCPortal() {
           </div>
         )}
 
-        <div style={{ background: 'rgba(255, 255, 255, 0.6)', padding: '1.25rem', borderRadius: '16px', marginBottom: '2rem', border: '1px solid rgba(255,255,255,1)', wordBreak: 'break-all' }}>
-          <small style={{ display: 'block', marginBottom: '0.5rem', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Target URL Payload:</small>
-          <code style={{ color: '#0061FF', fontWeight: '800', fontSize: '0.9rem' }}>{scanUrl}</code>
+        <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '1.25rem', borderRadius: '16px', marginBottom: '2rem', border: '1px solid var(--border-subtle)', wordBreak: 'break-all', backdropFilter: 'blur(10px)' }}>
+          <small style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Target URL Payload:</small>
+          <code style={{ color: 'var(--accent-cyan)', fontWeight: '800', fontSize: '0.9rem', textShadow: '0 0 10px rgba(0, 242, 255, 0.3)' }}>{scanUrl}</code>
         </div>
 
         {/* Action Button */}
@@ -88,9 +88,9 @@ export default function NFCPortal() {
         </button>
 
         {/* Instructions */}
-        <div className="text-left" style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(0, 97, 255, 0.1)' }}>
-          <h4 style={{ marginBottom: '1rem', color: '#0f172a', fontWeight: '800' }}>Protocol Instructions:</h4>
-          <ol style={{ paddingLeft: '1.5rem', color: '#475569', fontSize: '0.95rem', lineHeight: '1.8', fontWeight: '500' }}>
+        <div className="text-left" style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid var(--border-subtle)' }}>
+          <h4 style={{ marginBottom: '1rem', color: 'var(--text-primary)', fontWeight: '800' }}>Protocol Instructions:</h4>
+          <ol style={{ paddingLeft: '1.5rem', color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.8', fontWeight: '500' }}>
             <li>Purchase a blank <strong>NTAG215</strong> or NTAG213 sticker.</li>
             <li>Click the <strong>Write to NFC Tag</strong> button above.</li>
             <li>Hold the sticker to the back of your phone (near the camera).</li>

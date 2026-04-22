@@ -83,7 +83,7 @@ export default function Navbar() {
           ) : (
             <div className="navbar-unauth-links">
               {deferredPrompt && (
-                <button className="btn-nav-outline" onClick={handleInstallClick} style={{ marginRight: '1rem', border: '1px solid var(--accent-blue)', color: 'var(--accent-blue)' }}>
+                <button className="btn-nav-outline" onClick={handleInstallClick} style={{ marginRight: '1rem' }}>
                   📲 Get App
                 </button>
               )}

@@ -43,8 +43,9 @@
 
   /* Text — Maximum Highlighting */
   --text-primary: #ffffff;
-  --text-secondary: #e2e8f0;
-  --text-muted: #94a3b8;
+  --text-highlight: #ffffff;
+  --text-secondary: #f8fafc;
+  --text-muted: #cbd5e1;
   --text-accent: var(--accent-cyan);
 
   /* Borders — The "Outliner" Fix */
@@ -736,16 +737,32 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
 
 .section-header .section-tag {
   display: inline-block;
-  padding: 0.2rem 0.6rem;
-  background: rgba(139, 92, 246, 0.1);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 0.25rem 0.75rem;
+  background: rgba(0, 242, 255, 0.1);
+  border: 1px solid rgba(0, 242, 255, 0.3);
   border-radius: var(--radius-full);
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--accent-purple);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--accent-cyan);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   margin-bottom: var(--space-sm);
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+}
+
+.text-gradient-aurora {
+  background: var(--gradient-aurora);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* ──── Alert Messages ──── */
@@ -2259,31 +2276,293 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   color: #94a3b8;
 }
 
-/* ─── Navbar override on landing page ─── */
-.landing-light ~ .navbar,
-body:has(.landing-light) .navbar {
-  background: rgba(248, 250, 255, 0.7);
+/* Standardized Navbar for Midnight Aurora */
+.navbar {
+  background: rgba(2, 6, 23, 0.7);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-body:has(.landing-light) .navbar-logo span {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+.navbar-logo span {
+  color: white;
+  font-weight: 900;
+}
+
+.navbar-links a,
+.navbar-links button {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.nav-link.active {
+  color: var(--accent-cyan) !important;
+  text-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LANDING PAGE — LIGHT THEME with 3D Mesh Network
+   All scoped under .landing-light so other pages stay dark
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.landing-light {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(165deg, #f8faff 0%, #eef2ff 30%, #f0f4ff 60%, #faf8ff 100%);
+  color: #1e293b;
+  overflow-x: hidden;
+}
+
+/* ─── 3D Mesh Canvas ─── */
+.landing-mesh-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+}
+
+/* ─── Floating Orbs ─── */
+.landing-orbs {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.landing-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  animation: landingOrbFloat 20s ease-in-out infinite alternate;
+}
+
+.landing-orb-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(99,102,241,0.5), transparent 70%);
+  top: -10%; left: -5%;
+}
+
+.landing-orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(168,85,247,0.45), transparent 70%);
+  bottom: 5%; right: -5%;
+  animation-delay: -7s;
+  animation-duration: 25s;
+}
+
+.landing-orb-3 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(16,185,129,0.35), transparent 70%);
+  top: 40%; left: 60%;
+  animation-delay: -12s;
+  animation-duration: 22s;
+}
+
+@keyframes landingOrbFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, -40px) scale(1.15); }
+  100% { transform: translate(-30px, 50px) scale(0.9); }
+}
+
+/* ─── Hero Section ─── */
+.landing-light-hero {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 860px;
+  padding: 8rem 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.landing-light-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.45rem 1.2rem;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6366f1;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.8s ease-out both;
+}
+
+.landing-badge-dot {
+  width: 7px; height: 7px;
+  background: #6366f1;
+  border-radius: 50%;
+  animation: landingDotPulse 2s infinite;
+}
+
+@keyframes landingDotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.6); }
+}
+
+.landing-light-title {
+  font-size: clamp(2.8rem, 7vw, 5rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: #0f172a;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.8s ease-out 0.15s both;
+}
+
+.landing-gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 40%, #a855f7 70%, #6366f1 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: landingGradientShift 4s ease infinite;
+}
+
+@keyframes landingGradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.landing-light-subtitle {
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  color: #64748b;
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  animation: fadeIn 0.8s ease-out 0.3s both;
+}
+
+/* ─── Buttons ─── */
+.landing-light-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 3.5rem;
+  animation: fadeIn 0.8s ease-out 0.45s both;
+}
+
+.landing-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.9rem 2rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff !important;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35), 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.45), 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.landing-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.9rem 2rem;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(12px);
+  color: #4f46e5 !important;
+  border: 1.5px solid rgba(99, 102, 241, 0.2);
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.landing-btn-outline:hover {
+  background: rgba(255,255,255,0.9);
+  transform: translateY(-2px);
+}
+
+/* ─── Feature Cards ─── */
+.landing-light-features {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 4rem 1.5rem;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.landing-features-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.landing-fcard {
+  position: relative;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  text-align: left;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.landing-fcard:hover {
+  transform: translateY(-8px);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.landing-fcard h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.6rem;
+}
+
+.landing-fcard p {
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* ─── Navbar override on landing page ─── */
+body:has(.landing-light) .navbar {
+  background: rgba(248, 250, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+body:has(.landing-light) .navbar-logo span {
+  color: #0f172a;
 }
 
 body:has(.landing-light) .navbar-links a,
 body:has(.landing-light) .navbar-links button {
-  color: #64748b;
+  color: #475569;
 }
 
-body:has(.landing-light) .navbar-links a:hover,
-body:has(.landing-light) .navbar-links button:hover {
-  color: #0f172a;
-  background: rgba(99,102,241,0.06);
+body:has(.landing-light) .nav-link.active {
+  color: #6366f1 !important;
+  text-shadow: none !important;
 }
 
 body:has(.landing-light) .btn-nav-outline {
@@ -2292,10 +2571,13 @@ body:has(.landing-light) .btn-nav-outline {
   background: rgba(99,102,241,0.06);
 }
 
-body:has(.landing-light) .btn-nav-outline:hover {
-  background: rgba(99,102,241,0.12);
-  border-color: rgba(99,102,241,0.35);
+/* ─── Mobile Support for Landing ─── */
+@media (max-width: 768px) {
+  .landing-light-title { font-size: 3rem; }
+  .landing-features-cards { grid-template-columns: 1fr; }
 }
+
+/* ─── Analytics & Dark Theme Global styles continue below (preserved) ─── */
 
 /* ─── Mobile Responsive ─── */
 @media (max-width: 768px) {

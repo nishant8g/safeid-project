@@ -65,9 +65,9 @@ export default function QRPage() {
   return (
     <div className="page-container medium animate-fade-in">
       <div className="section-header text-center" style={{ marginBottom: '3rem' }}>
-        <div className="section-tag" style={{ background: 'rgba(0, 97, 255, 0.1)', color: '#0061FF', fontWeight: '700' }}>Quick Access</div>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em' }}>📱 SafeID QR Code</h2>
-        <p style={{ color: '#475569', fontSize: '1.1rem', fontWeight: '500' }}>Print this QR code and keep it with you. Anyone can scan it in an emergency.</p>
+        <div className="section-tag">Quick Access</div>
+        <h2 className="text-glow" style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>📱 SafeID QR Code</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '500' }}>Print this QR code and keep it with you. Anyone can scan it in an emergency.</p>
       </div>
 
       {error && <div className="alert alert-error">⚠️ {error}</div>}
@@ -103,10 +103,10 @@ export default function QRPage() {
             </div>
 
             {/* SMS Fallback */}
-            <div className="qr-fallback" style={{ width: '100%', background: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(226, 232, 240, 1)', padding: '20px', borderRadius: '20px' }}>
-              <div className="fallback-label" style={{ color: '#0f172a', fontWeight: '800' }}>📵 No Internet Fallback</div>
-              <div className="fallback-code" style={{ color: '#0061FF', fontSize: '1.5rem', letterSpacing: '4px' }}>{qrInfo.sms_fallback_code}</div>
-              <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '500', marginTop: '0.5rem' }}>
+            <div className="qr-fallback" style={{ width: '100%', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-subtle)', padding: '20px', borderRadius: '20px', backdropFilter: 'blur(10px)' }}>
+              <div className="fallback-label" style={{ color: 'var(--text-primary)', fontWeight: '800' }}>📵 No Internet Fallback</div>
+              <div className="fallback-code" style={{ color: 'var(--accent-cyan)', fontSize: '1.5rem', letterSpacing: '4px', textShadow: '0 0 10px rgba(0, 242, 255, 0.3)' }}>{qrInfo.sms_fallback_code}</div>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: '500', marginTop: '0.5rem' }}>
                 Print this code below your QR for offline SMS emergency
               </p>
             </div>
@@ -123,11 +123,12 @@ export default function QRPage() {
 
             {/* Tips */}
             <div style={{
-              width: '100%', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.6)',
-              borderRadius: '20px', fontSize: '0.9rem', border: '1px solid rgba(255,255,255,1)'
+              width: '100%', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '20px', fontSize: '0.9rem', border: '1px solid var(--border-subtle)',
+              backdropFilter: 'blur(10px)'
             }}>
-              <h4 style={{ fontSize: '1rem', marginBottom: '0.75rem', color: '#0f172a', fontWeight: '800' }}>💡 Pro-Tip Placement:</h4>
-              <ul style={{ color: '#475569', paddingLeft: '1.2rem', lineHeight: '1.6', fontWeight: '500' }}>
+              <h4 style={{ fontSize: '1rem', marginBottom: '0.75rem', color: 'var(--text-primary)', fontWeight: '800' }}>💡 Pro-Tip Placement:</h4>
+              <ul style={{ color: 'var(--text-secondary)', paddingLeft: '1.2rem', lineHeight: '1.6', fontWeight: '500' }}>
                 <li>Back of your phone case</li>
                 <li>Inside your wallet</li>
                 <li>On your helmet</li>

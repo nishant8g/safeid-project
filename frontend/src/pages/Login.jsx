@@ -44,27 +44,27 @@ export default function Login() {
       <div style={{ width: '100%', padding: '24px', display: 'flex', justifyContent: 'center', zIndex: 10 }}>
         <motion.div 
           initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          style={{ background: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(20px)', borderRadius: '32px', padding: '60px 40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: '0 40px 80px rgba(67, 56, 202, 0.15), 0 0 0 8px rgba(255, 255, 255, 0.4)', width: '100%', maxWidth: '420px', textAlign: 'center' }}
+          style={{ background: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(30px)', borderRadius: '32px', padding: '60px 40px', border: '1px solid var(--border-subtle)', boxShadow: '0 40px 80px rgba(0, 0, 0, 0.5)', width: '100%', maxWidth: '420px', textAlign: 'center' }}
         >
           
           <Link 
             to="/" 
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#64748b', textDecoration: 'none', fontWeight: '600', fontSize: '0.85rem', marginBottom: '24px', padding: '8px 16px', background: 'rgba(0, 0, 0, 0.03)', borderRadius: '12px', alignSelf: 'flex-start', transition: 'all 0.2s ease' }}
-            onMouseOver={(e) => { e.currentTarget.style.color = '#0061FF'; e.currentTarget.style.background = 'rgba(0, 97, 255, 0.05)'; }}
-            onMouseOut={(e) => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.background = 'rgba(0, 0, 0, 0.03)'; }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: '600', fontSize: '0.85rem', marginBottom: '24px', padding: '8px 16px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '12px', alignSelf: 'flex-start', transition: 'all 0.2s ease', border: '1px solid var(--border-subtle)' }}
+            onMouseOver={(e) => { e.currentTarget.style.color = 'var(--accent-cyan)'; e.currentTarget.style.background = 'rgba(0, 242, 255, 0.1)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; }}
           >
             <ArrowLeft size={14} /> Back to Home
           </Link>
 
-          <div style={{ width: '80px', height: '80px', background: 'rgba(0, 97, 255, 0.1)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}>
-            <ShieldCheck size={40} color="#0061FF" strokeWidth={2.5} />
+          <div style={{ width: '80px', height: '80px', background: 'rgba(0, 242, 255, 0.1)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px', border: '1px solid rgba(0, 242, 255, 0.2)' }}>
+            <ShieldCheck size={40} color="var(--accent-cyan)" strokeWidth={2.5} />
           </div>
 
           <div style={{ marginBottom: '40px' }}>
-            <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: '#0f172a', marginBottom: '12px', letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '12px', letterSpacing: '-0.02em' }}>
               Welcome Back
             </h2>
-            <p style={{ color: '#475569', fontSize: '1.05rem', lineHeight: '1.5', margin: 0 }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: '1.5', margin: 0, fontWeight: '500' }}>
               Military-grade digital identity.<br/>One-tap emergency response.
             </p>
           </div>
@@ -85,10 +85,10 @@ export default function Login() {
             />
           </div>
           
-          <p style={{ marginTop: '40px', fontSize: '0.9rem', color: '#64748b' }}>
-            New to SafeID? <span onClick={() => navigate('/register')} style={{ color: '#0061FF', cursor: 'pointer', fontWeight: '700' }}>Create an identity</span>
+          <p style={{ marginTop: '40px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+            New to SafeID? <span onClick={() => navigate('/register')} style={{ color: 'var(--accent-cyan)', cursor: 'pointer', fontWeight: '700' }}>Create an identity</span>
             <br/><br/>
-            <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>By continuing, you prove your identity via Google Authentication.</span>
+            <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>By continuing, you prove your identity via Google Authentication.</span>
           </p>
 
         </motion.div>
