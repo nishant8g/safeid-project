@@ -61,11 +61,11 @@ export default function Dashboard() {
     <div className="page-container animate-fade-in">
       {/* Welcome Header */}
       <div className="section-header" style={{ marginBottom: '3rem' }}>
-        <div className="section-tag" style={{ background: 'rgba(0, 97, 255, 0.1)', color: '#0061FF', fontWeight: '700' }}>Overview</div>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em' }}>
+        <div className="section-tag" style={{ background: 'rgba(34, 211, 238, 0.1)', color: 'var(--accent-cyan)', fontWeight: '700' }}>Overview</div>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
           Welcome, {user?.full_name?.split(' ')[0]} 👋
         </h2>
-        <p style={{ color: '#475569', fontSize: '1.1rem', fontWeight: '500' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '500' }}>
           Manage your SafeID profile and stay prepared.
         </p>
       </div>

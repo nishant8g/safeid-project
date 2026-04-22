@@ -55,14 +55,14 @@ export default function History() {
   return (
     <div className="page-container medium animate-fade-in">
       <div className="section-header" style={{ marginBottom: '3rem' }}>
-        <div className="section-tag" style={{ background: 'rgba(0, 97, 255, 0.1)', color: '#0061FF', fontWeight: '700' }}>Event Logs</div>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em' }}>📋 Emergency Alert Logs</h2>
-        <p style={{ color: '#475569', fontSize: '1.1rem', fontWeight: '500' }}>Detailed history of all emergency alerts triggered for your profile.</p>
+        <div className="section-tag" style={{ background: 'rgba(34, 211, 238, 0.1)', color: 'var(--accent-cyan)', fontWeight: '700' }}>Event Logs</div>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>📋 Emergency Alert Logs</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '500' }}>Detailed history of all emergency alerts triggered for your profile.</p>
       </div>
 
       {/* Backend Links */}
-      <div className="glass-card" style={{ marginBottom: '1.5rem', border: '1px solid rgba(255, 255, 255, 1)', padding: '30px' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '1.5rem', fontWeight: '800', color: '#0f172a' }}>🔗 Developer API Access</h3>
+      <div className="glass-card" style={{ marginBottom: '1.5rem', border: '1px solid var(--border-subtle)', padding: '30px' }}>
+        <h3 style={{ fontSize: '1.1rem', marginBottom: '1.5rem', fontWeight: '800', color: 'var(--text-primary)' }}>🔗 Developer API Access</h3>
         <div className="flex flex-col" style={{ gap: '0.75rem' }}>
           <a
             href={`http://${window.location.hostname}:8000/docs`}
@@ -98,13 +98,13 @@ export default function History() {
       {alerts.length > 0 ? (
         <div className="flex flex-col" style={{ gap: '1rem' }}>
           {alerts.map((alert) => (
-            <div key={alert.id} className="glass-card" style={{ border: '1px solid rgba(255,255,255,1)', boxShadow: 'var(--shadow-md)', padding: '24px' }}>
+            <div key={alert.id} className="glass-card" style={{ border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-md)', padding: '24px' }}>
               <div className="flex justify-between items-center" style={{ marginBottom: '1.25rem' }}>
                 <div className="flex items-center" style={{ gap: '1rem' }}>
                   <div style={{ width: '48px', height: '48px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>🚨</div>
                   <div>
-                    <h4 style={{ fontSize: '1.05rem', color: '#0f172a', fontWeight: '800' }}>Emergency SOS Triggered</h4>
-                    <p style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '600' }}>
+                    <h4 style={{ fontSize: '1.05rem', color: 'var(--text-primary)', fontWeight: '800' }}>Emergency SOS Triggered</h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: '600' }}>
                       {formatDate(alert.created_at)}
                     </p>
                   </div>
@@ -116,14 +116,14 @@ export default function History() {
 
               <div className="medical-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
                 <div className="medical-item">
-                  <div className="item-label" style={{ color: '#64748b' }}>Trigger Method</div>
-                  <div className="item-value" style={{ fontSize: '1rem', color: '#0f172a', fontWeight: '700' }}>
+                  <div className="item-label" style={{ color: 'var(--text-muted)' }}>Trigger Method</div>
+                  <div className="item-value" style={{ fontSize: '1rem', color: 'var(--text-primary)', fontWeight: '700' }}>
                     {alert.triggered_by === 'voice' ? '🎤 Voice Command' : '👆 Smart Button'}
                   </div>
                 </div>
                 <div className="medical-item">
-                  <div className="item-label" style={{ color: '#64748b' }}>Network Reach</div>
-                  <div className="item-value" style={{ fontSize: '1rem', color: '#0f172a', fontWeight: '700' }}>
+                  <div className="item-label" style={{ color: 'var(--text-muted)' }}>Network Reach</div>
+                  <div className="item-value" style={{ fontSize: '1rem', color: 'var(--text-primary)', fontWeight: '700' }}>
                     {alert.contacts_notified?.length || 0} Contacts Alerted
                   </div>
                 </div>
@@ -167,9 +167,9 @@ export default function History() {
       )}
 
       {/* SMS Info */}
-      <div className="glass-card" style={{ marginTop: '2rem', background: 'rgba(255, 255, 255, 0.6)', border: '1px solid rgba(255, 255, 255, 1)', padding: '30px' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: '#0f172a', fontWeight: '800' }}>📱 How Alert Propagation Works</h3>
-        <div style={{ color: '#475569', fontSize: '0.95rem', lineHeight: 1.7, fontWeight: '500' }}>
+      <div className="glass-card" style={{ marginTop: '2rem', border: '1px solid var(--border-subtle)', padding: '30px' }}>
+        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-primary)', fontWeight: '800' }}>📱 How Alert Propagation Works</h3>
+        <div style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.7, fontWeight: '500' }}>
           <p>When an emergency is detected, SafeID executes the following protocol:</p>
           <ol style={{ paddingLeft: '1.5rem', marginTop: '0.75rem' }}>
             <li><strong>Live GPS Lock:</strong> High-accuracy coordinates are captured from the active session.</li>
@@ -178,10 +178,10 @@ export default function History() {
             <li><strong>WhatsApp Sync:</strong> Secondary backup alerts are funneled through WhatsApp API.</li>
             <li><strong>Rescue Link:</strong> Contacts receive a real-time tracking link with your medical profile.</li>
           </ol>
-          <div className="alert alert-info" style={{ marginTop: '1rem', background: 'rgba(255, 255, 255, 0.4)', border: '1px solid rgba(255, 255, 255, 0.8)' }}>
+          <div className="alert alert-info" style={{ marginTop: '1rem', background: 'rgba(15, 23, 42, 0.4)', border: '1px solid var(--border-subtle)' }}>
             ℹ️ With Twilio trial account, SMS can only be sent to verified phone numbers.
             Add your phone in the{' '}
-            <a href="https://console.twilio.com/us1/develop/phone-numbers/manage/verified" target="_blank" rel="noopener noreferrer" style={{ color: '#0f172a', textDecoration: 'underline' }}>
+            <a href="https://console.twilio.com/us1/develop/phone-numbers/manage/verified" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-cyan)', textDecoration: 'underline' }}>
               Twilio Console → Verified Numbers
             </a>
           </div>

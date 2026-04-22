@@ -77,7 +77,7 @@ export default function MeshBackground() {
             ctx.beginPath();
             ctx.moveTo(a.px, a.py);
             ctx.lineTo(b.px, b.py);
-            ctx.strokeStyle = `rgba(96, 165, 250, ${opacity})`;
+            ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
             ctx.lineWidth = 1 * Math.min(a.scale, b.scale);
             ctx.stroke();
           }
@@ -88,17 +88,22 @@ export default function MeshBackground() {
       for (const p of projected) {
         const r = p.baseRadius * p.scale;
 
+        // Determine color based on index or position
+        const isPurple = (sorted.indexOf(p) % 2 === 0);
+        const glowColor = isPurple ? '192, 132, 252' : '34, 211, 238'; // Purple vs Cyan
+        const coreColor = isPurple ? '168, 85, 247' : '6, 182, 212';
+
         ctx.beginPath();
-        ctx.arc(p.px, p.py, r * 2.5, 0, Math.PI * 2);
-        const gradient = ctx.createRadialGradient(p.px, p.py, 0, p.px, p.py, r * 2.5);
-        gradient.addColorStop(0, `rgba(59, 130, 246, ${0.7 * p.scale})`);
-        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+        ctx.arc(p.px, p.py, r * 3, 0, Math.PI * 2);
+        const gradient = ctx.createRadialGradient(p.px, p.py, 0, p.px, p.py, r * 3);
+        gradient.addColorStop(0, `rgba(${glowColor}, ${0.6 * p.scale})`);
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = gradient;
         ctx.fill();
 
         ctx.beginPath();
         ctx.arc(p.px, p.py, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(6, 182, 212, ${0.9 * p.scale})`;
+        ctx.fillStyle = `rgba(${coreColor}, ${0.9 * p.scale})`;
         ctx.fill();
       }
 

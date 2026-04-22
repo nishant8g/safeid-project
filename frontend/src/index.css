@@ -8,58 +8,57 @@
 
 /* ──── CSS Custom Properties (Design Tokens) ──── */
 :root {
-  /* Colors — Premium Light Theme */
-  --bg-primary: #f0f9ff;
-  --bg-secondary: #e0f2fe;
-  --bg-card: rgba(255, 255, 255, 0.8);
-  --bg-glass: rgba(255, 255, 255, 0.75);
-  --bg-glass-hover: rgba(255, 255, 255, 0.9);
+  /* Colors — Midnight Aurora Dark Theme */
+  --bg-primary: #0f172a;
+  --bg-secondary: #020617;
+  --bg-card: rgba(30, 41, 59, 0.4);
+  --bg-glass: rgba(15, 23, 42, 0.65);
+  --bg-glass-hover: rgba(30, 41, 59, 0.8);
 
-  /* Brand Colors */
-  --accent-red: #ef4444;
-  --accent-red-glow: rgba(239, 68, 68, 0.2);
-  --accent-orange: #f97316;
-  --accent-amber: #f59e0b;
+  /* Brand Colors — More vibrant for Dark Mode */
+  --accent-red: #f43f5e;
+  --accent-red-glow: rgba(244, 63, 94, 0.3);
+  --accent-orange: #fb923c;
+  --accent-amber: #fbbf24;
   --accent-emerald: #10b981;
-  --accent-blue: #0061FF;
-  --accent-purple: #9D50BB;
-  --accent-cyan: #06b6d4;
+  --accent-blue: #3b82f6;
+  --accent-purple: #c084fc;
+  --accent-cyan: #22d3ee;
+  --accent-magenta: #d946ef;
 
   /* Emergency Colors */
-  --emergency-red: #dc2626;
-  --emergency-pulse: rgba(220, 38, 38, 0.2);
+  --emergency-red: #ef4444;
+  --emergency-pulse: rgba(239, 68, 68, 0.3);
   --severity-minor: #10b981;
   --severity-moderate: #f59e0b;
   --severity-critical: #ef4444;
 
-  /* Gradient Presets */
-  --gradient-sky: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
-  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
-  --gradient-red: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  --gradient-blue: linear-gradient(135deg, #0061FF 0%, #0044CC 100%);
-  --gradient-glow: radial-gradient(ellipse at center, rgba(0, 97, 255, 0.05) 0%, transparent 70%);
-  --gradient-emergency: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  /* Gradient Presets — Enhanced for Aurora look */
+  --gradient-sky: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #020617 100%);
+  --gradient-card: linear-gradient(145deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.3) 100%);
+  --gradient-red: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  --gradient-blue: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  --gradient-aurora: linear-gradient(135deg, #22d3ee 0%, #c084fc 100%);
+  --gradient-glow: radial-gradient(circle at center, rgba(34, 211, 238, 0.08) 0%, transparent 70%);
 
-  /* Text — Dark Slate for high contrast */
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
-  --text-accent: #0061FF;
+  /* Text — Light for high contrast on dark bg */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-accent: #22d3ee;
 
-  /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.8);
-  --border-light: rgba(255, 255, 255, 1);
-  --border-focus: rgba(0, 97, 255, 0.5);
-  --border-emergency: rgba(239, 68, 68, 0.2);
+  /* Borders — Glowing & Subtle */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.15);
+  --border-focus: rgba(34, 211, 238, 0.5);
+  --border-emergency: rgba(239, 68, 68, 0.3);
 
-  /* Shadows — Adjusted for light theme */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
-  --shadow-glow-purple: 0 0 40px rgba(157, 80, 187, 0.1);
-  --shadow-glow-red: 0 0 40px rgba(239, 68, 68, 0.1);
-  --shadow-glow-blue: 0 0 30px rgba(0, 97, 255, 0.1);
-  --shadow-glow-blue-alt: 0 0 30px rgba(59, 130, 246, 0.15);
+  /* Shadows — Glowing effects */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  --shadow-glow-purple: 0 0 40px rgba(192, 132, 252, 0.15);
+  --shadow-glow-cyan: 0 0 30px rgba(34, 211, 238, 0.15);
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -157,17 +156,19 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
 /* ──── Glass Card ──── */
 .glass-card {
   background: var(--gradient-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
   transition: all var(--transition-base);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 .glass-card:hover {
   border-color: var(--border-light);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-md), var(--shadow-glow-cyan);
+  transform: translateY(-2px);
 }
 
 .glass-card.emergency {
@@ -355,10 +356,10 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-inner {
