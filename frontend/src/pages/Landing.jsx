@@ -219,7 +219,7 @@ export default function Landing() {
       </div>
 
       {/* Hero Section */}
-      <section style={{ position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '100px', paddingBottom: '60px' }}>
+      <section style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '100px', paddingBottom: '20px' }}>
 
         <motion.div
           className="container"
@@ -268,7 +268,7 @@ export default function Landing() {
       </section>
 
       {/* High-Tech Grid Features - Balanced and Premium */}
-      <section style={{ padding: '100px 24px', position: 'relative', zIndex: 10 }}>
+      <section style={{ padding: '60px 24px', position: 'relative', zIndex: 10 }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '70px' }}>
             <span style={{ color: '#0061FF', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.8rem' }}>Core Capabilities</span>
