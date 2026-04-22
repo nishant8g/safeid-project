@@ -34,16 +34,12 @@
       "destination": "/api/index.py"
     },
     {
-      "source": "/assets/(.*)",
-      "destination": "/frontend/assets/$1"
-    },
-    {
       "source": "/(sw.js|manifest.json|favicon.svg|icons.svg|safeid-logo-192.png|safeid-logo-512.png)",
-      "destination": "/frontend/$1"
+      "destination": "/$1"
     },
     {
       "source": "/(.*)",
-      "destination": "/frontend/index.html"
+      "destination": "/index.html"
     }
   ]
 }

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { 
+  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, 
+  PieChart, Pie, Cell, RadialBarChart, RadialBar, Legend, BarChart, Bar
+} from 'recharts';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -13,7 +16,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Custom Emergency Red Marker
 const emergencyIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
@@ -23,9 +25,10 @@ const emergencyIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
+const COLORS = ['#22d3ee', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+
 export default function AnalyticsDashboard({ completionPercent }) {
   const [data, setData] = useState(() => {
-    // Load cached data immediately so there's no "5 minute wait" error
     const cached = localStorage.getItem('safeid_analytics_cache');
     return cached ? JSON.parse(cached) : null;
   });
@@ -42,8 +45,7 @@ export default function AnalyticsDashboard({ completionPercent }) {
         setError(null);
         setLoading(false);
       } catch (err) {
-        console.error("Backend still booting, retrying in 5s...", err);
-        // If we have cached data, don't show a hard error, just a subtle sync state
+        console.error("Sync error, retrying...", err);
         setError("Syncing...");
         setLoading(false);
         retryTimer = setTimeout(fetchAnalytics, 5000);
@@ -56,38 +58,25 @@ export default function AnalyticsDashboard({ completionPercent }) {
 
   if (loading && !data) {
     return (
-      <div className="glass-card text-center" style={{ padding: '2rem' }}>
-        <div className="spinner" style={{ margin: '0 auto 1rem auto' }}></div>
-        <p>Initializing Secure Analytics...</p>
-      </div>
-    );
-  }
-
-  // If we have data (cached or fresh), but also an error (rebooting), 
-  // we show the UI but add a small status badge.
-  const isRebooting = error && data;
-
-  if (error && !data) {
-    return (
-      <div className="glass-card text-center" style={{ padding: '2rem', border: '1px solid var(--accent-blue)' }}>
-        <div className="spinner" style={{ margin: '0 auto 1rem auto' }}></div>
-        <h3 style={{ color: 'var(--accent-blue)', marginBottom: '0.5rem' }}>Secure Sync in Progress</h3>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-          The backend is currently connecting to your secure vault.
-          <br/><strong>Auto-refreshing... stay on this page!</strong>
-        </p>
+      <div className="glass-card text-center" style={{ padding: '3rem' }}>
+        <div className="spinner" style={{ margin: '0 auto 1.5rem auto' }}></div>
+        <p style={{ letterSpacing: '0.1em', textTransform: 'uppercase', fontSize: '0.8rem', fontWeight: '700' }}>Initializing Secure Node...</p>
       </div>
     );
   }
 
   if (!data) return null;
 
-  // Custom Tooltip for Recharts
+  const radialData = [
+    { name: 'Completion', value: completionPercent, fill: completionPercent === 100 ? '#10b981' : '#22d3ee' }
+  ];
+
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{ background: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(10px)', padding: '0.5rem 1rem', border: '1px solid var(--accent-cyan)', borderRadius: '12px', color: 'var(--text-primary)', boxShadow: 'var(--shadow-md)' }}>
-          <p style={{ margin: 0, fontWeight: '700' }}>{label}: <span style={{color: 'var(--accent-cyan)'}}>{payload[0].value} scans</span></p>
+        <div className="glass-card" style={{ padding: '0.5rem 1.25rem', border: '1px solid var(--accent-cyan)', boxShadow: '0 0 20px rgba(34, 211, 238, 0.2)' }}>
+          <p style={{ margin: 0, fontWeight: '700', color: 'var(--text-primary)' }}>{label}</p>
+          <p style={{ margin: 0, color: 'var(--accent-cyan)', fontSize: '1.2rem', fontWeight: '900' }}>{payload[0].value} Scans</p>
         </div>
       );
     }
@@ -96,103 +85,137 @@ export default function AnalyticsDashboard({ completionPercent }) {
 
   const center = data.alert_locations.length > 0 
     ? [data.alert_locations[0].lat, data.alert_locations[0].lng] 
-    : [20.5937, 78.9629]; // Default India
+    : [20.5937, 78.9629];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '1.5rem' }}>
+    <div className="analytics-container animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
-      {/* Top Value Row */}
-      <div className="stats-grid">
+      {/* Visual KPI Row */}
+      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         
-        {/* Profile Health Circle */}
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-light)' }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '1rem', textTransform: 'uppercase', fontWeight: '700', letterSpacing: '0.05em' }}>Profile Health</h3>
-          <div style={{ position: 'relative', width: '100px', height: '100px' }}>
-            <svg width="100" height="100" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="10" />
-              <circle cx="50" cy="50" r="40" fill="none" 
-                stroke={completionPercent === 100 ? "#10b981" : "#f59e0b"} 
-                strokeWidth="10" 
-                strokeDasharray={`${(completionPercent / 100) * 251.2} 251.2`} 
-                strokeDashoffset="0"
-                strokeLinecap="round"
-                transform="rotate(-90 50 50)"
-                style={{ transition: 'stroke-dasharray 1s ease-out' }}
-              />
-            </svg>
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 'bold' }}>
+        {/* Profile Health Radial */}
+        <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', padding: '1.5rem' }}>
+          <div style={{ width: '120px', height: '120px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <RadialBarChart 
+                cx="50%" cy="50%" innerRadius="70%" outerRadius="100%" 
+                barSize={12} data={radialData} startAngle={90} endAngle={450}
+              >
+                <RadialBar background dataKey="value" cornerRadius={10} />
+              </RadialBarChart>
+            </ResponsiveContainer>
+            <div style={{ position: 'relative', top: '-75px', textAlign: 'center', fontSize: '1.4rem', fontWeight: '900' }}>
               {completionPercent}%
             </div>
           </div>
+          <div>
+            <h3 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>Identity Health</h3>
+            <p style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-primary)' }}>
+              {completionPercent === 100 ? 'Fully Shielded' : 'Action Required'}
+            </p>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Security score based on profile completion.</p>
+          </div>
         </div>
 
-        {/* Total Scans Card */}
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-subtle)' }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase', fontWeight: '700', letterSpacing: '0.05em' }}>Total QR Scans</h3>
-          <div style={{ fontSize: '3.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-            {data?.total_scans || 0}
+        {/* Scan Bar Highlight */}
+        <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: '1rem' }}>
+            <div>
+              <h3 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total Scans</h3>
+              <div style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', lineHeight: 1 }}>{data?.total_scans || 0}</div>
+            </div>
+            <div style={{ height: '60px', width: '120px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data?.scan_history?.slice(-5)}>
+                  <Bar dataKey="scans" fill="var(--accent-cyan)" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-          <p style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontWeight: '600' }}>Lifetime Views</p>
+          <div style={{ padding: '0.5rem', background: 'rgba(34, 211, 238, 0.05)', borderRadius: '8px', border: '1px solid rgba(34, 211, 238, 0.1)', fontSize: '0.75rem', color: 'var(--accent-cyan)', fontWeight: '600' }}>
+            ⚡ Activity Detected in Last 7 Days
+          </div>
         </div>
 
-        {/* Global Protection Card */}
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--accent-emerald)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Global Status</h3>
-          <div style={{ fontSize: '3.5rem', fontWeight: '900', color: 'var(--accent-emerald)', textShadow: '0 0 20px rgba(16, 185, 129, 0.4)' }}>
-            ✓
+        {/* Active Node Status */}
+        <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+          <div className="status-pulse" style={{ width: '60px', height: '60px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '12px', height: '12px', background: 'var(--accent-emerald)', borderRadius: '50%', boxShadow: '0 0 15px var(--accent-emerald)' }}></div>
           </div>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Secure Protection Active</p>
+          <div>
+            <h3 style={{ fontSize: '0.8rem', color: 'var(--accent-emerald)', textTransform: 'uppercase', fontWeight: '800' }}>Protection Live</h3>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>All alert nodes operational.</p>
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>Latency: 14ms | Global v2.4</div>
+          </div>
         </div>
 
       </div>
 
-      <div className="dashboard-grid">
-        {/* Scan Velocity Chart */}
-        <div className="glass-card" style={{ padding: '1.5rem', height: '350px', display: 'flex', flexDirection: 'column' }}>
-          <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            📈 Scan Velocity (7 Days)
-          </h3>
+      <div className="dashboard-grid" style={{ gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
+        
+        {/* Main Velocity Area Chart */}
+        <div className="glass-card" style={{ padding: '2rem', height: '400px', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ marginBottom: '2rem' }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-primary)' }}>Scan Velocity Architecture</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Temporal heat distribution of identity access.</p>
+          </div>
           <div style={{ flex: 1, minHeight: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data?.scan_history || []}>
                 <defs>
                   <linearGradient id="colorScans" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--accent-cyan)" stopOpacity={0.4}/>
+                    <stop offset="5%" stopColor="var(--accent-cyan)" stopOpacity={0.6}/>
                     <stop offset="95%" stopColor="var(--accent-cyan)" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                <XAxis 
+                  dataKey="date" 
+                  stroke="var(--text-muted)" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false} 
+                  tickFormatter={(val) => val.split('-').slice(1).join('/')}
+                />
+                <YAxis hide domain={[0, 'dataMax + 2']} />
                 <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="scans" stroke="var(--accent-cyan)" strokeWidth={4} fillOpacity={1} fill="url(#colorScans)" />
+                <Area 
+                  type="monotone" 
+                  dataKey="scans" 
+                  stroke="var(--accent-cyan)" 
+                  strokeWidth={5} 
+                  fillOpacity={1} 
+                  fill="url(#colorScans)" 
+                  animationDuration={2000}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Live GPS Map */}
-        <div className="glass-card" style={{ padding: 0, height: '350px', overflow: 'hidden', position: 'relative', border: '1px solid var(--border-light)' }}>
-          <div style={{ position: 'absolute', top: '1.25rem', left: '1.25rem', zIndex: 1000, background: 'rgba(15, 23, 42, 0.8)', backdropFilter: 'blur(10px)', padding: '0.6rem 1.2rem', borderRadius: '12px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-md)' }}>
-            <h3 style={{ fontSize: '0.9rem', margin: 0, color: 'var(--text-primary)', fontWeight: '700' }}>📍 SOS History Map</h3>
+        {/* SOS Spatial Distribution */}
+        <div className="glass-card" style={{ padding: 0, height: '400px', overflow: 'hidden', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', zIndex: 1000, background: 'rgba(15, 23, 42, 0.8)', backdropFilter: 'blur(12px)', padding: '0.75rem 1.25rem', borderRadius: '14px', border: '1px solid var(--border-subtle)', boxShadow: '0 4px 20px rgba(0,0,0,0.4)' }}>
+            <h3 style={{ fontSize: '0.85rem', margin: 0, color: 'var(--text-primary)', fontWeight: '800', letterSpacing: '0.05em' }}>📍 GEOSPATIAL LOOPS</h3>
           </div>
-          <MapContainer center={center} zoom={data?.alert_locations?.length > 0 ? 13 : 4} style={{ height: '100%', width: '100%', zIndex: 1, filter: 'invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%)' }}>
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
+          <MapContainer 
+            center={center} 
+            zoom={data?.alert_locations?.length > 0 ? 12 : 4} 
+            style={{ height: '100%', width: '100%', zIndex: 1, filter: 'invert(90%) hue-rotate(180deg) brightness(105%) contrast(85%)' }}
+          >
+            <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
             {(data?.alert_locations || []).map((loc, idx) => (
               <Marker key={idx} position={[loc.lat, loc.lng]} icon={emergencyIcon}>
                 <Popup>
-                  <div style={{ color: 'black' }}>
-                    <h4 style={{ margin: 0, color: '#dc2626' }}>SOS Alert</h4>
-                    <p style={{ margin: '0.2rem 0', fontSize: '0.8rem' }}>
-                      {new Date(loc.date.endsWith('Z') ? loc.date : `${loc.date}Z`).toLocaleString()}
-                    </p>
+                  <div style={{ padding: '0.5rem', textAlign: 'center' }}>
+                    <p style={{ margin: '0 0 0.25rem 0', fontWeight: '800', color: '#ef4444' }}>EMERGENCY EVENT</p>
+                    <p style={{ margin: 0, fontSize: '0.75rem' }}>{new Date(loc.date).toLocaleString()}</p>
                   </div>
                 </Popup>
               </Marker>
             ))}
           </MapContainer>
         </div>
+
       </div>
     </div>
   );

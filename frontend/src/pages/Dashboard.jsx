@@ -72,117 +72,138 @@ export default function Dashboard() {
 
       <AnalyticsDashboard completionPercent={completionPercent} />
 
-      {/* Stats Grid */}
-      <div className="stats-grid" style={{ marginBottom: '1.5rem' }}>
-        <div className="stat-card">
-          <div className="stat-icon">🩸</div>
-          <div className="stat-value">{medical?.blood_group || '—'}</div>
-          <div className="stat-label">Blood Group</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon">👥</div>
-          <div className="stat-value">{contacts.length}</div>
-          <div className="stat-label">Emergency Contacts</div>
-        </div>
-        <div className="stat-card" style={{ position: 'relative' }}>
-          <div className="stat-icon">📱</div>
-          <div className="stat-value" 
-               onClick={async () => {
-                 try {
-                   const res = await qrAPI.toggle();
-                   setQrInfo(prev => ({ ...prev, is_active: res.data.is_active }));
-                 } catch (err) {
-                   console.error('Toggle failed:', err);
-                 }
-               }}
-               style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-          >
-            {qrInfo?.is_active ? '✅ ON' : '❌ OFF'}
-            <div className={`toggle-pill ${qrInfo?.is_active ? 'active' : ''}`} style={{ 
-              width: '40px', 
-              height: '20px', 
-              background: qrInfo?.is_active ? 'var(--accent-emerald)' : '#4b5563', 
-              borderRadius: '20px',
-              position: 'relative',
-              transition: 'all 0.3s'
-            }}>
+      {/* Primary Actions & Controls */}
+      <div className="dashboard-grid" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+        <div className="glass-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem', border: '1px solid var(--accent-cyan)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ fontSize: '2rem' }}>🛡️</div>
+            <div>
+              <h3 style={{ fontSize: '1rem', fontWeight: '800' }}>Privacy Shield</h3>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Toggle QR accessibility for first responders.</p>
+            </div>
+          </div>
+          <div className="flex items-center" style={{ gap: '1rem' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: '700', color: qrInfo?.is_active ? 'var(--accent-emerald)' : 'var(--text-muted)' }}>
+              {qrInfo?.is_active ? 'ACTIVE' : 'INACTIVE'}
+            </span>
+            <div 
+              onClick={async () => {
+                try {
+                  const res = await qrAPI.toggle();
+                  setQrInfo(prev => ({ ...prev, is_active: res.data.is_active }));
+                } catch (err) {
+                  console.error('Toggle failed:', err);
+                }
+              }}
+              className={`toggle-pill ${qrInfo?.is_active ? 'active' : ''}`} 
+              style={{ 
+                width: '50px', 
+                height: '26px', 
+                background: qrInfo?.is_active ? 'var(--accent-emerald)' : '#334155', 
+                borderRadius: '20px',
+                position: 'relative',
+                transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                cursor: 'pointer',
+                boxShadow: qrInfo?.is_active ? '0 0 15px rgba(16, 185, 129, 0.3)' : 'none'
+              }}
+            >
               <div style={{ 
-                width: '16px', 
-                height: '16px', 
-                background: 'white', 
+                width: '20px', 
+                height: '20px', 
+                background: '#fff', 
                 borderRadius: '50%', 
                 position: 'absolute', 
-                top: '2px', 
-                left: qrInfo?.is_active ? '22px' : '2px',
-                transition: 'all 0.3s'
+                top: '3px', 
+                left: qrInfo?.is_active ? '27px' : '3px',
+                transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
               }} />
             </div>
           </div>
-          <div className="stat-label" style={{ color: '#64748b', fontWeight: '600' }}>{qrInfo?.is_active ? 'QR Working' : 'QR Privacy'}</div>
+        </div>
+
+        <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', padding: '1.5rem' }}>
+          <div style={{ fontSize: '2rem' }}>🩹</div>
+          <div>
+            <h3 style={{ fontSize: '1rem', fontWeight: '800' }}>Biometric Data</h3>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Blood Group: <span style={{ color: 'var(--accent-cyan)', fontWeight: '700' }}>{medical?.blood_group || 'Not Set'}</span></p>
+          </div>
         </div>
       </div>
 
-      {/* Dashboard Grid */}
+      {/* Info Sections */}
       <div className="dashboard-grid">
         {/* Medical Summary */}
-        <div className="glass-card" style={{ border: '1px solid rgba(255, 255, 255, 1)' }}>
+        <div className="glass-card" style={{ border: '1.2px solid var(--border-subtle)', background: 'rgba(15, 23, 42, 0.3)' }}>
           <div className="flex justify-between items-center" style={{ marginBottom: '1.5rem' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a' }}>🩺 Medical Info</h3>
-            <Link to="/profile" className="btn btn-ghost" style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0061FF' }}>
-              Edit Profile
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ color: 'var(--accent-cyan)' }}>🩺</span> Clinical Overview
+            </h3>
+            <Link to="/profile" className="btn btn-ghost" style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Refine Details
             </Link>
           </div>
           {medical ? (
-            <div className="medical-grid">
-              <div className="medical-item highlight">
-                <div className="item-label">Blood Group</div>
-                <div className="item-value">{medical.blood_group || '—'}</div>
+            <div className="medical-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem' }}>
+              <div className="medical-item highlight" style={{ background: 'rgba(34, 211, 238, 0.05)' }}>
+                <div className="item-label">Blood Type</div>
+                <div className="item-value" style={{ color: 'var(--accent-cyan)' }}>{medical.blood_group || '—'}</div>
               </div>
               <div className="medical-item">
                 <div className="item-label">Allergies</div>
-                <div className="item-value" style={{ fontSize: '0.9rem' }}>{medical.allergies || 'None'}</div>
+                <div className="item-value">{medical.allergies || 'None'}</div>
               </div>
               <div className="medical-item">
-                <div className="item-label" style={{ color: '#64748b' }}>Conditions</div>
-                <div className="item-value" style={{ fontSize: '0.95rem', color: '#0f172a', fontWeight: '600' }}>{medical.conditions || 'None'}</div>
+                <div className="item-label">Conditions</div>
+                <div className="item-value">{medical.conditions || 'None'}</div>
               </div>
               <div className="medical-item">
                 <div className="item-label">Organ Donor</div>
-                <div className="item-value">{medical.organ_donor ? '✅ Yes' : '❌ No'}</div>
+                <div className="item-value">{medical.organ_donor ? 'Verified' : 'Unspecified'}</div>
               </div>
             </div>
           ) : (
-            <p className="text-muted">No medical info yet. <Link to="/profile">Add now →</Link></p>
+            <div className="text-center" style={{ padding: '1rem' }}>
+              <p className="text-muted" style={{ marginBottom: '1rem' }}>No medical intelligence found.</p>
+              <Link to="/profile" className="btn btn-primary btn-sm">Initialize Profile</Link>
+            </div>
           )}
         </div>
 
         {/* Emergency Contacts */}
-        <div className="glass-card" style={{ border: '1px solid rgba(255, 255, 255, 1)' }}>
+        <div className="glass-card" style={{ border: '1.2px solid var(--border-subtle)', background: 'rgba(15, 23, 42, 0.3)' }}>
           <div className="flex justify-between items-center" style={{ marginBottom: '1.5rem' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0f172a' }}>👥 Emergency Contacts</h3>
-            <Link to="/contacts" className="btn btn-ghost" style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0061FF' }}>
-              Manage
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ color: 'var(--accent-emerald)' }}>👥</span> Safety Circle
+            </h3>
+            <Link to="/contacts" className="btn btn-ghost" style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Modify
             </Link>
           </div>
           {contacts.length > 0 ? (
-            <div className="flex flex-col" style={{ gap: '0.5rem' }}>
+            <div className="flex flex-col" style={{ gap: '0.75rem' }}>
               {contacts.slice(0, 3).map((c) => (
-                <div key={c.id} className="contact-card" style={{ padding: '0.75rem 1rem' }}>
+                <div key={c.id} className="contact-card" style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.02)' }}>
                   <div className="contact-info">
-                    <div className="contact-avatar" style={{ width: '36px', height: '36px', fontSize: '0.9rem' }}>
+                    <div className="contact-avatar" style={{ background: 'var(--accent-cyan)', color: '#000', fontWeight: '800' }}>
                       {c.name[0]}
                     </div>
                     <div className="contact-details">
-                      <h4 style={{ fontSize: '0.9rem' }}>{c.name}</h4>
-                      <p>{c.relationship || 'Contact'}</p>
+                      <h4 style={{ fontSize: '0.9rem', fontWeight: '700' }}>{c.name}</h4>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{c.relationship}</p>
                     </div>
                   </div>
-                  <span className="badge badge-blue" style={{ fontSize: '0.7rem' }}>#{c.priority}</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'end' }}>
+                    <span className="badge" style={{ background: 'rgba(34, 211, 238, 0.1)', color: 'var(--accent-cyan)', fontSize: '0.65rem' }}>PRIORITY {c.priority}</span>
+                  </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-muted">No contacts yet. <Link to="/contacts">Add now →</Link></p>
+            <div className="text-center" style={{ padding: '1rem' }}>
+              <p className="text-muted" style={{ marginBottom: '1rem' }}>Zero active responders linked.</p>
+              <Link to="/contacts" className="btn btn-primary btn-sm">Connect Contact</Link>
+            </div>
           )}
         </div>
       </div>

@@ -70,15 +70,15 @@ export default function Profile() {
   return (
     <div className="page-container medium animate-fade-in">
       <div className="section-header" style={{ marginBottom: '3rem' }}>
-        <div className="section-tag" style={{ background: 'rgba(0, 97, 255, 0.1)', color: '#0061FF', fontWeight: '700' }}>Medical Profile</div>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em' }}>🩺 Medical Information</h2>
-        <p style={{ color: '#475569', fontSize: '1.1rem', fontWeight: '500' }}>This info will be shown to rescuers who scan your QR code.</p>
+        <div className="section-tag" style={{ background: 'rgba(0, 242, 255, 0.1)', color: 'var(--accent-cyan)', fontWeight: '700' }}>Medical Profile</div>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>🩺 Medical Information</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '500' }}>This info will be shown to rescuers who scan your QR code.</p>
       </div>
 
-      {success && <div className="alert alert-success" style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#065f46', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: '12px' }}>✅ {success}</div>}
-      {error && <div className="alert alert-error" style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#991b1b', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '12px' }}>⚠️ {error}</div>}
+      {success && <div className="alert alert-success" style={{ background: 'rgba(0, 255, 170, 0.1)', color: 'var(--accent-emerald)', border: '1px solid rgba(0, 255, 170, 0.2)', borderRadius: '12px' }}>✅ {success}</div>}
+      {error && <div className="alert alert-error" style={{ background: 'rgba(255, 51, 102, 0.1)', color: 'var(--accent-red)', border: '1px solid rgba(255, 51, 102, 0.2)', borderRadius: '12px' }}>⚠️ {error}</div>}
 
-      <div className="glass-card" style={{ border: '1px solid rgba(255, 255, 255, 1)', padding: '40px' }}>
+      <div className="glass-card" style={{ border: '1.5px solid var(--border-subtle)', padding: '40px' }}>
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
@@ -192,24 +192,24 @@ export default function Profile() {
           <div className="form-group">
             <label style={{
               display: 'flex', alignItems: 'center', gap: '1rem',
-              cursor: 'pointer', padding: '1.25rem', background: 'rgba(255, 255, 255, 0.5)',
-              borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 1)',
+              cursor: 'pointer', padding: '1.25rem', background: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '16px', border: '1px solid var(--border-subtle)',
               transition: 'all 0.2s ease'
             }}
-            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.8)'}
-            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.5)'}
+            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'}
+            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'}
             >
               <input
                 type="checkbox"
                 name="organ_donor"
                 checked={formData.organ_donor || false}
                 onChange={handleChange}
-                style={{ width: '22px', height: '22px', accentColor: '#10b981' }}
+                style={{ width: '22px', height: '22px', accentColor: 'var(--accent-emerald)' }}
                 id="medical-organ-donor"
               />
               <div>
-                <div style={{ fontWeight: 700, color: '#0f172a' }}>Organ Donor</div>
-                <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '500' }}>
+                <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>Organ Donor</div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: '500' }}>
                   I wish to be an organ donor
                 </div>
               </div>

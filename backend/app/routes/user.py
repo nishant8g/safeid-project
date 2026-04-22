@@ -181,19 +181,30 @@ async def get_analytics(
     
     total_scans = db.query(ScanLog).filter(ScanLog.user_id == current_user.id).count()
     
-    # scan history
+    # scan history aggregated by day
     from datetime import datetime, timedelta, timezone
-    seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+    from collections import Counter
+    seven_days_ago = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=6)
+    
     scans = db.query(ScanLog).filter(
         ScanLog.user_id == current_user.id,
         ScanLog.created_at >= seven_days_ago
     ).all()
+    
+    # Generate last 7 days list
+    history_map = { (seven_days_ago + timedelta(days=i)).strftime('%Y-%m-%d'): 0 for i in range(7) }
+    for s in scans:
+        date_str = s.created_at.strftime('%Y-%m-%d')
+        if date_str in history_map:
+            history_map[date_str] += 1
+            
+    scan_history = [{"date": d, "scans": count} for d, count in sorted(history_map.items())]
     
     # locations
     alerts = db.query(AlertLog).filter(AlertLog.user_id == current_user.id).order_by(AlertLog.created_at.desc()).all()
     
     return {
         "total_scans": total_scans,
-        "scan_history": [s.id for s in scans], # simplified history list
+        "scan_history": scan_history,
         "alert_locations": [{"lat": a.latitude, "lng": a.longitude, "date": str(a.created_at)} for a in alerts if a.latitude]
     }

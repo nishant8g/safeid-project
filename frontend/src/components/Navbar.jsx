@@ -38,7 +38,7 @@ export default function Navbar() {
   const isPublicLightPage = ['/', '/login', '/register'].includes(location.pathname);
 
   return (
-    <nav className="navbar navbar-light">
+    <nav className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="navbar-logo">
           <span className="logo-icon">🛡️</span>

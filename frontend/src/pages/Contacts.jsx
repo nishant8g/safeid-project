@@ -63,9 +63,9 @@ export default function Contacts() {
   return (
     <div className="page-container medium animate-fade-in">
       <div className="section-header" style={{ marginBottom: '3rem' }}>
-        <div className="section-tag" style={{ background: 'rgba(0, 97, 255, 0.1)', color: '#0061FF', fontWeight: '700' }}>Protection Circle</div>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em' }}>👥 Emergency Contacts</h2>
-        <p style={{ color: '#475569', fontSize: '1.1rem', fontWeight: '500' }}>These people will be notified via SMS and WhatsApp when your QR code is scanned in an emergency.</p>
+        <div className="section-tag" style={{ background: 'rgba(0, 242, 255, 0.1)', color: 'var(--accent-cyan)', fontWeight: '700' }}>Protection Circle</div>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>👥 Emergency Contacts</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '500' }}>These people will be notified via SMS and WhatsApp when your QR code is scanned in an emergency.</p>
       </div>
 
       {error && <div className="alert alert-error">⚠️ {error}</div>}
@@ -73,20 +73,20 @@ export default function Contacts() {
       {/* Contact List */}
       <div className="flex flex-col" style={{ gap: '0.75rem', marginBottom: '1.5rem' }}>
         {contacts.map((contact) => (
-          <div key={contact.id} className="contact-card" style={{ background: 'rgba(255, 255, 255, 0.8)', border: '1px solid rgba(255, 255, 255, 1)', borderRadius: '20px', padding: '1.25rem 1.5rem', boxShadow: 'var(--shadow-md)' }}>
+          <div key={contact.id} className="contact-card" style={{ background: 'var(--bg-card)', border: '1.5px solid var(--border-subtle)', borderRadius: '20px', padding: '1.25rem 1.5rem', boxShadow: 'var(--shadow-md)' }}>
             <div className="contact-info">
-              <div className="contact-avatar" style={{ background: 'linear-gradient(135deg, #0061FF 0%, #0044CC 100%)', color: 'white', fontWeight: '700' }}>{contact.name[0]}</div>
+              <div className="contact-avatar" style={{ background: 'var(--gradient-aurora)', color: 'white', fontWeight: '700' }}>{contact.name[0]}</div>
               <div className="contact-details">
-                <h4 style={{ color: '#0f172a', fontWeight: '800', fontSize: '1.1rem' }}>{contact.name}</h4>
-                <p style={{ color: '#475569', fontWeight: '600' }}>{contact.relationship || 'Emergency Contact'} · {contact.phone}</p>
-                {contact.email && <p style={{ fontSize: '0.85rem', color: '#0061FF', fontWeight: '700' }}>✉️ {contact.email}</p>}
+                <h4 style={{ color: 'var(--text-primary)', fontWeight: '800', fontSize: '1.1rem' }}>{contact.name}</h4>
+                <p style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>{contact.relationship || 'Emergency Contact'} · {contact.phone}</p>
+                {contact.email && <p style={{ fontSize: '0.85rem', color: 'var(--accent-cyan)', fontWeight: '700' }}>✉️ {contact.email}</p>}
               </div>
             </div>
             <div className="contact-actions">
-              <span className="badge" style={{ fontSize: '0.8rem', marginRight: '0.75rem', background: 'rgba(0, 97, 255, 0.1)', color: '#0061FF', fontWeight: '700', padding: '4px 12px', borderRadius: '10px' }}>
+              <span className="badge" style={{ fontSize: '0.8rem', marginRight: '0.75rem', background: 'rgba(0, 242, 255, 0.1)', color: 'var(--accent-cyan)', fontWeight: '700', padding: '4px 12px', borderRadius: '10px' }}>
                 Priority #{contact.priority}
               </span>
-              <button className="icon-btn danger" onClick={() => handleDelete(contact.id)} title="Remove" style={{ background: 'rgba(239, 68, 68, 0.1)', border: 'none', borderRadius: '10px', width: '36px', height: '36px' }}>
+              <button className="icon-btn danger" onClick={() => handleDelete(contact.id)} title="Remove" style={{ background: 'rgba(255, 51, 102, 0.1)', border: 'none', borderRadius: '10px', width: '36px', height: '36px' }}>
                 🗑️
               </button>
             </div>
@@ -106,8 +106,8 @@ export default function Contacts() {
 
       {/* Add Contact Form */}
       {showForm ? (
-        <div className="glass-card animate-slide-up" style={{ border: '1px solid rgba(255, 255, 255, 1)', padding: '40px' }}>
-          <h3 style={{ marginBottom: '2rem', fontWeight: '800', color: '#0f172a' }}>➕ Add Emergency Contact</h3>
+        <div className="glass-card animate-slide-up" style={{ border: '1.5px solid var(--border-subtle)', padding: '40px' }}>
+          <h3 style={{ marginBottom: '2rem', fontWeight: '800', color: 'var(--text-primary)' }}>➕ Add Emergency Contact</h3>
           <form onSubmit={handleAdd}>
             <div className="form-row">
               <div className="form-group">
