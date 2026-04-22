@@ -1,34 +1,21 @@
 {
   "version": 2,
-  "build": {
-    "env": {
-      "PYTHON_VERSION": "3.12"
+  "functions": {
+    "api/*.py": {
+      "runtime": "vercel-python@0.1.0"
     }
   },
-  "builds": [
+  "rewrites": [
     {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
     },
     {
-      "src": "api/index.py",
-      "use": "@vercel/python"
+      "source": "/(.*)",
+      "destination": "/"
     }
   ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/index.py"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/frontend/$1"
-    }
-  ]
+  "env": {
+    "PYTHON_VERSION": "3.12"
+  }
 }
