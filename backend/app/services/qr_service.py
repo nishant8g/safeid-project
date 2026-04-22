@@ -2,9 +2,6 @@
 
 import os
 import qrcode
-from qrcode.image.styledpil import StyledPilImage
-from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
-from qrcode.image.styles.colormasks import RadialGradiantColorMask
 from pathlib import Path
 
 from ..config import settings
