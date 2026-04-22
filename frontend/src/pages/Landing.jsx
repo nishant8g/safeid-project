@@ -191,7 +191,6 @@ export default function Landing() {
               <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'white', marginBottom: '16px' }}>ABHA Health Sync</h3>
               <p style={{ color: '#94a3b8', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1, fontWeight: '500' }}>Connect seamlessly with your official ABHA Health ID. First responders get highly comprehensive, authorized access to your verified medical records instantly.</p>
             </motion.div>
-         </motion.div>
 
           </div>
         </div>
