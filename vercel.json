@@ -1,20 +1,29 @@
 {
   "version": 2,
-  "cleanUrls": true,
-  "framework": "vite",
-  "outputDirectory": "frontend/dist",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index.py"
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     },
     {
-      "source": "/(sw.js|manifest.json|favicon.svg|icons.svg|safeid-logo-192.png|safeid-logo-512.png)",
-      "destination": "/$1"
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.py"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
     }
   ]
 }
