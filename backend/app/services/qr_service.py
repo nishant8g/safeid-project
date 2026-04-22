@@ -2,6 +2,7 @@
 
 import os
 import qrcode
+import qrcode.image.svg
 from pathlib import Path
 
 from ..config import settings

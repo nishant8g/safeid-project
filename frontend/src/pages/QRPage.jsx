@@ -50,7 +50,7 @@ export default function QRPage() {
     const url = qrAPI.getImageUrl(user.id);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `SafeID_QR_${user.full_name.replace(/\s+/g, '_')}.png`;
+    link.download = `SafeID_QR_${user.full_name.replace(/\s+/g, '_')}.svg`;
     link.click();
   };
 
