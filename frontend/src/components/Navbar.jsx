@@ -90,30 +90,54 @@ export default function Navbar() {
   );
 }
 
-// Smart Get App button — detects browser and shows the RIGHT instructions
+// Detect platform
+function getPlatform() {
+  const ua = navigator.userAgent;
+  const isIos = /iphone|ipad|ipod/i.test(ua);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  const isAndroid = /android/i.test(ua);
+  if (isIos && isSafari) return 'ios';
+  if (isAndroid) return 'android';
+  return 'desktop';
+}
+
+// Always-visible Get App button — shows a unified premium modal for ALL platforms
 function GetAppButton({ deferredPrompt, onInstall }) {
   const [showModal, setShowModal] = useState(false);
+  const platform = getPlatform();
 
-  // Detect iOS Safari
-  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  const isIosSafari = isIos && isSafari;
-
-  const handleClick = () => {
-    if (deferredPrompt) {
-      // Native Android/Desktop Chrome install — best experience
-      onInstall();
-    } else {
-      setShowModal(true);
-    }
+  const steps = {
+    ios: [
+      { icon: '⬆️', label: 'Tap the Share icon', sub: 'At the bottom of your Safari browser' },
+      { icon: '➕', label: 'Tap "Add to Home Screen"', sub: 'Scroll down in the share sheet to find it' },
+      { icon: '✅', label: 'Tap "Add"', sub: 'SafeID icon will appear on your home screen' },
+    ],
+    android: [
+      { icon: '⋮', label: 'Tap the menu icon', sub: 'Top-right corner of Chrome browser' },
+      { icon: '📲', label: 'Tap "Add to Home screen"', sub: 'Or tap "Install App" if visible' },
+      { icon: '✅', label: 'Tap "Install"', sub: 'SafeID icon appears on your home screen' },
+    ],
+    desktop: [
+      { icon: '⊕', label: 'Click the install icon', sub: 'Look in the right side of your address bar' },
+      { icon: '🖱️', label: 'Click "Install"', sub: 'In the popup that appears from Chrome or Edge' },
+      { icon: '✅', label: 'Done!', sub: 'SafeID opens as a standalone desktop app' },
+    ],
   };
 
-  const modalContent = isIosSafari ? <IosGuide onClose={() => setShowModal(false)} /> : <GenericGuide onClose={() => setShowModal(false)} />;
+  const platformMeta = {
+    ios:     { emoji: '🍎', title: 'Add to iPhone / iPad', subtitle: 'Install via Safari — 3 quick steps' },
+    android: { emoji: '🤖', title: 'Install on Android',   subtitle: 'Install via Chrome — 3 quick steps' },
+    desktop: { emoji: '🖥️', title: 'Install on Your PC',   subtitle: 'Install via Chrome or Edge browser' },
+  };
+
+  const { emoji, title, subtitle } = platformMeta[platform];
+  const currentSteps = steps[platform];
 
   return (
     <>
+      {/* Always-visible Get App button */}
       <button
-        onClick={handleClick}
+        onClick={() => setShowModal(true)}
         style={{
           background: 'linear-gradient(135deg, #0061ff, #00f2ff)',
           color: '#fff', border: 'none', borderRadius: '10px',
@@ -129,14 +153,88 @@ function GetAppButton({ deferredPrompt, onInstall }) {
         📲 Get App
       </button>
 
+      {/* Unified premium modal for ALL platforms */}
       {showModal && (
-        <div onClick={() => setShowModal(false)} style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)',
-          zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backdropFilter: 'blur(8px)',
-        }}>
-          <div onClick={e => e.stopPropagation()}>
-            {modalContent}
+        <div
+          onClick={() => setShowModal(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'rgba(0,0,0,0.7)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            backdropFilter: 'blur(10px)',
+            animation: 'fadeIn 0.2s ease',
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: 'linear-gradient(160deg, #0e1628 0%, #0a1120 100%)',
+              border: '1px solid rgba(0,242,255,0.25)',
+              borderRadius: '24px', padding: '2rem',
+              maxWidth: '380px', width: '92vw',
+              boxShadow: '0 30px 100px rgba(0,0,0,0.8)',
+              textAlign: 'center',
+            }}
+          >
+            {/* Header */}
+            <div style={{ fontSize: '2.8rem', marginBottom: '0.6rem' }}>{emoji}</div>
+            <h3 style={{ color: '#fff', fontWeight: '900', margin: '0 0 0.3rem', fontSize: '1.3rem' }}>{title}</h3>
+            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.82rem', marginBottom: '1.6rem' }}>{subtitle}</p>
+
+            {/* Step cards */}
+            {currentSteps.map((step, i) => (
+              <div key={i} style={{
+                display: 'flex', alignItems: 'center', gap: '1rem',
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '14px', padding: '0.85rem 1rem',
+                marginBottom: '0.55rem', textAlign: 'left',
+              }}>
+                <div style={{
+                  width: '40px', height: '40px', borderRadius: '50%', flexShrink: 0,
+                  background: 'linear-gradient(135deg, rgba(0,97,255,0.3), rgba(0,242,255,0.3))',
+                  border: '1px solid rgba(0,242,255,0.35)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.2rem', fontWeight: '900', color: '#00f2ff',
+                }}>{step.icon}</div>
+                <div>
+                  <div style={{ color: '#fff', fontWeight: '700', fontSize: '0.9rem', marginBottom: '2px' }}>{step.label}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.76rem' }}>{step.sub}</div>
+                </div>
+              </div>
+            ))}
+
+            {/* Install Now button for Chrome/Edge (if native prompt available) */}
+            {deferredPrompt && (
+              <button
+                onClick={() => { onInstall(); setShowModal(false); }}
+                style={{
+                  marginTop: '1rem',
+                  background: 'linear-gradient(135deg, #0061ff, #00c6ff)',
+                  color: '#fff', border: 'none', borderRadius: '12px',
+                  padding: '0.85rem', fontWeight: '900', cursor: 'pointer',
+                  width: '100%', fontSize: '1rem',
+                  boxShadow: '0 8px 25px rgba(0,97,255,0.5)',
+                  animation: 'pulse 2s infinite',
+                }}
+              >
+                ⚡ Install Now — One Click!
+              </button>
+            )}
+
+            {/* Close button */}
+            <button
+              onClick={() => setShowModal(false)}
+              style={{
+                marginTop: deferredPrompt ? '0.6rem' : '1.2rem',
+                background: 'rgba(255,255,255,0.07)',
+                color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: '12px', padding: '0.7rem',
+                fontWeight: '600', cursor: 'pointer', width: '100%', fontSize: '0.9rem',
+              }}
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
@@ -144,108 +242,4 @@ function GetAppButton({ deferredPrompt, onInstall }) {
   );
 }
 
-// iOS Safari-specific guide with visual steps
-function IosGuide({ onClose }) {
-  return (
-    <div style={{
-      background: 'linear-gradient(160deg, #0e1628, #0d1f3c)',
-      border: '1px solid rgba(0,242,255,0.2)', borderRadius: '24px',
-      padding: '2rem', maxWidth: '360px', width: '90vw',
-      boxShadow: '0 25px 80px rgba(0,0,0,0.7)', textAlign: 'center',
-    }}>
-      <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🍎</div>
-      <h3 style={{ color: '#fff', fontWeight: '900', margin: '0 0 0.4rem', fontSize: '1.3rem' }}>Add to Your iPhone</h3>
-      <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', marginBottom: '1.75rem' }}>
-        Follow these 3 quick steps in Safari
-      </p>
 
-      {[
-        { icon: '⬆️', label: 'Tap the Share icon', sub: 'at the bottom of your screen' },
-        { icon: '➕', label: 'Tap "Add to Home Screen"', sub: 'scroll down in the share sheet' },
-        { icon: '✅', label: 'Tap "Add"', sub: 'SafeID icon appears on your home screen' },
-      ].map((step, i) => (
-        <div key={i} style={{
-          display: 'flex', alignItems: 'center', gap: '1rem',
-          background: 'rgba(255,255,255,0.06)', borderRadius: '14px',
-          padding: '0.9rem 1rem', marginBottom: '0.6rem', textAlign: 'left',
-          border: '1px solid rgba(255,255,255,0.08)',
-        }}>
-          <div style={{
-            width: '38px', height: '38px', borderRadius: '50%',
-            background: 'linear-gradient(135deg, #0061ff44, #00f2ff44)',
-            border: '1px solid rgba(0,242,255,0.3)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '1.3rem', flexShrink: 0,
-          }}>{step.icon}</div>
-          <div>
-            <div style={{ color: '#fff', fontWeight: '700', fontSize: '0.92rem' }}>{step.label}</div>
-            <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem' }}>{step.sub}</div>
-          </div>
-        </div>
-      ))}
-
-      <button onClick={onClose} style={{
-        marginTop: '1.25rem', background: 'linear-gradient(135deg, #0061ff, #00f2ff)',
-        color: '#fff', border: 'none', borderRadius: '12px',
-        padding: '0.8rem', fontWeight: '800', cursor: 'pointer',
-        width: '100%', fontSize: '0.95rem', letterSpacing: '0.03em',
-      }}>Got it ✓</button>
-    </div>
-  );
-}
-
-// Android / Desktop guide
-function GenericGuide({ onClose }) {
-  const isAndroid = /android/i.test(navigator.userAgent);
-  return (
-    <div style={{
-      background: 'linear-gradient(160deg, #0e1628, #0d1f3c)',
-      border: '1px solid rgba(0,242,255,0.2)', borderRadius: '24px',
-      padding: '2rem', maxWidth: '360px', width: '90vw',
-      boxShadow: '0 25px 80px rgba(0,0,0,0.7)', textAlign: 'center',
-    }}>
-      <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>{isAndroid ? '🤖' : '🖥️'}</div>
-      <h3 style={{ color: '#fff', fontWeight: '900', margin: '0 0 0.4rem', fontSize: '1.3rem' }}>
-        {isAndroid ? 'Install on Android' : 'Install on Desktop'}
-      </h3>
-      <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', marginBottom: '1.75rem' }}>
-        {isAndroid ? 'Using Chrome on your Android device' : 'Using Chrome or Edge on your computer'}
-      </p>
-
-      {(isAndroid ? [
-        { icon: '⋮', label: 'Tap the menu icon', sub: 'top-right corner of Chrome' },
-        { icon: '📲', label: 'Tap "Add to Home Screen"', sub: 'or "Install App"' },
-        { icon: '✅', label: 'Tap "Install"', sub: 'App icon appears on your home screen' },
-      ] : [
-        { icon: '⊕', label: 'Click the install icon', sub: 'in the right side of the address bar' },
-        { icon: '✅', label: 'Click "Install"', sub: 'SafeID opens as a native desktop app' },
-      ]).map((step, i) => (
-        <div key={i} style={{
-          display: 'flex', alignItems: 'center', gap: '1rem',
-          background: 'rgba(255,255,255,0.06)', borderRadius: '14px',
-          padding: '0.9rem 1rem', marginBottom: '0.6rem', textAlign: 'left',
-          border: '1px solid rgba(255,255,255,0.08)',
-        }}>
-          <div style={{
-            width: '38px', height: '38px', borderRadius: '50%',
-            background: 'linear-gradient(135deg, #0061ff44, #00f2ff44)',
-            border: '1px solid rgba(0,242,255,0.3)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '1.1rem', flexShrink: 0, fontWeight: '900', color: '#00f2ff',
-          }}>{step.icon}</div>
-          <div>
-            <div style={{ color: '#fff', fontWeight: '700', fontSize: '0.92rem' }}>{step.label}</div>
-            <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem' }}>{step.sub}</div>
-          </div>
-        </div>
-      ))}
-
-      <button onClick={onClose} style={{
-        marginTop: '1.25rem', background: 'linear-gradient(135deg, #0061ff, #00f2ff)',
-        color: '#fff', border: 'none', borderRadius: '12px',
-        padding: '0.8rem', fontWeight: '800', cursor: 'pointer',
-        width: '100%', fontSize: '0.95rem', letterSpacing: '0.03em',
-      }}>Got it ✓</button>
-    </div>
-  );
-}
