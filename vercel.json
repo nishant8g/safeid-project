@@ -35,19 +35,11 @@
       }
     },
     {
-      "src": "/safeid-logo-(.*).png",
-      "dest": "/safeid-logo-$1.png"
-    },
-    {
       "handle": "filesystem"
     },
     {
-      "src": "/assets/(.*)",
-      "dest": "/frontend/assets/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/frontend/index.html"
+      "dest": "/index.html"
     }
   ]
 }
