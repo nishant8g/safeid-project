@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -153,16 +154,16 @@ function GetAppButton({ deferredPrompt, onInstall }) {
         📲 Get App
       </button>
 
-      {/* Unified premium modal for ALL platforms */}
-      {showModal && (
+      {/* Unified premium modal — rendered via Portal to avoid Navbar stacking context */}
+      {showModal && createPortal(
         <div
           onClick={() => setShowModal(false)}
           style={{
-            position: 'fixed', inset: 0, zIndex: 9999,
-            background: 'rgba(0,0,0,0.7)',
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            zIndex: 99999,
+            background: 'rgba(0,0,0,0.75)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             backdropFilter: 'blur(10px)',
-            animation: 'fadeIn 0.2s ease',
           }}
         >
           <div
@@ -171,8 +172,9 @@ function GetAppButton({ deferredPrompt, onInstall }) {
               background: 'linear-gradient(160deg, #0e1628 0%, #0a1120 100%)',
               border: '1px solid rgba(0,242,255,0.25)',
               borderRadius: '24px', padding: '2rem',
-              maxWidth: '380px', width: '92vw',
-              boxShadow: '0 30px 100px rgba(0,0,0,0.8)',
+              maxWidth: '420px', width: '90vw',
+              maxHeight: '90vh', overflowY: 'auto',
+              boxShadow: '0 30px 100px rgba(0,0,0,0.9)',
               textAlign: 'center',
             }}
           >
@@ -191,20 +193,20 @@ function GetAppButton({ deferredPrompt, onInstall }) {
                 marginBottom: '0.55rem', textAlign: 'left',
               }}>
                 <div style={{
-                  width: '40px', height: '40px', borderRadius: '50%', flexShrink: 0,
+                  width: '42px', height: '42px', borderRadius: '50%', flexShrink: 0,
                   background: 'linear-gradient(135deg, rgba(0,97,255,0.3), rgba(0,242,255,0.3))',
                   border: '1px solid rgba(0,242,255,0.35)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '1.2rem', fontWeight: '900', color: '#00f2ff',
                 }}>{step.icon}</div>
-                <div>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ color: '#fff', fontWeight: '700', fontSize: '0.9rem', marginBottom: '2px' }}>{step.label}</div>
-                  <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.76rem' }}>{step.sub}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.76rem', wordBreak: 'break-word' }}>{step.sub}</div>
                 </div>
               </div>
             ))}
 
-            {/* Install Now button for Chrome/Edge (if native prompt available) */}
+            {/* Install Now button for Chrome/Edge */}
             {deferredPrompt && (
               <button
                 onClick={() => { onInstall(); setShowModal(false); }}
@@ -215,7 +217,6 @@ function GetAppButton({ deferredPrompt, onInstall }) {
                   padding: '0.85rem', fontWeight: '900', cursor: 'pointer',
                   width: '100%', fontSize: '1rem',
                   boxShadow: '0 8px 25px rgba(0,97,255,0.5)',
-                  animation: 'pulse 2s infinite',
                 }}
               >
                 ⚡ Install Now — One Click!
@@ -236,7 +237,8 @@ function GetAppButton({ deferredPrompt, onInstall }) {
               Close
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
