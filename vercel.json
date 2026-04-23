@@ -13,6 +13,22 @@
       "use": "@vercel/python"
     }
   ],
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "Content-Type", "value": "application/javascript" }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "Content-Type", "value": "application/json" }
+      ]
+    }
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
@@ -20,30 +36,22 @@
     },
     {
       "src": "/sw.js",
-      "dest": "/sw.js",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate",
-        "content-type": "application/javascript"
-      }
+      "dest": "/sw.js"
     },
     {
       "src": "/manifest.json",
-      "dest": "/manifest.json",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate",
-        "content-type": "application/json"
-      }
+      "dest": "/manifest.json"
     },
     {
-      "src": "/safeid-logo-(.*).png",
+      "src": "/safeid-logo-(.*)\\.png",
       "dest": "/safeid-logo-$1.png"
-    },
-    {
-      "handle": "filesystem"
     },
     {
       "src": "/assets/(.*)",
       "dest": "/frontend/assets/$1"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
