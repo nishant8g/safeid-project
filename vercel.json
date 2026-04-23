@@ -13,22 +13,6 @@
       "use": "@vercel/python"
     }
   ],
-  "headers": [
-    {
-      "source": "/sw.js",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "Content-Type", "value": "application/javascript" }
-      ]
-    },
-    {
-      "source": "/manifest.json",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "Content-Type", "value": "application/json" }
-      ]
-    }
-  ],
   "routes": [
     {
       "src": "/api/(.*)",
@@ -36,15 +20,27 @@
     },
     {
       "src": "/sw.js",
-      "dest": "/sw.js"
+      "dest": "/frontend/sw.js",
+      "headers": {
+        "cache-control": "no-cache, no-store, must-revalidate",
+        "content-type": "application/javascript; charset=utf-8"
+      }
     },
     {
       "src": "/manifest.json",
-      "dest": "/manifest.json"
+      "dest": "/frontend/manifest.json",
+      "headers": {
+        "cache-control": "no-cache, no-store, must-revalidate",
+        "content-type": "application/manifest+json; charset=utf-8"
+      }
     },
     {
-      "src": "/safeid-logo-(.*)\\.png",
-      "dest": "/safeid-logo-$1.png"
+      "src": "/safeid-logo-192.png",
+      "dest": "/frontend/safeid-logo-192.png"
+    },
+    {
+      "src": "/safeid-logo-512.png",
+      "dest": "/frontend/safeid-logo-512.png"
     },
     {
       "src": "/assets/(.*)",
