@@ -138,16 +138,29 @@ def send_emergency_email(
         # ⚡ ATTACH THE IMAGE AS CID (THE FIX)
         if media_url:
             try:
-                # Use a separate sync client for smtplib environment
-                import requests
-                img_data = requests.get(media_url).content
-                image = MIMEImage(img_data)
-                image.add_header('Content-ID', f'<{image_cid}>')
-                image.add_header('Content-Disposition', 'inline', filename='incident.jpg')
-                msg.attach(image)
-                logger.info("📎 Image embedded as CID successfully")
+        # ⚡ ATTACH THE IMAGE AS BOTH INLINE CID AND FILE ATTACHMENT
+        if media_url:
+            try:
+                # Use httpx to pull the cloud image
+                with httpx.Client() as client:
+                    resp = client.get(media_url, timeout=10.0)
+                    if resp.status_code == 200:
+                        img_data = resp.content
+                        
+                        # 1. Inline Image (for the HTML body)
+                        inline_image = MIMEImage(img_data)
+                        inline_image.add_header('Content-ID', f'<{image_cid}>')
+                        inline_image.add_header('Content-Disposition', 'inline', filename='incident_scene.jpg')
+                        msg.attach(inline_image)
+
+                        # 2. Regular Attachment (for the Gmail attachment bar)
+                        file_attachment = MIMEImage(img_data)
+                        file_attachment.add_header('Content-Disposition', 'attachment', filename=f'ResQ_Incident_{victim_name.replace(" ", "_")}.jpg')
+                        msg.attach(file_attachment)
+                        
+                        logger.info("📎 Image embedded and attached successfully")
             except Exception as ei:
-                logger.error(f"Failed to embed image CID: {ei}")
+                logger.error(f"Failed to attach images: {ei}")
                 # We still send the email, it just falls back to the img src cid which might be broken 
                 # but we included the text link inside the HTML as well.
 
