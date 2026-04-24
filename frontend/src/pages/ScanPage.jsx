@@ -287,7 +287,7 @@ export default function ScanPage() {
 
         {/* Header */}
         <div className="scan-header" style={{ paddingTop: '2.5rem', marginBottom: '2.5rem', textAlign: 'center' }}>
-          <div className="safeid-badge" style={{ background: 'rgba(0, 242, 255, 0.1)', color: 'var(--accent-cyan)', fontWeight: '800', display: 'inline-block', padding: '6px 16px', borderRadius: '50px', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>🚑 ResQ Live Pulse</div>
+          <div className="resq-badge" style={{ background: 'rgba(0, 242, 255, 0.1)', color: 'var(--accent-cyan)', fontWeight: '800', display: 'inline-block', padding: '6px 16px', borderRadius: '50px', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>🚑 ResQ Live Pulse</div>
           <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', marginTop: '0.75rem', marginBottom: '0.5rem', letterSpacing: '-0.03em' }}>
             {userData.full_name}
           </h1>
@@ -383,19 +383,56 @@ export default function ScanPage() {
               </button>
             </div>
           ) : (
-              <div className="glass-card animate-fade-in" style={{ padding: '2rem', border: '2px solid rgba(0, 242, 255, 0.3)', background: 'var(--bg-card)', textAlign: 'center', borderRadius: '28px' }}>
-                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🚑</div>
-                <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Alert Broadcast Live</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '2rem', fontWeight: '500' }}>
-                  Emergency signals have been sent via multidimensional channels.
-                </p>
-
-              </div>
+            <div className="glass-card animate-fade-in" style={{ padding: '2rem', border: '2px solid rgba(0, 242, 255, 0.3)', background: 'var(--bg-card)', textAlign: 'center', borderRadius: '28px' }}>
+              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🚑</div>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Alert Broadcast Live</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '1rem', fontWeight: '500' }}>
+                Emergency signals have been sent via multidimensional channels.
+              </p>
+            </div>
           )}
 
-          <div className="flex" style={{ gap: '0.75rem', marginTop: '1.5rem', justifyContent: 'center' }}>
-            <a href="tel:112" className="btn btn-danger btn-lg">📞 Call 112</a>
-            <a href="tel:108" className="btn btn-ghost btn-lg">🚑 Call 108</a>
+          <div className="flex flex-col" style={{ gap: '0.75rem', marginTop: '1.5rem', alignItems: 'center' }}>
+            <div className="flex" style={{ gap: '0.75rem', width: '100%', justifyContent: 'center' }}>
+              <a href="tel:112" className="btn btn-danger btn-lg flex-1" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>📞 Call 112</a>
+              <a href="tel:108" className="btn btn-ghost btn-lg flex-1" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>🚑 Call 108</a>
+            </div>
+
+            {/* Manual WhatsApp Fallback */}
+            {userData.emergency_contacts && userData.emergency_contacts.length > 0 && (
+              <div style={{ width: '100%', marginTop: '0.5rem' }}>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '0.5rem', fontWeight: '600' }}>
+                  MANUAL BACKUP (If auto-alert fails)
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {userData.emergency_contacts.map((contact, idx) => (
+                    <a 
+                      key={idx}
+                      href={`https://wa.me/${contact.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`🚑 EMERGENCY: I am with ${userData.full_name} who had an accident. I scanned their ResQ profile. Location: https://www.google.com/maps?q=${location?.lat || 0},${location?.lng || 0}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="glass-card"
+                      style={{ 
+                        padding: '12px', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        gap: '10px', 
+                        textDecoration: 'none', 
+                        color: '#25D366', 
+                        border: '1px solid rgba(37, 211, 102, 0.3)',
+                        borderRadius: '14px',
+                        fontSize: '0.9rem',
+                        fontWeight: '700',
+                        background: 'rgba(37, 211, 102, 0.05)'
+                      }}
+                    >
+                      <span>💬 Message {contact.name} (WhatsApp)</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

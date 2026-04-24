@@ -20,7 +20,7 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
     if not qr or not qr.is_active:
         raise HTTPException(
             status_code=403, 
-            detail="PROTECTED: This SafeID has been deactivated by the owner."
+            detail="PROTECTED: This ResQ has been deactivated by the owner."
         )
 
     # 3. Get medical info
