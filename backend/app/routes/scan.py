@@ -26,6 +26,11 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
     # 3. Get medical info
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
     
+    # 3.5 Get LATEST incident photo (Live Broadcast optimization)
+    from ..models.alert import AlertLog
+    latest_alert = db.query(AlertLog).filter(AlertLog.user_id == user_id).order_by(AlertLog.created_at.desc()).first()
+    latest_media = latest_alert.media_url if latest_alert else None
+
     # 4. Direct query for family contacts (Zero-Error Optimization)
     contacts = db.query(EmergencyContact).filter(EmergencyContact.user_id == user_id).all()
 
@@ -48,6 +53,7 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
         "medications": med.medications if med else None,
         "organ_donor": med.organ_donor if med else False,
         "special_notes": med.special_notes if med else None,
+        "latest_media": latest_media,
         "sms_fallback_code": qr.sms_fallback_code if qr else None,
         "emergency_contacts": [
             {"name": c.name, "phone": c.phone} for c in contacts

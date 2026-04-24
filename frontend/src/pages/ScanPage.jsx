@@ -296,6 +296,22 @@ export default function ScanPage() {
 
         {error && <div className="alert alert-error">{error}</div>}
 
+        {/* Live Incident Broadcast Photo (IF EXISTS) */}
+        {userData.latest_media && (
+          <div className="animate-pulse" style={{ marginBottom: '2rem' }}>
+             <div style={{ background: 'rgba(220, 38, 38, 0.1)', color: 'var(--accent-red)', padding: '6px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '900', display: 'inline-block', marginBottom: '8px' }}>
+                🔴 LIVE INCIDENT BROADCAST
+             </div>
+             <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', border: '2px solid var(--accent-red)', boxShadow: '0 10px 30px rgba(220, 38, 38, 0.2)' }}>
+                <img 
+                  src={userData.latest_media} 
+                  alt="Incident Scene" 
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+             </div>
+          </div>
+        )}
+
         {/* Medical Info */}
         <div className="glass-card emergency animate-slide-up" style={{ background: 'var(--bg-card)', border: '1.5px solid var(--border-emergency)', borderRadius: '24px', padding: '24px', boxShadow: 'var(--shadow-lg)' }}>
           <div className="medical-grid responsive-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem' }}>
