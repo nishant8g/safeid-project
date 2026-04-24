@@ -195,7 +195,7 @@ Be specific and actionable. Max 3 warnings and 4 recommendations. Return ONLY JS
         recommendations.append(f"Your blood group is {blood_group}. Make sure this is visible on your medical ID.")
 
     recommendations.append("Keep your emergency contacts up to date.")
-    recommendations.append("Share your SafeID QR code with close family members.")
+    recommendations.append("Share your ResQ QR code with close family members.")
 
     if not warnings:
         warnings.append("No critical warnings based on current data.")

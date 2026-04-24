@@ -1,5 +1,5 @@
 /**
- * NFC Portal — Program physical NFC tags with SafeID profiles.
+ * NFC Portal — Program physical NFC tags with ResQ profiles.
  */
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';

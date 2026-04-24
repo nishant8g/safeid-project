@@ -67,7 +67,7 @@ async def update_live_location(
         if contacts and user:
             # Generate updated message with NEW location
             updated_message = (
-                f"🚨 *LIVE UPDATE - SafeID* 🚨\n\n"
+                f"🚨 *LIVE UPDATE - ResQ* 🚨\n\n"
                 f"{user.full_name}'s location has updated:\n\n"
                 f"📍 *NEW LOCATION (GOOGLE MAPS):*\n"
                 f"https://www.google.com/maps?q={latitude},{longitude}\n\n"

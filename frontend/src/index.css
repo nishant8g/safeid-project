@@ -976,7 +976,7 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   position: relative;
 }
 
-.scan-header .safeid-badge {
+.scan-header .resq-badge {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);

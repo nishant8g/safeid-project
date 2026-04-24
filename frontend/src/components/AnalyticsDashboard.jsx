@@ -29,7 +29,7 @@ const COLORS = ['#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#a855f7'];
 
 export default function AnalyticsDashboard({ completionPercent }) {
   const [data, setData] = useState(() => {
-    const cached = localStorage.getItem('safeid_analytics_cache');
+    const cached = localStorage.getItem('resq_analytics_cache');
     return cached ? JSON.parse(cached) : null;
   });
   const [loading, setLoading] = useState(!data);
@@ -41,7 +41,7 @@ export default function AnalyticsDashboard({ completionPercent }) {
       try {
         const res = await userAPI.getAnalytics();
         setData(res.data);
-        localStorage.setItem('safeid_analytics_cache', JSON.stringify(res.data));
+        localStorage.setItem('resq_analytics_cache', JSON.stringify(res.data));
         setError(null);
         setLoading(false);
       } catch (err) {
