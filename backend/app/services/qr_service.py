@@ -28,7 +28,7 @@ def generate_qr_code(user_id: str, frontend_url: str = None) -> dict:
     
     scan_url = f"{base_url}/scan/{user_id}"
     sms_fallback = f"HELP-{user_id[:8].upper()}"
-    filename = f"safeid_{user_id}.svg"
+    filename = f"resq_{user_id}.svg"
     filepath = QR_DIR / filename
 
     # Create SVG QR code (Pure Python, no PIL needed)
@@ -55,7 +55,7 @@ def generate_qr_code(user_id: str, frontend_url: str = None) -> dict:
 
 def get_qr_image_path(user_id: str) -> str:
     """Get the file path for a user's QR code image."""
-    filename = f"safeid_{user_id}.svg"
+    filename = f"resq_{user_id}.svg"
     filepath = QR_DIR / filename
     if not filepath.exists():
         # Auto-regenerate on the fly if the Render ephemeral disk was wiped

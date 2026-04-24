@@ -62,7 +62,7 @@ def get_qr_image(user_id: str):
     return FileResponse(
         image_path,
         media_type="image/svg+xml",
-        filename=f"safeid_qr_{user_id[:8]}.svg",
+        filename=f"resq_qr_{user_id[:8]}.svg",
     )
 
 
