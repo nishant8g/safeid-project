@@ -1,5 +1,4 @@
-"""Authentication routes — register and login."""
-
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -7,6 +6,8 @@ from ..database import get_db
 from ..models.user import User
 from ..schemas.user import UserRegister, UserLogin, TokenResponse, UserProfile
 from ..services.auth_service import hash_password, verify_password, create_access_token
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
