@@ -412,7 +412,7 @@ export default function ScanPage() {
                   {userData.emergency_contacts.map((contact, idx) => (
                     <a 
                       key={idx}
-                      href={`https://wa.me/${contact.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`🚑 EMERGENCY: I am with ${userData.full_name} who had an accident. I scanned their ResQ profile. Location: https://www.google.com/maps?q=${location?.lat || 0},${location?.lng || 0}`)}`}
+                      href={`https://wa.me/${contact.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`🚨 RESQ EMERGENCY ALERT 🚑\n\nI am with ${userData.full_name} who needs urgent help. I have scanned their ResQ profile.\n\n📍 LIVE LOCATION: https://www.google.com/maps?q=${location?.lat || 0},${location?.lng || 0}\n\n📋 VIEW FULL REPORT & MEDICAL INFO:\nhttps://resq-project.vercel.app/scan/${userData.user_id}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="whatsapp-btn-demo"
