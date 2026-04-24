@@ -21,6 +21,7 @@ def login(data: UserLogin, db: Session = Depends(get_db)):
         from ..config import settings
         
         # Verify the direct Google ID Token
+        print(f"DEBUG AUTH: Using Client ID: '{settings.GOOGLE_CLIENT_ID}'")
         decoded_token = id_token.verify_oauth2_token(
             data.google_token, 
             requests.Request(), 
@@ -63,6 +64,7 @@ def register(data: UserLogin, db: Session = Depends(get_db)):
         from ..config import settings
         
         # Verify the direct Google ID Token
+        print(f"DEBUG AUTH REGISTER: Using Client ID: '{settings.GOOGLE_CLIENT_ID}'")
         decoded_token = id_token.verify_oauth2_token(
             data.google_token, 
             requests.Request(), 
