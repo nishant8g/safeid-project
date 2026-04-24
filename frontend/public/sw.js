@@ -1,9 +1,9 @@
 /* 
- * SafeID Service Worker
+ * ResQ Service Worker
  * Focus: Offline medical data access & 100% stability.
  */
 
-const CACHE_NAME = 'safeid-v1';
+const CACHE_NAME = 'resq-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

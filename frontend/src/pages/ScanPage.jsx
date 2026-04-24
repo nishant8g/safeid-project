@@ -85,7 +85,7 @@ export default function ScanPage() {
       } else {
         setError(
           err.response?.status === 404
-            ? 'SafeID not found. This QR code may be invalid.'
+            ? 'ResQ profile not found. This QR code may be invalid.'
             : 'Failed to load emergency data. Please try again.'
         );
       }
@@ -186,9 +186,9 @@ export default function ScanPage() {
       <div className="scan-page">
         <div className="loading-overlay" style={{ minHeight: '100vh' }}>
           <div style={{ fontSize: '4rem' }}>🔒</div>
-          <h2>SafeID Deactivated</h2>
+          <h2>ResQ Deactivated</h2>
           <p className="text-muted" style={{ maxWidth: '400px', textAlign: 'center' }}>
-            This SafeID is currently in "Privacy Mode" or has been disabled by its owner. No medical information is available.
+            This ResQ profile is currently in "Privacy Mode" or has been disabled by its owner. No medical information is available.
           </p>
           <div className="flex" style={{ gap: '1rem', marginTop: '1.5rem' }}>
             <a href="tel:112" className="btn btn-danger btn-lg">📞 Call 112</a>
@@ -203,7 +203,7 @@ export default function ScanPage() {
       <div className="scan-page">
         <div className="loading-overlay" style={{ minHeight: '100vh' }}>
           <div style={{ fontSize: '4rem' }}>⚠️</div>
-          <h2>SafeID Error</h2>
+          <h2>ResQ Error</h2>
           <p className="text-muted" style={{ maxWidth: '400px', textAlign: 'center' }}>{error}</p>
           <a href="tel:112" className="btn btn-danger btn-lg" style={{ marginTop: '1rem' }}>
             📞 Call Emergency Services (112)
@@ -287,7 +287,7 @@ export default function ScanPage() {
 
         {/* Header */}
         <div className="scan-header" style={{ paddingTop: '2.5rem', marginBottom: '2.5rem', textAlign: 'center' }}>
-          <div className="safeid-badge" style={{ background: 'rgba(0, 242, 255, 0.1)', color: 'var(--accent-cyan)', fontWeight: '800', display: 'inline-block', padding: '6px 16px', borderRadius: '50px', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>🛡️ SafeID Live Pulse</div>
+          <div className="safeid-badge" style={{ background: 'rgba(0, 242, 255, 0.1)', color: 'var(--accent-cyan)', fontWeight: '800', display: 'inline-block', padding: '6px 16px', borderRadius: '50px', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>🚑 ResQ Live Pulse</div>
           <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', marginTop: '0.75rem', marginBottom: '0.5rem', letterSpacing: '-0.03em' }}>
             {userData.full_name}
           </h1>
@@ -384,8 +384,8 @@ export default function ScanPage() {
             </div>
           ) : (
               <div className="glass-card animate-fade-in" style={{ padding: '2rem', border: '2px solid rgba(0, 242, 255, 0.3)', background: 'var(--bg-card)', textAlign: 'center', borderRadius: '28px' }}>
-                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🛡️</div>
-                <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Alert Broadacst Live</h2>
+                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🚑</div>
+                <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Alert Broadcast Live</h2>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '2rem', fontWeight: '500' }}>
                   Emergency signals have been sent via multidimensional channels.
                 </p>
@@ -456,7 +456,7 @@ export default function ScanPage() {
 
         {/* Footer */}
         <div className="text-center" style={{ padding: '2rem 0 1rem', opacity: 0.4, fontSize: '0.75rem' }}>
-          SafeID v2.0 · (BUILD: ULTRA V2) · SENIOR PROTECTED
+          ResQ v2.0 · (BUILD: ULTRA V2) · SENIOR PROTECTED
         </div>
       </div>
     </div>

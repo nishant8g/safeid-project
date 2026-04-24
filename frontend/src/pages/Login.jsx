@@ -23,7 +23,7 @@ export default function Login() {
       // 1. credentialResponse.credential is the direct Google ID Token (JWT)
       const googleToken = credentialResponse.credential;
 
-      // 2. Authenticate with SafeID API
+      // 2. Authenticate with ResQ API
       await login(googleToken);
       
       navigate('/dashboard');
@@ -86,7 +86,7 @@ export default function Login() {
           </div>
           
           <p style={{ marginTop: '40px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-            New to SafeID? <span onClick={() => navigate('/register')} style={{ color: 'var(--accent-cyan)', cursor: 'pointer', fontWeight: '700' }}>Create an identity</span>
+            New to ResQ? <span onClick={() => navigate('/register')} style={{ color: 'var(--accent-cyan)', cursor: 'pointer', fontWeight: '700' }}>Create an identity</span>
             <br/><br/>
             <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>By continuing, you prove your identity via Google Authentication.</span>
           </p>

@@ -43,7 +43,7 @@ def send_emergency_email(
         
         <!-- Header -->
         <div style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); padding: 24px; text-align: center;">
-            <h1 style="margin: 0; font-size: 24px; color: white;">🚨 SAFEID EMERGENCY ALERT 🚨</h1>
+            <h1 style="margin: 0; font-size: 24px; color: white;">🚨 RESQ EMERGENCY ALERT 🚨</h1>
             <p style="margin: 8px 0 0; color: #fecaca; font-size: 14px;">Immediate attention required</p>
         </div>
 
@@ -54,7 +54,7 @@ def send_emergency_email(
             </p>
             <p style="font-size: 16px; line-height: 1.6;">
                 Someone has found your relative <strong style="color: #f87171;">{victim_name}</strong> 
-                at an accident scene and triggered an emergency alert through SafeID.
+                at an accident scene and triggered an emergency alert through ResQ.
             </p>
 
             <!-- Medical Info -->
@@ -104,8 +104,8 @@ def send_emergency_email(
         <!-- Footer -->
         <div style="background: #1e293b; padding: 16px; text-align: center; border-top: 1px solid #334155;">
             <p style="margin: 0; color: #64748b; font-size: 12px;">
-                Sent by SafeID Emergency Response System · 
-                <a href="{settings.BASE_URL}" style="color: #60a5fa;">safeid-project.vercel.app</a>
+                Sent by ResQ Emergency Response System · 
+                <a href="{settings.BASE_URL}" style="color: #60a5fa;">resq-project.vercel.app</a>
             </p>
         </div>
     </div>
@@ -114,7 +114,7 @@ def send_emergency_email(
     try:
         msg = MIMEMultipart("alternative")
         msg["Subject"] = f"🚨 EMERGENCY ALERT — {victim_name} needs help!"
-        msg["From"] = f"SafeID Emergency <{sender_email}>"
+        msg["From"] = f"ResQ Emergency <{sender_email}>"
         msg["To"] = to_email
         msg["X-Priority"] = "1 (Highest)"
         msg["Importance"] = "High"

@@ -1,4 +1,4 @@
-# SafeID — AI-Powered Emergency QR Response System
+# ResQ — AI-Powered Emergency QR Response System
 
 > A full-stack emergency response system where users create digital medical profiles linked to QR codes. When scanned by a bystander in an emergency, a web page opens instantly showing critical medical info with a one-click "Notify Family" button.
 
@@ -14,7 +14,7 @@
 ### 1. Clone & Setup Environment
 
 ```bash
-cd safeid-project
+cd resq-project
 ```
 
 Copy `.env` and fill in your API keys (already configured if using the template).

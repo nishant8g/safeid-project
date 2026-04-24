@@ -50,7 +50,7 @@ export default function QRPage() {
     const url = qrAPI.getImageUrl(user.id);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `SafeID_QR_${user.full_name.replace(/\s+/g, '_')}.svg`;
+    link.download = `ResQ_QR_${user.full_name.replace(/\s+/g, '_')}.svg`;
     link.click();
   };
 
@@ -66,7 +66,7 @@ export default function QRPage() {
     <div className="page-container medium animate-fade-in">
       <div className="section-header text-center" style={{ marginBottom: '3rem' }}>
         <div className="section-tag">Quick Access</div>
-        <h2 className="text-glow" style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>📱 SafeID QR Code</h2>
+        <h2 className="text-glow" style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>📱 ResQ QR Code</h2>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '500' }}>Print this QR code and keep it with you. Anyone can scan it in an emergency.</p>
       </div>
 
@@ -79,7 +79,7 @@ export default function QRPage() {
             <div className="qr-frame" style={{ background: 'white', padding: '20px', borderRadius: '24px', boxShadow: 'var(--shadow-lg), 0 0 0 1px rgba(0,0,0,0.05)' }}>
               <img
                 src={`${qrAPI.getImageUrl(user.id)}?t=${Date.now()}`}
-                alt="SafeID QR Code"
+                alt="ResQ QR Code"
                 style={{ width: '250px', height: '250px', display: 'block' }}
                 id="qr-image"
               />
@@ -142,7 +142,7 @@ export default function QRPage() {
             <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📱</div>
             <h3>Generate Your QR Code</h3>
             <p className="text-muted" style={{ marginBottom: '1.5rem' }}>
-              Create a unique QR code linked to your SafeID profile. Anyone who scans it can instantly
+              Create a unique QR code linked to your ResQ profile. Anyone who scans it can instantly
               see your medical info and notify your emergency contacts.
             </p>
             <button

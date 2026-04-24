@@ -23,7 +23,7 @@ export default function Register() {
       // 1. credentialResponse.credential is the direct Google ID Token (JWT)
       const googleToken = credentialResponse.credential;
 
-      // 2. Authenticate with SafeID API (Strict Registration)
+      // 2. Authenticate with ResQ API (Strict Registration)
       await register(googleToken);
 
       navigate('/dashboard');
@@ -62,7 +62,7 @@ export default function Register() {
 
           <div style={{ marginBottom: '40px' }}>
             <h2 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '12px', letterSpacing: '-0.02em' }}>
-              Join SafeID
+              Join ResQ
             </h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: '1.5', margin: 0, fontWeight: '500' }}>
               Create your military-grade emergency profile.<br />Verified instantly via Google.

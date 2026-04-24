@@ -1,6 +1,6 @@
 """
-Ngrok tunnel script — creates a public URL for SafeID.
-Run this to make your local SafeID accessible from any phone worldwide.
+Ngrok tunnel script — creates a public URL for ResQ.
+Run this to make your local ResQ accessible from any phone worldwide.
 
 Usage:
   python tunnel.py
@@ -25,7 +25,7 @@ except ImportError:
 def start_tunnels():
     """Start ngrok tunnels for both frontend and backend."""
 
-    print("\n🚀 Starting SafeID Public Tunnels...\n")
+    print("\n🚀 Starting ResQ Public Tunnels...\n")
 
     # Start tunnels
     try:
@@ -50,7 +50,7 @@ def start_tunnels():
         backend_url = backend_url.replace("http://", "https://")
 
     print("=" * 60)
-    print("🌍 SafeID is now PUBLIC!")
+    print("🌍 ResQ is now PUBLIC!")
     print("=" * 60)
     print(f"\n🖥️  Frontend URL:  {frontend_url}")
     print(f"📡 Backend API:   {backend_url}")

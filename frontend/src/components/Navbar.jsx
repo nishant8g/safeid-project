@@ -40,8 +40,8 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="navbar-logo">
-          <span className="logo-icon">🛡️</span>
-          <span>SafeID</span>
+          <span className="logo-icon">🚑</span>
+          <span>ResQ</span>
         </Link>
 
         <button className="nav-toggle" onClick={() => setMobileOpen(!mobileOpen)}>
@@ -111,17 +111,17 @@ function GetAppButton({ deferredPrompt, onInstall }) {
     ios: [
       { icon: '⬆️', label: 'Tap the Share icon', sub: 'At the bottom of your Safari browser' },
       { icon: '➕', label: 'Tap "Add to Home Screen"', sub: 'Scroll down in the share sheet to find it' },
-      { icon: '✅', label: 'Tap "Add"', sub: 'SafeID icon will appear on your home screen' },
+      { icon: '✅', label: 'Tap "Add"', sub: 'ResQ icon will appear on your home screen' },
     ],
     android: [
       { icon: '⋮', label: 'Tap the menu icon', sub: 'Top-right corner of Chrome browser' },
       { icon: '📲', label: 'Tap "Add to Home screen"', sub: 'Or tap "Install App" if visible' },
-      { icon: '✅', label: 'Tap "Install"', sub: 'SafeID icon appears on your home screen' },
+      { icon: '✅', label: 'Tap "Install"', sub: 'ResQ icon appears on your home screen' },
     ],
     desktop: [
       { icon: '⊕', label: 'Click the install icon', sub: 'Look in the right side of your address bar' },
       { icon: '🖱️', label: 'Click "Install"', sub: 'In the popup that appears from Chrome or Edge' },
-      { icon: '✅', label: 'Done!', sub: 'SafeID opens as a standalone desktop app' },
+      { icon: '✅', label: 'Done!', sub: 'ResQ opens as a standalone desktop app' },
     ],
   };
 

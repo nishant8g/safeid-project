@@ -1,7 +1,7 @@
-# SafeID — Project Overview & Architecture
+# ResQ — Project Overview & Architecture
 
 ## The Vision
-**SafeID** is an AI-powered emergency response and medical identity system. The core mission is to bridge the gap between first responders and unconscious or unresponsive patients. By utilizing instant-access technologies like QR Codes and NFC tags, paramedics can scan a patient's SafeID and instantly access life-saving medical data without unlocking the patient's phone.
+**ResQ** is an AI-powered emergency response and medical identity system. The core mission is to bridge the gap between first responders and unconscious or unresponsive patients. By utilizing instant-access technologies like QR Codes and NFC tags, paramedics can scan a patient's ResQ and instantly access life-saving medical data without unlocking the patient's phone.
 
 ---
 
@@ -16,7 +16,7 @@
 
 ## 🛠️ The Technology Stack
 
-SafeID is built on a modern, decoupled, highly-scalable software architecture.
+ResQ is built on a modern, decoupled, highly-scalable software architecture.
 
 ### 1. Frontend (The User Interface)
 The frontend is designed for speed, beauty, and absolute mobile responsiveness.

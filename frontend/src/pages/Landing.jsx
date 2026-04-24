@@ -242,7 +242,7 @@ export default function Landing() {
 
           {/* Subtitle */}
           <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', color: '#475569', maxWidth: '820px', lineHeight: '1.5', marginBottom: '28px', opacity: 0.9 }}>
-            SafeID uses advanced QR and NFC technology to instantly provide first responders with your life-saving medical data and alert your emergency contacts.
+            ResQ uses advanced QR and NFC technology to instantly provide first responders with your life-saving medical data and alert your emergency contacts.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -288,7 +288,7 @@ export default function Landing() {
                 <Wifi size={30} strokeWidth={2.5} />
               </div>
               <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>Instant Alerts</h3>
-              <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: '1.6', flexGrow: 1 }}>When your QR code or NFC tag is scanned, SafeID instantly dispatches a high-priority SMS and WhatsApp alert to your contacts.</p>
+              <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: '1.6', flexGrow: 1 }}>When your QR code or NFC tag is scanned, ResQ instantly dispatches a high-priority SMS and WhatsApp alert to your contacts.</p>
             </motion.div>
 
             {/* Box 2: Encryption */}
@@ -353,7 +353,7 @@ export default function Landing() {
             {[
               { num: '01', title: 'Create Profile', desc: 'Securely log your critical conditions, allergies, and emergency contacts.' },
               { num: '02', title: 'Link Identifier', desc: 'Get your unique cryptographic QR code, physical NFC tag, or link your ABHA card.' },
-              { num: '03', title: 'Global Protection', desc: 'Responders globally can scan your SafeID to access data and trigger GPS alerts.' }
+              { num: '03', title: 'Global Protection', desc: 'Responders globally can scan your ResQ to access data and trigger GPS alerts.' }
             ].map((step, idx) => (
               <motion.div 
                 key={idx}
@@ -408,8 +408,8 @@ export default function Landing() {
 
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '40px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '1.8rem' }}>🛡️</span>
-            <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.8px' }}>SafeID</span>
+            <span style={{ fontSize: '1.8rem' }}>🚑</span>
+            <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.8px' }}>ResQ</span>
           </div>
           
           <div style={{ display: 'flex', gap: '40px', fontSize: '1rem', fontWeight: '600', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -425,7 +425,7 @@ export default function Landing() {
           </div>
         </div>
         <div style={{ maxWidth: '1200px', margin: '40px auto 0', textAlign: 'center', fontSize: '0.85rem' }}>
-          &copy; {new Date().getFullYear()} SafeID Inc. All rights reserved. Designed to save lives.
+          &copy; {new Date().getFullYear()} ResQ Inc. All rights reserved. Designed to save lives.
         </div>
       </footer>
     </div>

@@ -1,5 +1,5 @@
 {
-  "name": "safeid-project-root",
+  "name": "resq-project-root",
   "private": true,
   "scripts": {
     "build": "cd frontend && npm install && npm run build",

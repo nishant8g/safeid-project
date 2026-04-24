@@ -144,7 +144,7 @@ async def upload_incident_photo(
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
     
     sos_message = (
-        f"🚨 *SAFEID EMERGENCY ALERT* 🚨\n\n"
+        f"🚨 *RESQ EMERGENCY ALERT* 🚨\n\n"
         f"I have found your relative *{user.full_name}* at an accident scene.\n\n"
         f"📸 *INCIDENT PHOTO:* {media_url if media_url else 'Direct access'}\n\n"
         f"🏥 *MEDICAL INFO:* {med.blood_group if med else 'Unknown'}\n"
@@ -218,7 +218,7 @@ async def trigger_alert(data: AlertTrigger, db: Session = Depends(get_db)):
 
     # 3. Generate Rich SOS Message
     sos_message = (
-        f"🚨 *SAFEID EMERGENCY SOS* 🚨\n\n"
+        f"🚨 *RESQ EMERGENCY SOS* 🚨\n\n"
         f"I have found your relative *{user.full_name}* at an accident scene.\n\n"
         f"🏥 *MEDICAL INFO:*\n"
         f"• Blood Group: {med.blood_group if med else 'Unknown'}\n"

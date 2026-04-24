@@ -1,11 +1,11 @@
-# SafeID Project Architecture
+# ResQ Project Architecture
 
-This document provides a 'graphified' view of the SafeID ecosystem, detailing the project structure and how the various components interact.
+This document provides a 'graphified' view of the ResQ ecosystem, detailing the project structure and how the various components interact.
 
 ## 📂 Project Structure
 
 ```text
-safeid-project/
+resq-project/
 ├── backend/                # FastAPI Application
 │   ├── app/
 │   │   ├── models/        # SQLAlchemy Models (User, Medical, Alert, etc.)

@@ -66,7 +66,7 @@ export default function Dashboard() {
           Welcome, {user?.full_name?.split(' ')[0]} 👋
         </h2>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '500' }}>
-          Manage your SafeID profile and stay prepared.
+          Manage your ResQ profile and stay prepared.
         </p>
       </div>
 
@@ -76,7 +76,7 @@ export default function Dashboard() {
       <div className="dashboard-grid" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
         <div className="glass-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem', border: '1px solid var(--accent-cyan)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div style={{ fontSize: '2rem' }}>🛡️</div>
+            <div style={{ fontSize: '2rem' }}>🚑</div>
             <div>
               <h3 style={{ fontSize: '1rem', fontWeight: '800' }}>Privacy Shield</h3>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Toggle QR accessibility for first responders.</p>

@@ -1,6 +1,6 @@
-# SafeID: Your Life-Saving Digital Identity 🛡️
+# ResQ: Your Life-Saving Digital Identity 🚑
 
-**SafeID** is a cutting-edge, AI-powered emergency response platform designed to bridge the critical information gap during the "Golden Hour" of a medical emergency. By combining QR/NFC technology with cloud-based medical profiles, SafeID ensures that vital information is always available when every second counts.
+**ResQ** is a cutting-edge, AI-powered emergency response platform designed to bridge the critical information gap during the "Golden Hour" of a medical emergency. By combining QR/NFC technology with cloud-based medical profiles, ResQ ensures that vital information is always available when every second counts.
 
 ---
 
@@ -10,17 +10,17 @@ In a medical emergency, bystanders and first responders often lack immediate acc
 2. **Emergency Contacts** (Who to notify immediately).
 3. **Current Location** (Providing accurate coordinates to family).
 
-SafeID eliminates this uncertainty by turning everyday items (bracelets, stickers, cards) into digital lifelines.
+ResQ eliminates this uncertainty by turning everyday items (bracelets, stickers, cards) into digital lifelines.
 
 ---
 
 ## ✨ Key Features
 
 ### 1. 📲 Universal QR Scan System
-No app is required for a responder. A simple scan of a SafeID QR code instantly opens a secure web profile with mission-critical medical data and emergency contact shortcuts.
+No app is required for a responder. A simple scan of a ResQ QR code instantly opens a secure web profile with mission-critical medical data and emergency contact shortcuts.
 
 ### 2. 📡 NFC "Tap-to-Save" Integration
-Our system supports NFC (Near Field Communication). A responder can simply tap their phone against a SafeID-enabled tag or wearable to access the profile wirelessly.
+Our system supports NFC (Near Field Communication). A responder can simply tap their phone against a ResQ-enabled tag or wearable to access the profile wirelessly.
 
 ### 3. 🤖 AI-Powered SOS Engine
 Powered by **Anthropic Claude**, our system generates:
@@ -29,10 +29,10 @@ Powered by **Anthropic Claude**, our system generates:
 - **Personalized Health Risks**: The dashboard provides AI warnings based on the user's specific medical history.
 
 ### 4. 📍 Real-Time GPS Tracking
-When a SafeID tag is scanned, the system automatically requests the responder's GPS coordinates and shares a live Google Maps link with the user's emergency contacts via SMS and WhatsApp.
+When a ResQ tag is scanned, the system automatically requests the responder's GPS coordinates and shares a live Google Maps link with the user's emergency contacts via SMS and WhatsApp.
 
 ### 5. 📲 PWA Mobile Experience
-SafeID is built as a **Progressive Web App**. Users can "Install" SafeID on their Android or iOS home screen for instant access to their digital ID, scan history, and profile management without visiting the Play Store.
+ResQ is built as a **Progressive Web App**. Users can "Install" ResQ on their Android or iOS home screen for instant access to their digital ID, scan history, and profile management without visiting the Play Store.
 
 ---
 
@@ -54,4 +54,4 @@ SafeID is built as a **Progressive Web App**. Users can "Install" SafeID on thei
 
 ---
 
-**SafeID: Because in an emergency, your data is your best defense.** 🛡️
+**ResQ: Because in an emergency, your data is your best defense.** 🚑

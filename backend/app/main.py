@@ -1,5 +1,5 @@
 """
-SafeID — FastAPI Application Entry Point
+ResQ — FastAPI Application Entry Point
 AI-Powered Emergency QR Response System
 """
 
@@ -42,7 +42,7 @@ def get_current_admin(credentials: HTTPBasicCredentials = Depends(security)):
 
 # Create FastAPI app (Public Docs Disabled)
 app = FastAPI(
-    title="SafeID API",
+    title="ResQ API",
     description="AI-Powered Emergency QR Response System",
     version="1.0.0",
     docs_url=None,
@@ -54,7 +54,7 @@ app = FastAPI(
 # Secure Docs Routes
 @app.get("/docs", include_in_schema=False)
 async def get_secure_documentation(admin: str = Depends(get_current_admin)):
-    return get_swagger_ui_html(openapi_url="/openapi.json", title="SafeID API secured")
+    return get_swagger_ui_html(openapi_url="/openapi.json", title="ResQ API secured")
 
 @app.get("/openapi.json", include_in_schema=False)
 async def get_openapi_endpoint(admin: str = Depends(get_current_admin)):
@@ -68,7 +68,7 @@ app.add_middleware(
         "http://localhost:5173",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:5173",
-        "https://safeid-project.vercel.app",
+        "https://resq-project.vercel.app",
         f"http://{settings.LAN_IP}:3000",
     ],
     allow_credentials=True,
@@ -116,7 +116,7 @@ def root():
     """Health check endpoint."""
     return {
         "status": "running",
-        "app": "SafeID API",
+        "app": "ResQ API",
         "version": "1.0.0",
         "docs": "/docs",
     }

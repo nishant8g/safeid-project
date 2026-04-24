@@ -29,17 +29,17 @@ class Settings(BaseSettings):
 
     # App
     LAN_IP: str = LAN_IP
-    APP_NAME: str = "SafeID"
+    APP_NAME: str = "ResQ"
     APP_ENV: str = "development"
-    SECRET_KEY: str = "safeid-super-secret-key"
+    SECRET_KEY: str = "resq-super-secret-key"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
-    BASE_URL: str = os.getenv("BASE_URL", "https://safeid-project.vercel.app")
+    BASE_URL: str = os.getenv("BASE_URL", "https://resq-project.vercel.app")
 
     # Database
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL", 
-        "sqlite:////tmp/safeid.db" if os.environ.get("VERCEL") else "sqlite:///./safeid.db"
+        "sqlite:////tmp/resq.db" if os.environ.get("VERCEL") else "sqlite:///./resq.db"
     )
     AI_SERVICE_URL: str = os.getenv("AI_SERVICE_URL", "http://localhost:8001")
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "963876569237-9osij8medcclsjr52ehr7mb4vs2fluq7.apps.googleusercontent.com")

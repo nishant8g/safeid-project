@@ -48,7 +48,7 @@ export default function NFCPortal() {
       <div className="section-header text-center" style={{ marginBottom: '3rem' }}>
         <div className="section-tag">Smart Hardware</div>
         <h2 className="text-glow" style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>📡 Tap-to-Scan NFC</h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '500' }}>Program a physical NFC sticker with your SafeID. Rescuers can just tap their phone to your helmet to view your emergency profile!</p>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '500' }}>Program a physical NFC sticker with your ResQ. Rescuers can just tap their phone to your helmet to view your emergency profile!</p>
       </div>
 
       <div className="glass-card text-center" style={{ maxWidth: '500px', margin: '0 auto', padding: '40px', border: '1px solid rgba(255, 255, 255, 1)', boxShadow: 'var(--shadow-xl)' }}>
