@@ -67,11 +67,11 @@ async def update_live_location(
         if contacts and user:
             # Generate updated message with NEW location
             updated_message = (
-                f"🚨 *LIVE UPDATE - ResQ* 🚨\n\n"
+                f"*LIVE UPDATE - ResQ*\n\n"
                 f"{user.full_name}'s location has updated:\n\n"
-                f"📍 *NEW LOCATION (GOOGLE MAPS):*\n"
+                f"*NEW LOCATION (GOOGLE MAPS):*\n"
                 f"https://www.google.com/maps?q={latitude},{longitude}\n\n"
-                f"⏱️ *Updated at:* {now.strftime('%H:%M:%S UTC')}\n"
+                f"Updated at: {now.strftime('%H:%M:%S UTC')}\n"
                 f"(Earlier profile: {settings.BASE_URL}/scan/{alert.user_id})"
             )
             
@@ -100,7 +100,7 @@ async def upload_incident_photo(
     photo: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
-    print(f"\n🚀 [INCIDENT] PROCESSING ALERT FOR USER: {user_id}")
+    print(f"\n[INCIDENT] PROCESSING ALERT FOR USER: {user_id}")
     """
     SENIOR EXPERT FIX: Receive live photo and location.
     Hardened Base64 upload for ImgBB + Universal Google Map Pins.
@@ -127,7 +127,7 @@ async def upload_incident_photo(
                     media_url = response.json()["data"]["url"]
                     
     except Exception as e:
-        logger.error(f"🚨 IMGBB Upload Failure: {e}")
+        logger.error(f"IMGBB Upload Failure: {e}")
 
     # 3. Get emergency contacts
     contacts = (
@@ -144,13 +144,13 @@ async def upload_incident_photo(
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
     
     sos_message = (
-        f"🚨 *RESQ EMERGENCY ALERT* 🚨\n\n"
+        f"*RESQ EMERGENCY ALERT*\n\n"
         f"I have found your relative *{user.full_name}* at an accident scene.\n\n"
-        f"📸 *INCIDENT PHOTO:* {media_url if media_url else 'Direct access'}\n\n"
-        f"🏥 *MEDICAL INFO:* {med.blood_group if med else 'Unknown'}\n"
+        f"INCIDENT PHOTO: {media_url if media_url else 'Direct access'}\n\n"
+        f"MEDICAL INFO: {med.blood_group if med else 'Unknown'}\n"
         f"• Allergies: {med.allergies if med and med.allergies else 'None'}\n\n"
-        f"📍 *LOCATION:* https://www.google.com/maps?q={latitude},{longitude}\n\n"
-        f"🆔 *PROFILE:* {settings.BASE_URL}/scan/{user_id}\n"
+        f"LOCATION: https://www.google.com/maps?q={latitude},{longitude}\n\n"
+        f"PROFILE: {settings.BASE_URL}/scan/{user_id}\n"
     )
 
     # 6. Primary Broadcasts (Email, Twilio, Telegram)
@@ -197,7 +197,7 @@ async def upload_incident_photo(
 
 @router.post("/trigger", response_model=AlertResponse)
 async def trigger_alert(data: AlertTrigger, db: Session = Depends(get_db)):
-    print(f"\n🚀 [TRIGGER] DIRECT SOS FOR USER: {data.user_id}")
+    print(f"\n[TRIGGER] DIRECT SOS FOR USER: {data.user_id}")
     # 1. Get user
     user = db.query(User).filter(User.id == data.user_id).first()
     if not user:
@@ -218,17 +218,17 @@ async def trigger_alert(data: AlertTrigger, db: Session = Depends(get_db)):
 
     # 3. Generate Rich SOS Message
     sos_message = (
-        f"🚨 *RESQ EMERGENCY SOS* 🚨\n\n"
+        f"*RESQ EMERGENCY SOS*\n\n"
         f"I have found your relative *{user.full_name}* at an accident scene.\n\n"
-        f"🏥 *MEDICAL INFO:*\n"
+        f"MEDICAL INFO:\n"
         f"• Blood Group: {med.blood_group if med else 'Unknown'}\n"
         f"• Allergies: {med.allergies if med and med.allergies else 'None Recorded'}\n\n"
-        f"📍 *LIVE LOCATION:* https://www.google.com/maps?q={data.latitude},{data.longitude}\n\n"
-        f"🆔 *PROFILE:* {settings.BASE_URL}/scan/{data.user_id}\n"
+        f"LIVE LOCATION: https://www.google.com/maps?q={data.latitude},{data.longitude}\n\n"
+        f"PROFILE: {settings.BASE_URL}/scan/{data.user_id}\n"
     )
 
     if data.message_override:
-        sos_message += f"\n\n🎤 Rescuer Note: \"{data.message_override}\""
+        sos_message += f"\n\nRescuer Note: \"{data.message_override}\""
 
     # 4. Broadcasts
     results = []
