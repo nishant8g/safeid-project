@@ -123,9 +123,9 @@ app.include_router(ai.router)
 def startup():
     """Initialize database on startup."""
     init_db()
-    logger.info("✅ Database initialized")
-    logger.info(f"📡 API docs: http://localhost:8000/docs")
-    logger.info(f"🌐 Frontend expected at: {settings.FRONTEND_URL}")
+    logger.info("Database initialized")
+    logger.info(f"API docs: http://localhost:8000/docs")
+    logger.info(f"Frontend expected at: {settings.FRONTEND_URL}")
 
 
 @app.get("/", tags=["Health Check"])
