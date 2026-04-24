@@ -1,12 +1,18 @@
-"""Application configuration loaded from environment variables."""
-
-import os
-import socket
 from pathlib import Path
-from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
 
-# Load .env from project root (3 levels up from backend/app/config.py)
-ENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env"
+# Find the project root (3 levels up)
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+ENV_LOCAL = ROOT_DIR / ".env.local"
+ENV_DEFAULT = ROOT_DIR / ".env"
+
+# Explicitly load files into environment variables
+if ENV_LOCAL.exists():
+    load_dotenv(str(ENV_LOCAL), override=True)
+elif ENV_DEFAULT.exists():
+    load_dotenv(str(ENV_DEFAULT), override=True)
+
+from pydantic_settings import BaseSettings
 
 
 def get_lan_ip() -> str:
@@ -28,55 +34,39 @@ class Settings(BaseSettings):
     """Application settings."""
 
     # App
-    LAN_IP: str = LAN_IP
-    APP_NAME: str = "ResQ"
-    APP_ENV: str = "development"
-    SECRET_KEY: str = "resq-super-secret-key"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
-    BASE_URL: str = os.getenv("BASE_URL", "https://resq-project.vercel.app")
+    APP_NAME: str = os.getenv("APP_NAME", "ResQ")
+    APP_ENV: str = os.getenv("APP_ENV", "development")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "resq-super-secret-key")
+    ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))
+    
+    # URLs
+    LAN_IP: str = get_lan_ip()
+    BASE_URL: str = os.getenv("BASE_URL", "http://localhost:8000")
+    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
     # Database
-    DATABASE_URL: str = os.getenv(
-        "DATABASE_URL", 
-        "sqlite:////tmp/resq.db" if os.environ.get("VERCEL") else "sqlite:///./resq.db"
-    )
-    AI_SERVICE_URL: str = os.getenv("AI_SERVICE_URL", "http://localhost:8001")
-    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "963876569237-9osij8medcclsjr52ehr7mb4vs2fluq7.apps.googleusercontent.com")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./resq.db")
+    
+    # OAuth
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
 
     # Twilio (optional secondary channel)
-    TWILIO_ACCOUNT_SID: str = ""
-    TWILIO_AUTH_TOKEN: str = ""
-    TWILIO_PHONE_NUMBER: str = ""
-    TWILIO_WHATSAPP_FROM: str = ""
+    TWILIO_ACCOUNT_SID: str = os.getenv("TWILIO_ACCOUNT_SID", "")
+    TWILIO_AUTH_TOKEN: str = os.getenv("TWILIO_AUTH_TOKEN", "")
+    TWILIO_PHONE_NUMBER: str = os.getenv("TWILIO_PHONE_NUMBER", "")
+    TWILIO_WHATSAPP_FROM: str = os.getenv("TWILIO_WHATSAPP_FROM", "")
 
     # Gmail SMTP (primary channel)
-    SMTP_EMAIL: str = ""
-    SMTP_APP_PASSWORD: str = ""
+    SMTP_EMAIL: str = os.getenv("SMTP_EMAIL", "")
+    SMTP_APP_PASSWORD: str = os.getenv("SMTP_APP_PASSWORD", "")
 
-    # AI (Migrating to Gemini for Free Tier)
-    ANTHROPIC_API_KEY: str = ""
-    GEMINI_API_KEY: str = ""
-
-    # Google Maps
-    GOOGLE_MAPS_API_KEY: str = ""
-
-    # What3Words
-    WHAT3WORDS_API_KEY: str = ""
-
-    # Telegram (Free Automated Alerts)
-    TELEGRAM_BOT_TOKEN: str = ""
-    TELEGRAM_CHAT_ID: str = ""
-
-    # CORS — allow both localhost and LAN access
-    FRONTEND_URL: str = f"http://{LAN_IP}:3000"
+    # Google Maps / AI
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    GOOGLE_MAPS_API_KEY: str = os.getenv("GOOGLE_MAPS_API_KEY", "")
 
     class Config:
-        case_sensitive = False
-        # Load .env.local first (overrides .env for dev), then .env
-        env_file = (str(ENV_PATH.parent / ".env.local"), str(ENV_PATH))
-        env_file_encoding = "utf-8"
-        extra = "allow"
+        extra = "ignore"
 
 
 settings = Settings()
