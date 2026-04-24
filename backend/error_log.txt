@@ -7,3 +7,9 @@
 2026-04-24 18:36:21,814 - app.main - INFO - Database initialized
 2026-04-24 18:36:21,814 - app.main - INFO - API docs: http://localhost:8000/docs
 2026-04-24 18:36:21,817 - app.main - INFO - Frontend expected at: http://localhost:3000
+2026-04-24 18:46:19,571 - app.main - INFO - Database initialized
+2026-04-24 18:46:19,571 - app.main - INFO - API docs: http://localhost:8000/docs
+2026-04-24 18:46:19,571 - app.main - INFO - Frontend expected at: https://resq-project.vercel.app
+2026-04-24 18:48:48,008 - app.main - INFO - Database initialized
+2026-04-24 18:48:48,009 - app.main - INFO - API docs: http://localhost:8000/docs
+2026-04-24 18:48:48,009 - app.main - INFO - Frontend expected at: https://resq-project.vercel.app
