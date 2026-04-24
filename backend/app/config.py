@@ -64,14 +64,17 @@ class Settings(BaseSettings):
     # What3Words
     WHAT3WORDS_API_KEY: str = ""
 
-    # ImgBB Cloud Storage
-    IMGBB_API_KEY: str = ""
+    # Telegram (Free Automated Alerts)
+    TELEGRAM_BOT_TOKEN: str = ""
+    TELEGRAM_CHAT_ID: str = ""
 
     # CORS — allow both localhost and LAN access
     FRONTEND_URL: str = f"http://{LAN_IP}:3000"
 
     class Config:
-        env_file = str(ENV_PATH)
+        case_sensitive = False
+        # Load .env.local first (overrides .env for dev), then .env
+        env_file = (str(ENV_PATH.parent / ".env.local"), str(ENV_PATH))
         env_file_encoding = "utf-8"
         extra = "allow"
 

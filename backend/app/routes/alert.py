@@ -17,6 +17,7 @@ from ..services.ai_service import generate_sos_message
 from ..services.location_service import reverse_geocode, get_google_maps_link, get_what3words
 from ..services.alert_service import send_alerts_to_contacts
 from ..services.email_service import send_email_alerts_to_contacts
+from ..services.telegram_service import send_telegram_alert
 from ..config import settings
 
 logger = logging.getLogger(__name__)
@@ -99,6 +100,7 @@ async def upload_incident_photo(
     photo: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
+    print(f"\n🚀 [INCIDENT] PROCESSING ALERT FOR USER: {user_id}")
     """
     SENIOR EXPERT FIX: Receive live photo and location.
     Hardened Base64 upload for ImgBB + Universal Google Map Pins.
@@ -113,42 +115,19 @@ async def upload_incident_photo(
     upload_error = ""
     
     try:
-        import httpx
-        
         # Read the raw file content
         image_content = await photo.read()
         
-        print(f"DEBUG: Incident Photo Received: {photo.filename}")
-        print(f"DEBUG: File Size: {len(image_content)} bytes")
-        
-        if len(image_content) == 0:
-            print("🚨 ERROR: Received empty file from frontend!")
-            upload_error = "(File is empty)"
-        else:
+        if len(image_content) > 0:
             async with httpx.AsyncClient() as client:
-                # 1. Put the API key directly in the URL
                 upload_url = f"https://api.imgbb.com/1/upload?key={settings.IMGBB_API_KEY}"
-                
-                # 2. Send the RAW file, no Base64 encoding at all.
-                # We pass the filename, the raw bytes, and the content type.
-                files = {
-                    "image": (photo.filename, image_content, photo.content_type)
-                }
-                
-                print(f"📡 Sending Raw Image File to ImgBB...")
+                files = {"image": (photo.filename, image_content, photo.content_type)}
                 response = await client.post(upload_url, files=files, timeout=60.0)
-                
                 if response.status_code == 200:
-                    res_data = response.json()
-                    media_url = res_data["data"]["url"]
-                    print(f"✅ IMGBB SUCCESS: {media_url}")
-                else:
-                    print(f"❌ IMGBB {response.status_code} REJECTION: {response.text}")
-                    upload_error = f"(Cloud Error: {response.status_code})"
+                    media_url = response.json()["data"]["url"]
                     
     except Exception as e:
-        print(f"🚨 SENIOR DEBUGGER EXCEPTION: {e}")
-        upload_error = "(Backend Logic Issue)"
+        logger.error(f"🚨 IMGBB Upload Failure: {e}")
 
     # 3. Get emergency contacts
     contacts = (
@@ -164,78 +143,61 @@ async def upload_incident_photo(
     # 5. Generate Universal SOS Message
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
     
-    # SENIOR FIX: Optimize for WhatsApp Link Preview and ensure media_url is used
     sos_message = (
         f"🚨 *SAFEID EMERGENCY ALERT* 🚨\n\n"
         f"I have found your relative *{user.full_name}* at an accident scene.\n\n"
-        f"📸 *INCIDENT PHOTO:* {media_url if media_url else 'Pending/Failed'}\n\n"
+        f"📸 *INCIDENT PHOTO:* {media_url if media_url else 'Direct access'}\n\n"
         f"🏥 *MEDICAL INFO:* {med.blood_group if med else 'Unknown'}\n"
         f"• Allergies: {med.allergies if med and med.allergies else 'None'}\n\n"
         f"📍 *LOCATION:* https://www.google.com/maps?q={latitude},{longitude}\n\n"
         f"🆔 *PROFILE:* {settings.BASE_URL}/scan/{user_id}\n"
     )
 
-    print(f"\n📡 FINAL SOS TEMPLATE:\n{sos_message}\n")
-
-    # 6. PRIMARY: Email Broadcast (always works, free, supports images)
+    # 6. Primary Broadcasts (Email, Twilio, Telegram)
     results = []
+    
+    # Email
     try:
-        logger.info("📧 Sending EMAIL alerts (primary channel)...")
         email_results = send_email_alerts_to_contacts(
-            contacts=contacts,
-            victim_name=user.full_name,
-            sos_message=sos_message,
-            latitude=latitude,
-            longitude=longitude,
-            media_url=media_url,
-            blood_group=med.blood_group if med else None,
-            allergies=med.allergies if med else None,
+            contacts=contacts, victim_name=user.full_name, sos_message=sos_message,
+            latitude=latitude, longitude=longitude, media_url=media_url,
+            blood_group=med.blood_group if med else None, allergies=med.allergies if med else None,
         )
         results.extend(email_results)
-        logger.info(f"✅ Email broadcast complete: {email_results}")
-    except Exception as e:
-        logger.error(f"❌ Email broadcast failed: {e}")
+    except Exception as e: logger.error(f"E-failed: {e}")
 
-    # 7. SECONDARY: Twilio SMS/WhatsApp (optional, if configured)
+    # Twilio
     try:
-        logger.info("📱 Sending Twilio SMS/WhatsApp alerts (secondary channel)...")
         twilio_results = send_alerts_to_contacts(contacts, sos_message, media_url=media_url)
         results.extend(twilio_results)
-        logger.info(f"✅ Twilio broadcast complete")
-    except Exception as e:
-        logger.error(f"⚠️ Twilio broadcast failed (non-critical): {e}")
+    except Exception as e: logger.error(f"T-failed: {e}")
+
+    # Telegram (Free & Automated)
+    try:
+        tg_result = await send_telegram_alert(sos_message, media_url=media_url)
+        results.append({"contact": "Safety Bot", **tg_result})
+    except Exception as e: logger.error(f"TG-failed: {e}")
+
     # 7. Log the Alert
     contact_list = [{"name": c.name, "phone": c.phone} for c in contacts]
     alert_log = AlertLog(
-        user_id=user_id,
-        triggered_by="camera",
-        latitude=latitude,
-        longitude=longitude,
-        address=address,
-        severity="critical",
-        message_sent=sos_message,
-        contacts_notified=contact_list,
-        media_url=media_url
+        user_id=user_id, triggered_by="camera", latitude=latitude, longitude=longitude,
+        address=address, severity="critical", message_sent=sos_message,
+        contacts_notified=contact_list, media_url=media_url
     )
     db.add(alert_log)
     db.commit()
     db.refresh(alert_log)
 
     return {
-        "status": "success",
-        "alert_id": alert_log.id,
-        "sos_message": sos_message,
-        "contacts_list": contact_list,
-        "delivery_results": results
+        "status": "success", "alert_id": alert_log.id, "sos_message": sos_message,
+        "contacts_list": contact_list, "delivery_results": results
     }
 
 
 @router.post("/trigger", response_model=AlertResponse)
 async def trigger_alert(data: AlertTrigger, db: Session = Depends(get_db)):
-    """
-    PUBLIC endpoint — trigger an emergency alert.
-    Sends SMS/WhatsApp to all emergency contacts of the user.
-    """
+    print(f"\n🚀 [TRIGGER] DIRECT SOS FOR USER: {data.user_id}")
     # 1. Get user
     user = db.query(User).filter(User.id == data.user_id).first()
     if not user:
@@ -249,107 +211,69 @@ async def trigger_alert(data: AlertTrigger, db: Session = Depends(get_db)):
         .all()
     )
     if not contacts:
-        raise HTTPException(
-            status_code=400,
-            detail="No emergency contacts configured for this user",
-        )
+        raise HTTPException(status_code=400, detail="No contacts configured")
 
-    # 3. Get medical info
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == data.user_id).first()
+    address = await reverse_geocode(data.latitude, data.longitude) if data.latitude and data.longitude else None
 
-    # 4. Reverse geocode location
-    address = None
-    if data.latitude and data.longitude:
-        address = await reverse_geocode(data.latitude, data.longitude)
+    # 3. Generate Rich SOS Message
+    sos_message = (
+        f"🚨 *SAFEID EMERGENCY SOS* 🚨\n\n"
+        f"I have found your relative *{user.full_name}* at an accident scene.\n\n"
+        f"🏥 *MEDICAL INFO:*\n"
+        f"• Blood Group: {med.blood_group if med else 'Unknown'}\n"
+        f"• Allergies: {med.allergies if med and med.allergies else 'None Recorded'}\n\n"
+        f"📍 *LIVE LOCATION:* https://www.google.com/maps?q={data.latitude},{data.longitude}\n\n"
+        f"🆔 *PROFILE:* {settings.BASE_URL}/scan/{data.user_id}\n"
+    )
 
-    # 5. Generate Rich SOS Message
-    try:
-        # FIX 2: Standard Google Maps format (https://www.google.com/maps?q=lat,lng)
-        sos_message = (
-            f"🚨 *SAFEID EMERGENCY SOS* 🚨\n\n"
-            f"I have found your relative *{user.full_name}* at an accident scene.\n\n"
-            f"🏥 *MEDICAL INFO:*\n"
-            f"• Blood Group: {med.blood_group if med else 'Unknown'}\n"
-            f"• Allergies: {med.allergies if med and med.allergies else 'None Recorded'}\n\n"
-            f"📍 *LIVE LOCATION (GOOGLE MAPS):*\n"
-            f"https://www.google.com/maps?q={data.latitude},{data.longitude}\n\n"
-            f"🆔 *FULL PROFILE:* {settings.BASE_URL}/scan/{data.user_id}\n"
-        )
-    except Exception as e:
-        print(f"Fallback generation: {e}")
-        sos_message = f"🚨 EMERGENCY: I have found your relative {user.full_name}. Location: https://www.google.com/maps?q={data.latitude},{data.longitude}"
-
-    # 6. Append voice override if rescuer spoke a message
     if data.message_override:
         sos_message += f"\n\n🎤 Rescuer Note: \"{data.message_override}\""
 
-    # 7. PRIMARY: Email Broadcast
+    # 4. Broadcasts
     results = []
+    
+    # Email
     try:
-        logger.info("📧 Sending EMAIL alerts (primary)...")
         email_results = send_email_alerts_to_contacts(
-            contacts=contacts,
-            victim_name=user.full_name,
-            sos_message=sos_message,
-            latitude=data.latitude,
-            longitude=data.longitude,
-            blood_group=med.blood_group if med else None,
-            allergies=med.allergies if med else None,
+            contacts=contacts, victim_name=user.full_name, sos_message=sos_message,
+            latitude=data.latitude, longitude=data.longitude,
+            blood_group=med.blood_group if med else None, allergies=med.allergies if med else None,
         )
         results.extend(email_results)
-    except Exception as e:
-        logger.error(f"Email broadcast failed: {e}")
+    except Exception as e: logger.error(f"E-failed: {e}")
 
-    # 8. SECONDARY: Twilio SMS/WhatsApp (optional)
+    # Twilio
     try:
         twilio_results = send_alerts_to_contacts(contacts, sos_message)
         results.extend(twilio_results)
-    except Exception as e:
-        logger.error(f"Twilio broadcast failed (non-critical): {e}")
+    except Exception as e: logger.error(f"T-failed: {e}")
 
-    # 8. Log the Alert
+    # Telegram
+    try:
+        tg_result = await send_telegram_alert(sos_message)
+        results.append({"contact": "Safety Bot", **tg_result})
+    except Exception as e: logger.error(f"TG-failed: {e}")
+
+    # 5. Log the Alert
     contact_list = [{"name": c.name, "phone": c.phone} for c in contacts]
     alert_log = AlertLog(
-        user_id=data.user_id,
-        triggered_by=data.triggered_by,
-        latitude=data.latitude,
-        longitude=data.longitude,
-        address=address,
-        severity=data.severity,
-        message_sent=sos_message,
-        contacts_notified=contact_list,
+        user_id=data.user_id, triggered_by=data.triggered_by, latitude=data.latitude,
+        longitude=data.longitude, address=address, severity=data.severity,
+        message_sent=sos_message, contacts_notified=contact_list,
     )
     db.add(alert_log)
     db.commit()
     db.refresh(alert_log)
 
     return {
-        "status": "success",
-        "alert_id": alert_log.id,
-        "sos_message": sos_message,
-        "contacts_list": contact_list,
-        "delivery_results": results
+        "status": "success", "alert_id": alert_log.id, "sos_message": sos_message,
+        "contacts_list": contact_list, "delivery_results": results
     }
 
 
 @router.get("/history")
 def get_alert_history(user_id: str, db: Session = Depends(get_db)):
     """Get alert history for a user."""
-    alerts = (
-        db.query(AlertLog)
-        .filter(AlertLog.user_id == user_id)
-        .order_by(AlertLog.created_at.desc())
-        .limit(20)
-        .all()
-    )
-    return [
-        {
-            "id": a.id,
-            "triggered_by": a.triggered_by,
-            "severity": a.severity,
-            "address": a.address,
-            "contacts_notified": a.contacts_notified,
-            "created_at": a.created_at.isoformat() if a.created_at else None,
-        }
-        for a in alerts
-    ]
+    alerts = db.query(AlertLog).filter(AlertLog.user_id == user_id).order_by(AlertLog.created_at.desc()).limit(20).all()
+    return [{"id": a.id, "triggered_by": a.triggered_by, "severity": a.severity, "address": a.address, "contacts_notified": a.contacts_notified, "created_at": a.created_at.isoformat() if a.created_at else None} for a in alerts]

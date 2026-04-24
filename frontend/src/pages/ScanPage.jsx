@@ -383,29 +383,69 @@ export default function ScanPage() {
               </button>
             </div>
           ) : (
-             <div className="glass-card animate-fade-in" style={{ padding: '1.5rem', border: '2px solid rgba(34, 197, 94, 0.4)', textAlign: 'center' }}>
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
-                <h3 style={{ color: 'var(--accent-green)', marginBottom: '0.5rem' }}>Alert Sent to Family</h3>
-                <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-                  The incident photo and live location have been broadcast to the family via Twilio WhatsApp & SMS.
+              <div className="glass-card animate-fade-in" style={{ padding: '2rem', border: '2px solid rgba(0, 242, 255, 0.3)', background: 'var(--bg-card)', textAlign: 'center', borderRadius: '28px' }}>
+                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🛡️</div>
+                <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Alert Broadacst Live</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '2rem', fontWeight: '500' }}>
+                  Emergency signals have been sent via multidimensional channels.
                 </p>
 
-                {/* --- SMART MANUAL BACKUP (Bug #1 Hybrid Fix) --- */}
-                <div className="flex flex-col" style={{ gap: '0.8rem', marginTop: '1rem' }}>
-                   {userData?.emergency_contacts?.map((contact, idx) => (
+                {/* --- DELIVERY STATUS DASHBOARD --- */}
+                <div style={{ background: 'rgba(255, 255, 255, 0.03)', borderRadius: '20px', padding: '1.5rem', marginBottom: '2rem', border: '1px solid var(--border-subtle)' }}>
+                  <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '1.25rem', letterSpacing: '0.1em' }}>Transmission Status</h4>
+                  <div className="flex flex-col" style={{ gap: '1rem' }}>
+                    {alertResult?.delivery_results?.map((res, i) => (
+                      <div key={i} className="flex justify-between items-center" style={{ paddingBottom: '0.75rem', borderBottom: i < alertResult.delivery_results.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
+                        <div className="flex items-center gap-3">
+                          <span style={{ fontSize: '1.2rem' }}>
+                            {res.method === 'email' ? '📧' : res.method === 'sms' ? '📱' : res.method === 'telegram' ? '🤖' : '💬'}
+                          </span>
+                          <div style={{ textAlign: 'left' }}>
+                            <div style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--text-primary)' }}>{res.method?.toUpperCase()}</div>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{res.contact}</div>
+                          </div>
+                        </div>
+                        <div style={{ 
+                          fontSize: '0.75rem', 
+                          fontWeight: '800', 
+                          color: res.status === 'sent' || res.status === 'success' || res.status === 'called' ? 'var(--accent-green)' : 'var(--accent-red)',
+                          background: res.status === 'sent' || res.status === 'success' || res.status === 'called' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(220, 38, 38, 0.1)',
+                          padding: '4px 10px',
+                          borderRadius: '10px'
+                        }}>
+                          {res.status?.toUpperCase()}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* --- DIRECT FALLBACK BUTTONS (PRESENTATION SAVIOR) --- */}
+                <div style={{ textAlign: 'left' }}>
+                  <p style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--accent-cyan)', marginBottom: '1rem', textTransform: 'uppercase' }}>Backup WhatsApp (Click if trial restricted)</p>
+                  <div className="flex flex-col" style={{ gap: '0.75rem' }}>
+                    {alertResult?.delivery_results?.filter(r => r.method === 'whatsapp').map((contact_res, i) => (
                       <a 
-                        key={idx}
-                        href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(alertResult?.sos_message || `🚨 EMERGENCY ALERT for ${userData.full_name}: I have found them at an accident scene. Location: https://www.google.com/maps?q=${location?.lat},${location?.lng}`)}`}
+                        key={i}
+                        href={contact_res.direct_link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn btn-ghost w-full"
-                        style={{ fontSize: '0.9rem', padding: '0.75rem', borderColor: 'rgba(37, 211, 102, 0.3)', color: '#25D366' }}
+                        className="btn btn-ghost w-full flex items-center justify-center gap-2"
+                        style={{ 
+                          padding: '1rem', 
+                          borderRadius: '16px', 
+                          borderColor: 'rgba(37, 211, 102, 0.3)', 
+                          color: '#25D366', 
+                          fontWeight: '800',
+                          background: 'rgba(37, 211, 102, 0.05)'
+                        }}
                       >
-                        💬 Backup WA: {contact.name}
+                        🚀 Direct Link: {contact_res.contact}
                       </a>
-                   ))}
+                    ))}
+                  </div>
                 </div>
-             </div>
+              </div>
           )}
 
           <div className="flex" style={{ gap: '0.75rem', marginTop: '1.5rem', justifyContent: 'center' }}>
