@@ -1,10 +1,10 @@
-from pathlib import Path
-from dotenv import load_dotenv
+# Look for .env right in the current folder (backend/)
+ENV_LOCAL = Path("").resolve() / ".env.local"
+ENV_DEFAULT = Path("").resolve() / ".env"
 
-# Find the project root (3 levels up)
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-ENV_LOCAL = ROOT_DIR / ".env.local"
-ENV_DEFAULT = ROOT_DIR / ".env"
+print(f"DEBUG: CWD detected as: {Path('').resolve()}")
+print(f"DEBUG: Checking .env.local at: {ENV_LOCAL}")
+print(f"DEBUG: .env.local exists? {ENV_LOCAL.exists()}")
 
 # Explicitly load files into environment variables
 if ENV_LOCAL.exists():
