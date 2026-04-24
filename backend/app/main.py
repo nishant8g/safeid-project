@@ -23,14 +23,25 @@ from .routes import auth, user, qr, scan, alert, ai
 from .config import settings
 from .database import init_db
 
-# Configure logging to both console and file for debugging
+# # Configure logging to both console and file for debugging
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+#     handlers=[
+#         logging.FileHandler("error_log.txt"),
+#         logging.StreamHandler()
+#     ]
+# )
+# logger = logging.getLogger(__name__)
+# Configure logging (Vercel is read-only, so we only use StreamHandler in production)
+handlers = [logging.StreamHandler()]
+if not os.environ.get("VERCEL"):
+    handlers.append(logging.FileHandler("error_log.txt"))
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler("error_log.txt"),
-        logging.StreamHandler()
-    ]
+    handlers=handlers
 )
 logger = logging.getLogger(__name__)
 
