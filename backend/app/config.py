@@ -6,7 +6,7 @@ from pathlib import Path
 from pydantic_settings import BaseSettings
 
 # Load .env from project root (3 levels up from backend/app/config.py)
-ENV_PATH = Path(__file__).resolve().parent.parent.parent.parent / ".env"
+ENV_PATH = Path(__file__).resolve().parent.parent.parent / ".env"
 
 
 def get_lan_ip() -> str:
