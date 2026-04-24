@@ -163,7 +163,7 @@ function AnimatedCounter({ end, suffix = '', label }) {
       <span style={{ fontSize: 'clamp(2.5rem, 4vw, 3rem)', fontWeight: '900', color: '#0f172a', letterSpacing: '-1px' }}>
         {count}{typeof count === 'number' && suffix}
       </span>
-      <span style={{ color: '#64748b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1.5px', fontSize: '0.85rem' }}>
+      <span style={{ color: '#1e293b', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1.5px', fontSize: '0.85rem' }}>
         {label}
       </span>
     </div>
@@ -241,7 +241,7 @@ export default function Landing() {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', color: '#475569', maxWidth: '820px', lineHeight: '1.5', marginBottom: '28px', opacity: 0.9 }}>
+          <motion.p variants={fadeUpVariant} style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', color: '#1e293b', maxWidth: '820px', lineHeight: '1.6', marginBottom: '28px', fontWeight: '500' }}>
             ResQ uses advanced QR and NFC technology to instantly provide first responders with your life-saving medical data and alert your emergency contacts.
           </motion.p>
 
@@ -267,86 +267,13 @@ export default function Landing() {
         </motion.div>
       </section>
 
-      {/* High-Tech Grid Features - Balanced and Premium */}
-      <section style={{ padding: '60px 24px', position: 'relative', zIndex: 10 }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '70px' }}>
-            <span style={{ color: '#0061FF', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.8rem' }}>Core Capabilities</span>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.02em', marginBottom: '16px', marginTop: '12px' }}>Enterprise-Grade Security</h2>
-            <p style={{ color: '#64748b', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>Combining robust encryption with seamless accessibility to ensure your data is strictly safe, yet instantly available when it matters.</p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '30px' }}>
-            
-            {/* Box 1: Alerts */}
-            <motion.div 
-              style={{ background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(30px)', borderRadius: '32px', padding: '48px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.04), 0 1px 3px rgba(0,0,0,0.01)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'default' }}
-              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUpVariant}
-              whileHover={{ y: -10, boxShadow: '0 40px 80px rgba(67, 56, 202, 0.1)' }}
-            >
-              <div style={{ width: '60px', height: '60px', background: 'linear-gradient(135deg, rgba(0, 97, 255, 0.12), rgba(0, 97, 255, 0.05))', color: '#0061FF', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
-                <Wifi size={30} strokeWidth={2.5} />
-              </div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>Instant Alerts</h3>
-              <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: '1.6', flexGrow: 1 }}>When your QR code or NFC tag is scanned, ResQ instantly dispatches a high-priority SMS and WhatsApp alert to your contacts.</p>
-            </motion.div>
-
-            {/* Box 2: Encryption */}
-            <motion.div 
-              style={{ background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(30px)', borderRadius: '32px', padding: '48px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.04), 0 1px 3px rgba(0,0,0,0.01)', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', overflow: 'hidden', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'default' }}
-              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUpVariant}
-              whileHover={{ y: -10, boxShadow: '0 40px 80px rgba(67, 56, 202, 0.1)' }}
-            >
-              <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <div style={{ width: '60px', height: '60px', background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(6, 182, 212, 0.05))', color: '#0891b2', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
-                  <Lock size={30} strokeWidth={2.5} />
-                </div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>AES-256 Vault</h3>
-                <p style={{ color: '#475569', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1 }}>Your health data is sealed with military-grade encryption within our secure vaults. Only physically verified scans can decrypt your vital info.</p>
-              </div>
-              <motion.div 
-                animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-                style={{ position: 'absolute', right: '-40px', bottom: '-40px', width: '180px', height: '180px', border: '2px dashed rgba(6, 182, 212, 0.1)', borderRadius: '50%', zIndex: 1 }}
-              />
-            </motion.div>
-
-            {/* Box 3: NFC */}
-            <motion.div 
-              style={{ background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(30px)', borderRadius: '32px', padding: '48px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.04), 0 1px 3px rgba(0,0,0,0.01)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'default' }}
-              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUpVariant}
-              whileHover={{ y: -10, boxShadow: '0 40px 80px rgba(67, 56, 202, 0.1)' }}
-            >
-              <div style={{ width: '60px', height: '60px', background: 'linear-gradient(135deg, rgba(157, 80, 187, 0.12), rgba(157, 80, 187, 0.05))', color: '#9D50BB', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
-                <Nfc size={30} strokeWidth={2.5} />
-              </div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>NFC Smart Tags</h3>
-              <p style={{ color: '#475569', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1 }}>Embed your profile into smart bracelets or wallet cards. A tap from any modern smartphone unlocks your emergency profile immediately.</p>
-            </motion.div>
-
-            {/* Box 4: ABHA */}
-            <motion.div 
-              style={{ background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(30px)', borderRadius: '32px', padding: '48px', border: '1px solid rgba(255, 255, 255, 0.8)', boxShadow: '0 20px 40px rgba(67, 56, 202, 0.04), 0 1px 3px rgba(0,0,0,0.01)', display: 'flex', flexDirection: 'column', height: '100%', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', cursor: 'default' }}
-              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUpVariant}
-              whileHover={{ y: -10, boxShadow: '0 40px 80px rgba(67, 56, 202, 0.1)' }}
-            >
-              <div style={{ width: '60px', height: '60px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.05))', color: '#10b981', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
-                <Stethoscope size={30} strokeWidth={2.5} />
-              </div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '16px' }}>ABHA Health Sync</h3>
-              <p style={{ color: '#475569', fontSize: '1.05rem', lineHeight: '1.6', flexGrow: 1 }}>Connect seamlessly with your official ABHA Health ID. First responders get highly comprehensive, authorized access to your verified medical records instantly.</p>
-            </motion.div>
-
-          </div>
-        </div>
-      </section>
-
       {/* How it Works Flowchart - Simplified & Cleaned */}
       <section id="how-it-works" style={{ padding: '100px 24px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
           <div style={{ textAlign: 'center', marginBottom: '70px' }}>
             <span style={{ color: '#0061FF', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.8rem' }}>Implementation</span>
             <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', color: '#0f172a', fontWeight: '900', marginTop: '12px', letterSpacing: '-0.02em', marginBottom: '16px' }}>3 Steps to Protection</h2>
-            <p style={{ color: '#64748b', fontSize: '1rem' }}>Our platform ensures a frictionless onboarding experience for lifecycle-long safety.</p>
+            <p style={{ color: '#1e293b', fontSize: '1.1rem', fontWeight: '500' }}>Our platform ensures a frictionless onboarding experience for lifecycle-long safety.</p>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
@@ -365,7 +292,7 @@ export default function Landing() {
                   {step.num}
                 </div>
                 <h3 style={{ fontSize: '1.4rem', color: '#0f172a', fontWeight: '800', marginBottom: '16px' }}>{step.title}</h3>
-                <p style={{ color: '#64748b', fontSize: '1.05rem', lineHeight: '1.6', margin: 0, flexGrow: 1, opacity: 0.9 }}>{step.desc}</p>
+                <p style={{ color: '#334155', fontSize: '1.05rem', lineHeight: '1.6', margin: 0, flexGrow: 1, fontWeight: '600' }}>{step.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -384,7 +311,7 @@ export default function Landing() {
           <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: '900', color: '#0f172a', marginBottom: '20px', letterSpacing: '-0.02em', lineHeight: '1.1' }}>
             Don't leave your <br /> safety to chance.
           </h2>
-          <p style={{ color: '#64748b', fontSize: '1.1rem', marginBottom: '40px', maxWidth: '400px', margin: '0 auto 40px' }}>
+          <p style={{ color: '#1e293b', fontSize: '1.15rem', marginBottom: '40px', maxWidth: '400px', margin: '0 auto 40px', fontWeight: '600' }}>
             Set up your digital medical identity in under 2 minutes. Free and straightforward.
           </p>
           <Link to={isAuthenticated ? '/dashboard' : '/register'} style={{ display: 'inline-flex', padding: '20px 48px', background: '#0f172a', color: 'white', fontSize: '1.1rem', borderRadius: '16px', fontWeight: '800', textDecoration: 'none', boxShadow: '0 15px 30px rgba(15, 23, 42, 0.25)', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
