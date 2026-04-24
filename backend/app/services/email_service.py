@@ -6,8 +6,10 @@ Supports rich HTML emails with embedded incident photos.
 
 import smtplib
 import logging
+import httpx
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
 from typing import List, Optional
 
 from ..config import settings
@@ -37,6 +39,9 @@ def send_emergency_email(
 
     # Build the rich HTML email
     maps_link = f"https://www.google.com/maps?q={latitude},{longitude}" if latitude and longitude else ""
+
+    # CID for the inline image
+    image_cid = "incident_photo_resq"
 
     html_body = f"""
     <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; color: #e2e8f0; border-radius: 16px; overflow: hidden;">
@@ -68,7 +73,8 @@ def send_emergency_email(
             <!-- Incident Photo -->
             <div style="background: #1e293b; border-radius: 12px; padding: 16px; margin: 16px 0; border-left: 4px solid #ef4444;">
                 <h3 style="margin: 0 0 12px; color: #fca5a5;">📸 Incident Photo</h3>
-                <img src="{media_url}" alt="Incident Scene" style="width: 100%; max-width: 500px; border-radius: 8px; border: 2px solid #334155;" />
+                <img src="cid:{image_cid}" alt="Incident Scene" style="width: 100%; max-width: 500px; border-radius: 8px; border: 2px solid #334155;" />
+                <p style="margin: 8px 0 0; font-size: 11px; color: #94a3b8;">Original Link: <a href="{media_url}" style="color: #60a5fa;">{media_url}</a></p>
             </div>
             '''}
 
@@ -109,20 +115,41 @@ def send_emergency_email(
             </p>
         </div>
     </div>
+    </div>
     """
 
     try:
-        msg = MIMEMultipart("alternative")
+        msg = MIMEMultipart("related") # Changed from 'alternative' to 'related' for CID support
         msg["Subject"] = f"🚨 EMERGENCY ALERT — {victim_name} needs help!"
         msg["From"] = f"ResQ Emergency <{sender_email}>"
         msg["To"] = to_email
         msg["X-Priority"] = "1 (Highest)"
         msg["Importance"] = "High"
 
+        # Content container for HTML/Text
+        msg_alternative = MIMEMultipart("alternative")
+        msg.attach(msg_alternative)
+
         # Plain text fallback
-        msg.attach(MIMEText(sos_message, "plain"))
+        msg_alternative.attach(MIMEText(sos_message, "plain"))
         # Rich HTML version
-        msg.attach(MIMEText(html_body, "html"))
+        msg_alternative.attach(MIMEText(html_body, "html"))
+
+        # ⚡ ATTACH THE IMAGE AS CID (THE FIX)
+        if media_url:
+            try:
+                # Use a separate sync client for smtplib environment
+                import requests
+                img_data = requests.get(media_url).content
+                image = MIMEImage(img_data)
+                image.add_header('Content-ID', f'<{image_cid}>')
+                image.add_header('Content-Disposition', 'inline', filename='incident.jpg')
+                msg.attach(image)
+                logger.info("📎 Image embedded as CID successfully")
+            except Exception as ei:
+                logger.error(f"Failed to embed image CID: {ei}")
+                # We still send the email, it just falls back to the img src cid which might be broken 
+                # but we included the text link inside the HTML as well.
 
         # Port 587 with STARTTLS is more compatible with cloud environments
         with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as server:
