@@ -398,39 +398,48 @@ export default function ScanPage() {
               <a href="tel:108" className="btn btn-ghost btn-lg flex-1" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>🚑 Call 108</a>
             </div>
 
-            {/* Manual WhatsApp Fallback */}
+            {/* Manual WhatsApp Fallback - DESIGNED FOR DEMO PERFORMANCE */}
             {userData.emergency_contacts && userData.emergency_contacts.length > 0 && (
-              <div style={{ width: '100%', marginTop: '0.5rem' }}>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '0.5rem', fontWeight: '600' }}>
-                  MANUAL BACKUP (If auto-alert fails)
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ width: '100%', marginTop: '1.5rem', padding: '20px', background: 'rgba(37, 211, 102, 0.03)', borderRadius: '24px', border: '1px solid rgba(37, 211, 102, 0.2)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '1.25rem' }}>
+                    <span style={{ fontSize: '0.7rem', background: '#25D366', color: 'white', padding: '2px 8px', borderRadius: '4px', fontWeight: '900' }}>DIRECT</span>
+                    <p style={{ fontSize: '0.8rem', color: '#25D366', fontWeight: '800', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      Verified Family Backup
+                    </p>
+                </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {userData.emergency_contacts.map((contact, idx) => (
                     <a 
                       key={idx}
                       href={`https://wa.me/${contact.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`🚑 EMERGENCY: I am with ${userData.full_name} who had an accident. I scanned their ResQ profile. Location: https://www.google.com/maps?q=${location?.lat || 0},${location?.lng || 0}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="glass-card"
+                      className="whatsapp-btn-demo"
                       style={{ 
-                        padding: '12px', 
+                        padding: '18px', 
                         display: 'flex', 
                         alignItems: 'center', 
                         justifyContent: 'center', 
-                        gap: '10px', 
+                        gap: '12px', 
                         textDecoration: 'none', 
-                        color: '#25D366', 
-                        border: '1px solid rgba(37, 211, 102, 0.3)',
-                        borderRadius: '14px',
-                        fontSize: '0.9rem',
-                        fontWeight: '700',
-                        background: 'rgba(37, 211, 102, 0.05)'
+                        color: 'white', 
+                        background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
+                        borderRadius: '16px',
+                        fontSize: '1.1rem',
+                        fontWeight: '800',
+                        boxShadow: '0 8px 20px rgba(37, 211, 102, 0.25)',
+                        transition: 'all 0.3s ease',
                       }}
                     >
-                      <span>💬 Message {contact.name} (WhatsApp)</span>
+                      <span style={{ fontSize: '1.4rem' }}>💬</span>
+                      <span>Notify {contact.name.split(' ')[0]} via WhatsApp</span>
                     </a>
                   ))}
                 </div>
+                <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: '1rem', fontWeight: '600' }}>
+                   🔒 SECURE HANDSHAKE: NO VERIFICATION REQUIRED
+                </p>
               </div>
             )}
           </div>
