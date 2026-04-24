@@ -45,7 +45,7 @@ Frontend runs at: **http://localhost:3000**
 ## 📁 Project Structure
 
 ```
-safeid-project/
+resq-project/
 ├── backend/              # FastAPI backend
 │   ├── app/
 │   │   ├── main.py       # App entry point
@@ -161,9 +161,9 @@ We have prepared the repository for **true free cloud hosting**.
 ### 1. Host the Backend on Render
 1. Create a free account at [Render](https://render.com/).
 2. Click **New +** → **Blueprint**.
-3. Connect your GitHub repository containing SafeID.
+3. Connect your GitHub repository containing ResQ.
 4. Render will automatically detect the `backend/render.yaml` file and deploy your FastAPI backend for free!
-5. After deployment, copy your Render URL (e.g., `https://safeid-backend.onrender.com`).
+5. After deployment, copy your Render URL (e.g., `https://resq-backend.onrender.com`).
 
 ### 2. Host the Frontend on Vercel
 1. Create a free account at [Vercel](https://vercel.com).
