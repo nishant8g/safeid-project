@@ -1,6 +1,7 @@
 """
 ResQ — FastAPI Application Entry Point
 AI-Powered Emergency QR Response System
+Version: 1.0.1 (Production Refresh)
 """
 
 import logging
