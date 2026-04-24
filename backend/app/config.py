@@ -70,6 +70,7 @@ class Settings(BaseSettings):
     # Google Maps / AI
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     GOOGLE_MAPS_API_KEY: str = os.getenv("GOOGLE_MAPS_API_KEY", "")
+    IMGBB_API_KEY: str = os.getenv("IMGBB_API_KEY", "")
 
     class Config:
         extra = "ignore"
