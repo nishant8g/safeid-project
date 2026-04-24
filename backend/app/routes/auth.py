@@ -26,17 +26,29 @@ def login(data: UserLogin, db: Session = Depends(get_db)):
             audience=settings.GOOGLE_CLIENT_ID
         )
         verified_email = decoded_token.get("email")
+
+        if not verified_email:
+             raise HTTPException(status_code=400, detail="Google account has no verified email.")
+
+        user = db.query(User).filter(User.email == verified_email).first()
+        
+        # Strict check: If User doesn't exist, block login!
+        if not user:
+            raise HTTPException(status_code=404, detail="No account found with this email. Please sign up first!")
+
+        token = create_access_token(data={"sub": user.id})
+        return TokenResponse(access_token=token, user=UserProfile.model_validate(user))
+
+    except HTTPException as he:
+        # Re-raise known API errors (401, 404, etc)
+        raise he
     except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Invalid Google Token: {str(e)}")
-
-    user = db.query(User).filter(User.email == verified_email).first()
-    
-    # Strict check: If User doesn't exist, block login!
-    if not user:
-        raise HTTPException(status_code=404, detail="No account found with this email. Please sign up first!")
-
-    token = create_access_token(data={"sub": user.id})
-    return TokenResponse(access_token=token, user=UserProfile.model_validate(user))
+        # ⚡ CRITICAL DEBUG: Catch the 500 and show the reason
+        logger.error(f"🚨 LOGIN CRASH: {e}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"SERVER CRASH: {str(e)}. Check backend console for full traceback."
+        )
 
 
 # Keeping a blank dummy register endpoint just in case the API schema breaks unexpectedly,
@@ -56,26 +68,36 @@ def register(data: UserLogin, db: Session = Depends(get_db)):
             audience=settings.GOOGLE_CLIENT_ID
         )
         verified_email = decoded_token.get("email")
-        verified_name = decoded_token.get("name", "SafeID User")
+        verified_name = decoded_token.get("name", "ResQ User")
+
+        if not verified_email:
+             raise HTTPException(status_code=400, detail="Google account has no verified email.")
+
+        user = db.query(User).filter(User.email == verified_email).first()
+        
+        # Strict check: If User already exists, block registration!
+        if user:
+            raise HTTPException(status_code=400, detail="Account already exists. Please log in!")
+
+        # Auto-Register them safely via Google payload
+        user = User(
+            full_name=verified_name,
+            email=verified_email,
+            phone=None,
+            password_hash="GOOGLE_OAUTH_MANAGED",
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+        token = create_access_token(data={"sub": user.id})
+        return TokenResponse(access_token=token, user=UserProfile.model_validate(user))
+
+    except HTTPException as he:
+        raise he
     except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Invalid Google Token: {str(e)}")
-
-    user = db.query(User).filter(User.email == verified_email).first()
-    
-    # Strict check: If User already exists, block registration!
-    if user:
-        raise HTTPException(status_code=400, detail="Account already exists. Please log in!")
-
-    # Auto-Register them safely via Google payload
-    user = User(
-        full_name=verified_name,
-        email=verified_email,
-        phone=None,
-        password_hash="GOOGLE_OAUTH_MANAGED",
-    )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-
-    token = create_access_token(data={"sub": user.id})
-    return TokenResponse(access_token=token, user=UserProfile.model_validate(user))
+        logger.error(f"🚨 REGISTRATION CRASH: {e}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"REGISTRATION SERVER CRASH: {str(e)}"
+        )
