@@ -135,9 +135,6 @@ def send_emergency_email(
         # Rich HTML version
         msg_alternative.attach(MIMEText(html_body, "html"))
 
-        # ⚡ ATTACH THE IMAGE AS CID (THE FIX)
-        if media_url:
-            try:
         # ⚡ ATTACH THE IMAGE AS BOTH INLINE CID AND FILE ATTACHMENT
         if media_url:
             try:
