@@ -1,3 +1,7 @@
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
 # Look for .env right in the current folder (backend/)
 ENV_LOCAL = Path("").resolve() / ".env.local"
 ENV_DEFAULT = Path("").resolve() / ".env"
