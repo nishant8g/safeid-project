@@ -170,7 +170,7 @@ export default function History() {
       <div className="glass-card" style={{ marginTop: '2rem', border: '1px solid var(--border-subtle)', padding: '30px' }}>
         <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-primary)', fontWeight: '800' }}>📱 How Alert Propagation Works</h3>
         <div style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.7, fontWeight: '500' }}>
-          <p>When an emergency is detected, SafeID executes the following protocol:</p>
+          <p>When an emergency is detected, ResQ executes the following protocol:</p>
           <ol style={{ paddingLeft: '1.5rem', marginTop: '0.75rem' }}>
             <li><strong>Live GPS Lock:</strong> High-accuracy coordinates are captured from the active session.</li>
             <li><strong>AI Synapse:</strong> Gemini models generate a precise medical brief for first responders.</li>

@@ -390,61 +390,6 @@ export default function ScanPage() {
                   Emergency signals have been sent via multidimensional channels.
                 </p>
 
-                {/* --- DELIVERY STATUS DASHBOARD --- */}
-                <div style={{ background: 'rgba(255, 255, 255, 0.03)', borderRadius: '20px', padding: '1.5rem', marginBottom: '2rem', border: '1px solid var(--border-subtle)' }}>
-                  <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '1.25rem', letterSpacing: '0.1em' }}>Transmission Status</h4>
-                  <div className="flex flex-col" style={{ gap: '1rem' }}>
-                    {alertResult?.delivery_results?.map((res, i) => (
-                      <div key={i} className="flex justify-between items-center" style={{ paddingBottom: '0.75rem', borderBottom: i < alertResult.delivery_results.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
-                        <div className="flex items-center gap-3">
-                          <span style={{ fontSize: '1.2rem' }}>
-                            {res.method === 'email' ? '📧' : res.method === 'sms' ? '📱' : res.method === 'telegram' ? '🤖' : '💬'}
-                          </span>
-                          <div style={{ textAlign: 'left' }}>
-                            <div style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--text-primary)' }}>{res.method?.toUpperCase()}</div>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{res.contact}</div>
-                          </div>
-                        </div>
-                        <div style={{ 
-                          fontSize: '0.75rem', 
-                          fontWeight: '800', 
-                          color: res.status === 'sent' || res.status === 'success' || res.status === 'called' ? 'var(--accent-green)' : 'var(--accent-red)',
-                          background: res.status === 'sent' || res.status === 'success' || res.status === 'called' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(220, 38, 38, 0.1)',
-                          padding: '4px 10px',
-                          borderRadius: '10px'
-                        }}>
-                          {res.status?.toUpperCase()}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* --- DIRECT FALLBACK BUTTONS (PRESENTATION SAVIOR) --- */}
-                <div style={{ textAlign: 'left' }}>
-                  <p style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--accent-cyan)', marginBottom: '1rem', textTransform: 'uppercase' }}>Backup WhatsApp (Click if trial restricted)</p>
-                  <div className="flex flex-col" style={{ gap: '0.75rem' }}>
-                    {alertResult?.delivery_results?.filter(r => r.method === 'whatsapp').map((contact_res, i) => (
-                      <a 
-                        key={i}
-                        href={contact_res.direct_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-ghost w-full flex items-center justify-center gap-2"
-                        style={{ 
-                          padding: '1rem', 
-                          borderRadius: '16px', 
-                          borderColor: 'rgba(37, 211, 102, 0.3)', 
-                          color: '#25D366', 
-                          fontWeight: '800',
-                          background: 'rgba(37, 211, 102, 0.05)'
-                        }}
-                      >
-                        🚀 Direct Link: {contact_res.contact}
-                      </a>
-                    ))}
-                  </div>
-                </div>
               </div>
           )}
 

@@ -8,13 +8,13 @@
       "type": "image/x-icon"
     },
     {
-      "src": "/safeid-logo-192.png",
+      "src": "/resq-logo-192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "/safeid-logo-512.png",
+      "src": "/resq-logo-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

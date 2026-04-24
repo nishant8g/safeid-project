@@ -13,8 +13,8 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // Restore session from sessionStorage
-    const savedToken = sessionStorage.getItem('safeid_token');
-    const savedUser = sessionStorage.getItem('safeid_user');
+    const savedToken = sessionStorage.getItem('resq_token');
+    const savedUser = sessionStorage.getItem('resq_user');
     if (savedToken && savedUser) {
       setToken(savedToken);
       setUser(JSON.parse(savedUser));
@@ -25,8 +25,8 @@ export function AuthProvider({ children }) {
   const login = async (googleToken) => {
     const res = await authAPI.login({ email: "google-auth", password: "google-auth", google_token: googleToken });
     const { access_token, user: userData } = res.data;
-    sessionStorage.setItem('safeid_token', access_token);
-    sessionStorage.setItem('safeid_user', JSON.stringify(userData));
+    sessionStorage.setItem('resq_token', access_token);
+    sessionStorage.setItem('resq_user', JSON.stringify(userData));
     setToken(access_token);
     setUser(userData);
     return userData;
@@ -35,16 +35,16 @@ export function AuthProvider({ children }) {
   const register = async (googleToken) => {
     const res = await authAPI.register({ email: "google-auth", password: "google-auth", google_token: googleToken });
     const { access_token, user: userData } = res.data;
-    sessionStorage.setItem('safeid_token', access_token);
-    sessionStorage.setItem('safeid_user', JSON.stringify(userData));
+    sessionStorage.setItem('resq_token', access_token);
+    sessionStorage.setItem('resq_user', JSON.stringify(userData));
     setToken(access_token);
     setUser(userData);
     return userData;
   };
 
   const logout = () => {
-    sessionStorage.removeItem('safeid_token');
-    sessionStorage.removeItem('safeid_user');
+    sessionStorage.removeItem('resq_token');
+    sessionStorage.removeItem('resq_user');
     setToken(null);
     setUser(null);
   };

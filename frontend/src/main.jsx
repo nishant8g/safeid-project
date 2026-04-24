@@ -1,5 +1,5 @@
 /**
- * SafeID — Entry Point
+ * ResQ — Entry Point
  */
 import React from 'react'
 import ReactDOM from 'react-dom/client'

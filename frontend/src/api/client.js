@@ -1,5 +1,5 @@
 /**
- * SafeID API Client
+ * ResQ API Client
  * Centralized HTTP client for all backend communication.
  */
 import axios from 'axios';
@@ -19,7 +19,7 @@ const api = axios.create({
 
 // Request interceptor â€” attach JWT token
 api.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('safeid_token');
+  const token = sessionStorage.getItem('resq_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -31,8 +31,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      sessionStorage.removeItem('safeid_token');
-      sessionStorage.removeItem('safeid_user');
+      sessionStorage.removeItem('resq_token');
+      sessionStorage.removeItem('resq_user');
       // Don't redirect on scan pages
       if (!window.location.pathname.startsWith('/scan')) {
         window.location.href = '/login';

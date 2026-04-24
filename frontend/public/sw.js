@@ -8,8 +8,8 @@ const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/safeid-logo-192.png',
-  '/safeid-logo-512.png',
+  '/resq-logo-192.png',
+  '/resq-logo-512.png',
   '/favicon.ico'
 ];
 
