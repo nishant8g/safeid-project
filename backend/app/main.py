@@ -12,6 +12,9 @@ from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi import Request
+from fastapi.responses import JSONResponse
+import traceback
 from pathlib import Path
 
 from .models import user as user_model, medical, contact, qrcode, alert as alert_model, analytics
@@ -19,10 +22,14 @@ from .routes import auth, user, qr, scan, alert, ai
 from .config import settings
 from .database import init_db
 
-# Configure logging
+# Configure logging to both console and file for debugging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("error_log.txt"),
+        logging.StreamHandler()
+    ]
 )
 logger = logging.getLogger(__name__)
 
@@ -50,6 +57,15 @@ app = FastAPI(
     openapi_url=None,
     root_path="/api" if os.environ.get("VERCEL") else "",
 )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    error_msg = f"GLOBAL CRASH: {str(exc)}\n{traceback.format_exc()}"
+    logger.error(error_msg)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"INTERNAL SERVER ERROR: {str(exc)}", "trace": traceback.format_exc()},
+    )
 
 # Secure Docs Routes
 @app.get("/docs", include_in_schema=False)
