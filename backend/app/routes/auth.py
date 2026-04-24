@@ -45,8 +45,8 @@ def login(data: UserLogin, db: Session = Depends(get_db)):
         # Re-raise known API errors (401, 404, etc)
         raise he
     except Exception as e:
-        # ⚡ CRITICAL DEBUG: Catch the 500 and show the reason
-        logger.error(f"🚨 LOGIN CRASH: {e}")
+        # CRITICAL DEBUG: Catch the 500 and show the reason
+        logger.error(f"LOGIN CRASH: {e}")
         raise HTTPException(
             status_code=500, 
             detail=f"SERVER CRASH: {str(e)}. Check backend console for full traceback."
@@ -99,7 +99,7 @@ def register(data: UserLogin, db: Session = Depends(get_db)):
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error(f"🚨 REGISTRATION CRASH: {e}")
+        logger.error(f"REGISTRATION CRASH: {e}")
         raise HTTPException(
             status_code=500, 
             detail=f"REGISTRATION SERVER CRASH: {str(e)}"
