@@ -57,17 +57,17 @@ def send_sms(to_phone: str, message: str, media_url: Optional[str] = None) -> di
             logger.error(f"Twilio SMS failed to {to_phone}: {e}")
             return {"status": "failed", "method": "sms", "error": str(e), "to": to_phone}
     else:
-        print(f"📱 MOCK SMS → {to_phone}: {message}")
+        print(f"MOCK SMS -> {to_phone}: {message}")
         return {"status": "mock", "method": "sms", "to": to_phone}
 
 
 def send_whatsapp(to_phone: str, message: str, media_url: Optional[str] = None) -> dict:
-    """Send WhatsApp message with optional media attachment via Twilio (Fix #3)."""
+    """Send WhatsApp message with optional media attachment via Twilio."""
     to_phone = normalize_phone(to_phone)
     client = get_twilio_client()
     
     if media_url and "INCIDENT PHOTO" not in message:
-        message += f"\n\n📸 INCIDENT PHOTO:\n{media_url}"
+        message += f"\n\nPHOTO ATTACHED:\n{media_url}"
         
     if client:
         try:
@@ -77,10 +77,6 @@ def send_whatsapp(to_phone: str, message: str, media_url: Optional[str] = None) 
                 "from_": settings.TWILIO_WHATSAPP_FROM if settings.TWILIO_WHATSAPP_FROM else "whatsapp:+14155238886",
                 "to": f"whatsapp:{to_phone}"
             }
-            
-            # Twilio WhatsApp Sandbox often rejects third-party media URLs (returns "image not supported").
-            # Since the URL is already in the message body, WhatsApp will render a Rich Preview automatically.
-            # We strictly send just the text body to ensure 100% delivery success.
             
             message_obj = client.messages.create(**msg_params)
             logger.info(f"WhatsApp sent to {to_phone}: SID={message_obj.sid}")
@@ -101,10 +97,10 @@ def send_whatsapp(to_phone: str, message: str, media_url: Optional[str] = None) 
             }
     else:
         print(f"\n{'='*60}")
-        print(f"📱 MOCK WHATSAPP → {to_phone}")
-        print(f"📝 {message}")
+        print(f"MOCK WHATSAPP -> {to_phone}")
+        print(f"Note: {message}")
         if media_url:
-            print(f"📸 MEDIA: {media_url}")
+            print(f"PHOTO: {media_url}")
         print(f"{'='*60}\n")
         return {
             "status": "mock",
@@ -120,7 +116,7 @@ def get_whatsapp_direct_link(phone: str, message: str, media_url: Optional[str] 
     clean_phone = normalize_phone(phone).replace("+", "")
     
     if media_url and "INCIDENT PHOTO" not in message:
-        message += f"\n\n📸 INCIDENT PHOTO:\n{media_url}"
+        message += f"\n\nPHOTO ATTACHED:\n{media_url}"
         
     encoded_msg = urllib.parse.quote(message)
     return f"https://wa.me/{clean_phone}?text={encoded_msg}"
