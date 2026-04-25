@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
+
 from ..database import get_db
 from ..models.user import User
 from ..models.medical import MedicalInfo
@@ -27,14 +28,14 @@ def get_scan_data(user_id: str, db: Session = Depends(get_db)):
     # 3. Get medical info
     med = db.query(MedicalInfo).filter(MedicalInfo.user_id == user_id).first()
     
-    # 3.5 Get LATEST incident photo ONLY if it happened in the last 2 hours
+    # 3.5 Get LATEST incident photo ONLY if it happened in the last 1 minute (for testing)
     from ..models.alert import AlertLog
     
-    two_hours_ago = datetime.now(timezone.utc) - timedelta(hours=2)
+    recent_time_limit = datetime.now(timezone.utc) - timedelta(minutes=1)
     
     latest_alert = db.query(AlertLog).filter(
         AlertLog.user_id == user_id,
-        AlertLog.created_at >= two_hours_ago
+        AlertLog.created_at >= recent_time_limit
     ).order_by(AlertLog.created_at.desc()).first()
     
     latest_media = latest_alert.media_url if latest_alert else None
