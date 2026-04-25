@@ -66,6 +66,9 @@ def send_whatsapp(to_phone: str, message: str, media_url: Optional[str] = None) 
     to_phone = normalize_phone(to_phone)
     client = get_twilio_client()
     
+    if media_url and "INCIDENT PHOTO" not in message:
+        message += f"\n\n📸 INCIDENT PHOTO:\n{media_url}"
+        
     if client:
         try:
             # For WhatsApp, use the Twilio WhatsApp number format
@@ -111,10 +114,14 @@ def send_whatsapp(to_phone: str, message: str, media_url: Optional[str] = None) 
         }
 
 
-def get_whatsapp_direct_link(phone: str, message: str) -> str:
+def get_whatsapp_direct_link(phone: str, message: str, media_url: Optional[str] = None) -> str:
     """Generate a https://wa.me/ link for manual fallback during demo."""
     import urllib.parse
     clean_phone = normalize_phone(phone).replace("+", "")
+    
+    if media_url and "INCIDENT PHOTO" not in message:
+        message += f"\n\n📸 INCIDENT PHOTO:\n{media_url}"
+        
     encoded_msg = urllib.parse.quote(message)
     return f"https://wa.me/{clean_phone}?text={encoded_msg}"
 
@@ -137,7 +144,7 @@ def send_alerts_to_contacts(contacts: list, message: str, media_url: Optional[st
         wa_result = send_whatsapp(phone, message, media_url=media_url)
         
         # 3. Always include a Direct Link (wa.me) for presentation fallback
-        direct_link = get_whatsapp_direct_link(phone, message)
+        direct_link = get_whatsapp_direct_link(phone, message, media_url=media_url)
         
         results.append({
             "contact": contact.name, 
