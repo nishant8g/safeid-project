@@ -12,3 +12,15 @@ qr/generated/
 
 .vercel
 .env*.local
+
+# Additional rules for both Python and JS (appending only new ones)
+*.py[cod]
+*.sqlite
+*.db
+*.log
+.cache/
+*.key
+*.pem
+Thumbs.db
+.vite/
+*.tmp
