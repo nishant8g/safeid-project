@@ -58,7 +58,7 @@ class Settings(BaseSettings):
     )
     
     # OAuth
-    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "963876569237-9osij8medcclsjr52ehr7mb4vs2fluq7.apps.googleusercontent.com")
     print(f"DEBUG CONFIG: Google Client ID Loaded: '{GOOGLE_CLIENT_ID}'")
 
     # Twilio (optional secondary channel)

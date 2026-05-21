@@ -166,3 +166,25 @@ def health_check():
             "maps": "configured" if settings.GOOGLE_MAPS_API_KEY else "not configured",
         },
     }
+
+
+@app.get("/debug", tags=["Health Check"])
+def debug_info():
+    """Debug endpoint to diagnose Vercel deployment issues."""
+    db_url = settings.DATABASE_URL
+    # Mask the password in the DB URL for security
+    if "@" in db_url:
+        parts = db_url.split("@")
+        db_url = f"***masked***@{parts[-1]}"
+    return {
+        "vercel": bool(os.environ.get("VERCEL")),
+        "google_client_id_set": bool(settings.GOOGLE_CLIENT_ID),
+        "google_client_id_preview": settings.GOOGLE_CLIENT_ID[:20] + "..." if settings.GOOGLE_CLIENT_ID else "EMPTY",
+        "database_url_type": "postgresql" if "postgres" in settings.DATABASE_URL else "sqlite",
+        "database_url_preview": db_url[:60] + "..." if len(db_url) > 60 else db_url,
+        "secret_key_set": bool(settings.SECRET_KEY),
+        "smtp_configured": bool(settings.SMTP_EMAIL),
+        "gemini_configured": bool(settings.GEMINI_API_KEY),
+        "root_path": app.root_path,
+    }
+
