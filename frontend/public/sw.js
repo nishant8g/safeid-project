@@ -3,7 +3,7 @@
  * Focus: Offline medical data access & 100% stability.
  */
 
-const CACHE_NAME = 'resq-v1';
+const CACHE_NAME = 'resq-v2'; // Cache busted to force clients to get the API URL fix
 const STATIC_ASSETS = [
   '/',
   '/index.html',
