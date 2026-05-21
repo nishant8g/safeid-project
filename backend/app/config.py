@@ -51,7 +51,11 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./resq.db")
+    DATABASE_URL: str = (
+        os.getenv("DATABASE_URL").replace("sqlite:///./", "sqlite:////tmp/")
+        if os.getenv("DATABASE_URL") and os.getenv("VERCEL") and os.getenv("DATABASE_URL").startswith("sqlite:///./")
+        else (os.getenv("DATABASE_URL") if os.getenv("DATABASE_URL") else ("sqlite:////tmp/resq.db" if os.getenv("VERCEL") else "sqlite:///./resq.db"))
+    )
     
     # OAuth
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
