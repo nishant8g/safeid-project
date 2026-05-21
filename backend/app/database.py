@@ -59,9 +59,11 @@ def init_db():
         # If it throws, the column does not exist
         try:
             print("🚀 Dynamically adding column 'abha_verified' to 'medical_info' table...")
+            # Use FALSE for PostgreSQL/MySQL, 0 for SQLite
+            is_postgres = "postgres" in str(engine.url) or "postgresql" in str(engine.url)
+            default_val = "FALSE" if is_postgres else "0"
             with engine.begin() as conn:
-                # DEFAULT 0 is safe for SQLite (0) and Postgres (FALSE)
-                conn.execute(text("ALTER TABLE medical_info ADD COLUMN abha_verified BOOLEAN DEFAULT 0;"))
+                conn.execute(text(f"ALTER TABLE medical_info ADD COLUMN abha_verified BOOLEAN DEFAULT {default_val};"))
             print("✅ Successfully added 'abha_verified' column.")
         except Exception as e:
             print(f"⚠️ Failed to dynamically add 'abha_verified' column: {e}")
