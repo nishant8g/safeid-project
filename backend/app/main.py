@@ -162,7 +162,7 @@ def health_check():
         "services": {
             "database": "connected",
             "twilio": "configured" if settings.TWILIO_ACCOUNT_SID else "not configured",
-            "ai": "configured" if settings.ANTHROPIC_API_KEY else "not configured",
+            "ai": "configured" if settings.GEMINI_API_KEY else "not configured",
             "maps": "configured" if settings.GOOGLE_MAPS_API_KEY else "not configured",
         },
     }
