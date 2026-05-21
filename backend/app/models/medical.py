@@ -22,5 +22,6 @@ class MedicalInfo(Base):
     height = Column(String(10), nullable=True)
     weight = Column(String(10), nullable=True)
     abha_id = Column(String(20), nullable=True, unique=True)
+    abha_verified = Column(Boolean, default=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))

@@ -38,6 +38,8 @@ def generate_sos_message(
     latitude: Optional[float] = None,
     longitude: Optional[float] = None,
     address: Optional[str] = None,
+    triggered_by: str = "button",
+    profile_url: Optional[str] = None,
 ) -> str:
     """
     Generate a clear, human-friendly SOS message.
@@ -55,7 +57,26 @@ def generate_sos_message(
     model = get_gemini_model()
     if model:
         try:
-            prompt = f"""Generate a brief, clear emergency SOS message for sending to family contacts.
+            if triggered_by == "auto":
+                prompt = f"""Generate a brief, clear emergency SOS message for sending to family contacts.
+The message MUST start with the tag [AUTOMATED FALL DETECTED].
+Explain that the user's device registered a severe fall and sudden impact, and they are now unresponsive or have not cancelled the alert.
+Provide the following critical advice: Keep their neck stable and do not move them unless necessary to prevent spinal injury.
+Include the user's medical details, location details, and profile URL.
+Keep it under 320 characters suitable for SMS/WhatsApp.
+
+Details:
+- Person's name: {user_name}
+- Blood group: {blood_group or 'Unknown'}
+- Medical conditions: {conditions or 'None reported'}
+- Allergies: {allergies or 'None reported'}
+- Location: {address or 'Unknown'}
+- Map link: {f'https://www.google.com/maps?q={latitude},{longitude}' if latitude and longitude else 'Unknown'}
+- Profile link: {profile_url or 'Unknown'}
+
+Return ONLY the message text, no quotes or explanation."""
+            else:
+                prompt = f"""Generate a brief, clear emergency SOS message for sending to family contacts.
 The message should be:
 - Urgent but not panic-inducing
 - Include all critical medical info
@@ -68,6 +89,7 @@ Details:
 - Allergies: {allergies or 'None reported'}
 - Location: {address or 'Unknown'}
 - Map link: {f'https://www.google.com/maps?q={latitude},{longitude}' if latitude and longitude else 'Unknown'}
+- Profile link: {profile_url or 'Unknown'}
 
 Return ONLY the message text, no quotes or explanation."""
 
@@ -88,11 +110,23 @@ Return ONLY the message text, no quotes or explanation."""
 
     medical_str = " | ".join(medical_info) if medical_info else "No medical details on file"
 
-    message = f"🚨 EMERGENCY SOS — {user_name}\n\n"
-    message += f"⚕️ {medical_str}\n\n"
-    if location_str:
-        message += f"{location_str}\n\n"
-    message += "⚠️ Someone has triggered an emergency alert. Please respond immediately or call emergency services."
+    if triggered_by == "auto":
+        message = f"🚨 *[AUTOMATED FALL DETECTED]* 🚨\n\n"
+        message += f"ResQ Guardian Mode has detected a severe impact and subsequent immobility for *{user_name}*.\n\n"
+        message += f"⚕️ *MEDICAL INFO:* {medical_str}\n"
+        if location_str:
+            message += f"{location_str}\n"
+        if profile_url:
+            message += f"🆔 *FULL PROFILE:* {profile_url}\n"
+        message += "\n⚠️ *CRITICAL ADVICE:* Potential neck/spinal injury. Do NOT move them unless absolutely necessary. Check on them immediately."
+    else:
+        message = f"🚨 EMERGENCY SOS — {user_name}\n\n"
+        message += f"⚕️ {medical_str}\n\n"
+        if location_str:
+            message += f"{location_str}\n\n"
+        if profile_url:
+            message += f"🆔 *FULL PROFILE:* {profile_url}\n\n"
+        message += "⚠️ Someone has triggered an emergency alert. Please respond immediately or call emergency services."
 
     return message
 

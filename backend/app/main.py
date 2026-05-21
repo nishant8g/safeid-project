@@ -19,7 +19,7 @@ import traceback
 from pathlib import Path
 
 from .models import user as user_model, medical, contact, qrcode, alert as alert_model, analytics
-from .routes import auth, user, qr, scan, alert, ai
+from .routes import auth, user, qr, scan, alert, ai, abha
 from .config import settings
 from .database import init_db
 
@@ -128,6 +128,7 @@ app.include_router(qr.router)
 app.include_router(scan.router)
 app.include_router(alert.router)
 app.include_router(ai.router)
+app.include_router(abha.router)
 
 
 @app.on_event("startup")

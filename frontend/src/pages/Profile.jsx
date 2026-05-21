@@ -2,10 +2,10 @@
  * Profile Page — Edit medical information.
  */
 import { useState, useEffect } from 'react';
-import { userAPI } from '../api/client';
+import { userAPI, abhaAPI } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import ABHACard from '../components/ABHACard';
-import { Shield } from 'lucide-react';
+import { Shield, CheckCircle2 } from 'lucide-react';
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -22,11 +22,21 @@ export default function Profile() {
     height: '',
     weight: '',
     abha_id: '',
+    abha_verified: false,
   });
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+
+  // ABHA Sync States
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
+  const [txnId, setTxnId] = useState('');
+  const [otpMessage, setOtpMessage] = useState('');
+  const [otpError, setOtpError] = useState('');
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+  const [abhaGender, setAbhaGender] = useState('');
 
   useEffect(() => {
     loadMedical();
@@ -46,6 +56,71 @@ export default function Profile() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
+  };
+
+  const handleAbhaInit = async (e) => {
+    e.preventDefault();
+    if (!formData.abha_id) {
+      setError('Please enter a valid ABHA ID first.');
+      return;
+    }
+    setSaving(true);
+    setError('');
+    setSuccess('');
+    try {
+      const res = await abhaAPI.verifyInit({ abha_id: formData.abha_id });
+      if (res.data.status === 'success') {
+        setTxnId(res.data.txn_id);
+        setOtpMessage(res.data.message);
+        setShowOtpModal(true);
+        setOtpCode('');
+        setOtpError('');
+      } else {
+        setError(res.data.message || 'Failed to initialize ABHA sync');
+      }
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to initialize ABHA sync. Check format.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleAbhaConfirm = async () => {
+    if (!otpCode || otpCode.length !== 6) {
+      setOtpError('Please enter a 6-digit OTP code.');
+      return;
+    }
+    setVerifyingOtp(true);
+    setOtpError('');
+    try {
+      const res = await abhaAPI.verifyConfirm({
+        txn_id: txnId,
+        otp: otpCode,
+        abha_id: formData.abha_id
+      });
+      if (res.data.status === 'success') {
+        const { profile } = res.data;
+        setFormData(prev => ({
+          ...prev,
+          abha_verified: true,
+          abha_id: profile.abha_id,
+          blood_group: profile.blood_group || prev.blood_group,
+          date_of_birth: profile.dob || prev.date_of_birth,
+          conditions: prev.conditions || 'None (ABDM Verified)',
+          allergies: prev.allergies || 'None (ABDM Verified)'
+        }));
+        setAbhaGender(profile.gender || '');
+        setShowOtpModal(false);
+        setSuccess('ABHA Health Account successfully linked and verified!');
+        setTimeout(() => setSuccess(''), 5000);
+      } else {
+        setOtpError(res.data.message || 'Verification failed');
+      }
+    } catch (err) {
+      setOtpError(err.response?.data?.detail || 'Invalid verification code. Use 123456.');
+    } finally {
+      setVerifyingOtp(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -94,6 +169,7 @@ export default function Profile() {
                 value={formData.blood_group || ''}
                 onChange={handleChange}
                 id="medical-blood-group"
+                disabled={formData.abha_verified}
               >
                 <option value="">Select Blood Group</option>
                 {BLOOD_GROUPS.map((bg) => (
@@ -111,6 +187,7 @@ export default function Profile() {
                 value={formData.date_of_birth || ''}
                 onChange={handleChange}
                 id="medical-dob"
+                disabled={formData.abha_verified}
               />
             </div>
           </div>
@@ -125,6 +202,7 @@ export default function Profile() {
               onChange={handleChange}
               id="medical-allergies"
               style={{ minHeight: '80px' }}
+              disabled={formData.abha_verified}
             />
           </div>
 
@@ -138,6 +216,7 @@ export default function Profile() {
               onChange={handleChange}
               id="medical-conditions"
               style={{ minHeight: '80px' }}
+              disabled={formData.abha_verified}
             />
           </div>
 
@@ -229,7 +308,7 @@ export default function Profile() {
 
           <div className="abha-sync-section" style={{ marginBottom: '2.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-              <div style={{ padding: '6px', background: 'var(--accent-cyan)', borderRadius: '6px' }}>
+              <div style={{ padding: '6px', background: formData.abha_verified ? 'var(--accent-emerald)' : 'var(--accent-cyan)', borderRadius: '6px', transition: 'all 0.3s ease' }}>
                 <Shield size={18} color="#0f172a" />
               </div>
               <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-primary)', margin: 0 }}>ABHA Health ID Sync</h3>
@@ -237,7 +316,9 @@ export default function Profile() {
             
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', alignItems: 'start' }}>
               <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label" style={{ color: 'var(--accent-cyan)' }}>Official Health ID Number</label>
+                <label className="form-label" style={{ color: formData.abha_verified ? 'var(--accent-emerald)' : 'var(--accent-cyan)' }}>
+                  Official Health ID Number
+                </label>
                 <input
                   type="text"
                   name="abha_id"
@@ -246,24 +327,67 @@ export default function Profile() {
                   value={formData.abha_id || ''}
                   onChange={handleChange}
                   id="medical-abha-id"
+                  disabled={formData.abha_verified}
                   style={{ 
-                    border: '1.5px solid rgba(34, 211, 238, 0.3)', 
+                    border: formData.abha_verified ? '1.5px solid rgba(16, 185, 129, 0.4)' : '1.5px solid rgba(34, 211, 238, 0.3)', 
                     fontSize: '1.2rem', 
                     letterSpacing: '0.1em',
                     fontWeight: '800',
-                    color: 'var(--accent-cyan)'
+                    color: formData.abha_verified ? 'var(--accent-emerald)' : 'var(--accent-cyan)',
+                    background: formData.abha_verified ? 'rgba(16, 185, 129, 0.02)' : 'transparent',
+                    transition: 'all 0.3s ease'
                   }}
                 />
                 <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem', lineHeight: '1.4' }}>
                   Syncing your ABHA ID allows first responders to access your verified Indian national health records instantly.
                 </p>
+
+                {!formData.abha_verified && formData.abha_id && (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleAbhaInit}
+                    style={{
+                      marginTop: '1rem',
+                      width: '100%',
+                      padding: '0.8rem',
+                      borderRadius: '12px',
+                      fontWeight: '700',
+                      background: 'linear-gradient(135deg, var(--accent-cyan) 0%, #06b6d4 100%)',
+                      boxShadow: '0 0 15px rgba(34, 211, 238, 0.3)'
+                    }}
+                  >
+                    🔗 Verify & Link Health ID
+                  </button>
+                )}
+
+                {formData.abha_verified && (
+                  <div style={{
+                    marginTop: '1rem',
+                    padding: '0.85rem',
+                    borderRadius: '12px',
+                    background: 'rgba(16, 185, 129, 0.1)',
+                    border: '1.5px solid rgba(16, 185, 129, 0.3)',
+                    color: 'var(--accent-emerald)',
+                    fontWeight: '700',
+                    fontSize: '0.9rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px'
+                  }}>
+                    <span>🛡️ ABDM Secured & Synced</span>
+                  </div>
+                )}
               </div>
 
-              <div className="abha-preview" style={{ opacity: formData.abha_id ? 1 : 0.6, filter: formData.abha_id ? 'none' : 'grayscale(0.5)', transition: 'all 0.3s ease' }}>
+              <div className="abha-preview" style={{ transition: 'all 0.3s ease' }}>
                 <ABHACard 
                   abhaId={formData.abha_id} 
                   fullName={user?.full_name} 
                   dob={formData.date_of_birth}
+                  gender={abhaGender}
+                  verified={formData.abha_verified}
                 />
               </div>
             </div>
@@ -274,6 +398,108 @@ export default function Profile() {
           </button>
         </form>
       </div>
+
+      {showOtpModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'rgba(15, 23, 42, 0.85)',
+          backdropFilter: 'blur(12px)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div className="glass-card" style={{
+            width: '90%',
+            maxWidth: '450px',
+            padding: '2.5rem',
+            border: '1.5px solid rgba(34, 211, 238, 0.4)',
+            boxShadow: '0 0 40px rgba(34, 211, 238, 0.25), 0 20px 40px rgba(0,0,0,0.6)',
+            borderRadius: '24px',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              padding: '12px',
+              background: 'rgba(34, 211, 238, 0.1)',
+              borderRadius: '50%',
+              marginBottom: '1.5rem',
+              border: '1px solid rgba(34, 211, 238, 0.3)'
+            }}>
+              <Shield size={32} color="var(--accent-cyan)" />
+            </div>
+            
+            <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>ABHA OTP Verification</h3>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem', lineHeight: '1.5' }}>
+              {otpMessage || 'We have sent a verification code to your registered mobile number.'}
+            </p>
+
+            <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+              <input
+                type="text"
+                maxLength={6}
+                placeholder="0 0 0 0 0 0"
+                value={otpCode}
+                onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                style={{
+                  width: '100%',
+                  textAlign: 'center',
+                  fontSize: '2rem',
+                  fontWeight: '800',
+                  letterSpacing: '0.2em',
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1.5px solid rgba(34, 211, 238, 0.3)',
+                  borderRadius: '16px',
+                  padding: '0.75rem',
+                  color: 'var(--accent-cyan)'
+                }}
+              />
+              <p style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', marginTop: '0.5rem', opacity: 0.8 }}>
+                💡 Tip: Enter the test code: <strong>123456</strong>
+              </p>
+            </div>
+
+            {otpError && (
+              <div style={{
+                color: 'var(--accent-red)',
+                background: 'rgba(255, 51, 102, 0.1)',
+                border: '1px solid rgba(255, 51, 102, 0.2)',
+                padding: '0.75rem',
+                borderRadius: '12px',
+                fontSize: '0.85rem',
+                marginBottom: '1.5rem',
+                fontWeight: '600'
+              }}>
+                ⚠️ {otpError}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setShowOtpModal(false)}
+                style={{ flex: 1, padding: '0.85rem', borderRadius: '12px', fontWeight: '700' }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                disabled={verifyingOtp}
+                onClick={handleAbhaConfirm}
+                style={{ flex: 1, padding: '0.85rem', borderRadius: '12px', fontWeight: '700' }}
+              >
+                {verifyingOtp ? 'Verifying...' : 'Verify & Sync'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

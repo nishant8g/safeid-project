@@ -6,7 +6,7 @@ Usage:
   python tunnel.py
 
 This will:
-1. Create a public URL for the frontend (port 3000)
+1. Create a public URL for the frontend (port 3001)
 2. Create a public URL for the backend API (port 8000)
 3. Update the QR code BASE_URL to use the public URL
 """
@@ -29,7 +29,7 @@ def start_tunnels():
 
     # Start tunnels
     try:
-        frontend_tunnel = ngrok.connect(3000, "http")
+        frontend_tunnel = ngrok.connect(3001, "http")
         backend_tunnel = ngrok.connect(8000, "http")
     except Exception as e:
         print(f"❌ Failed to start tunnels: {e}")
@@ -96,8 +96,8 @@ def start_tunnels():
         if os.path.exists(env_path):
             with open(env_path, "r") as f:
                 content = f.read()
-            content = content.replace(f"BASE_URL={frontend_url}", "BASE_URL=http://localhost:3000")
-            content = content.replace(f"FRONTEND_URL={frontend_url}", "FRONTEND_URL=http://localhost:3000")
+            content = content.replace(f"BASE_URL={frontend_url}", "BASE_URL=http://localhost:3001")
+            content = content.replace(f"FRONTEND_URL={frontend_url}", "FRONTEND_URL=http://localhost:3001")
             with open(env_path, "w") as f:
                 f.write(content)
             print("✅ .env restored to localhost URLs")

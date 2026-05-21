@@ -95,4 +95,11 @@ export const aiAPI = {
   getRiskPrediction: () => api.post('/ai/risk'),
 };
 
+// ─── ABHA Health Sync ───
+export const abhaAPI = {
+  verifyInit: (data) => api.post('/health/abha/verify-init', data),
+  verifyConfirm: (data) => api.post('/health/abha/verify-confirm', data),
+};
+
 export default api;
+

@@ -13,9 +13,9 @@ def main():
     print("Initializing Database...")
     try:
         init_db()
-        print("✅ Database initialized successfully.")
+        print("[SUCCESS] Database initialized successfully.")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[ERROR] Error: {e}")
 
 if __name__ == "__main__":
     main()

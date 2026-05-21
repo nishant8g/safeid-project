@@ -15,6 +15,7 @@ class MedicalInfoCreate(BaseModel):
     height: Optional[str] = None
     weight: Optional[str] = None
     abha_id: Optional[str] = None
+    abha_verified: Optional[bool] = False
 
 
 class MedicalInfoResponse(BaseModel):
@@ -28,9 +29,9 @@ class MedicalInfoResponse(BaseModel):
     special_notes: Optional[str] = None
     date_of_birth: Optional[str] = None
     height: Optional[str] = None
-    height: Optional[str] = None
     weight: Optional[str] = None
     abha_id: Optional[str] = None
+    abha_verified: Optional[bool] = False
 
     class Config:
         from_attributes = True
@@ -46,3 +47,4 @@ class PublicMedicalInfo(BaseModel):
     organ_donor: bool = False
     special_notes: Optional[str] = None
     abha_id: Optional[str] = None
+    abha_verified: Optional[bool] = False

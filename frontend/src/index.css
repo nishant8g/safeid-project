@@ -2706,3 +2706,101 @@ body:has(.landing-light) .btn-nav-outline {
   background: rgba(34, 211, 238, 0.05) !important;
   transform: translateX(4px);
 }
+
+/* ──── Guardian Mode Fall Alarm UI Styles ──── */
+.fall-warning-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  animation: bgFlashRed 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes bgFlashRed {
+  0% { background-color: rgba(15, 23, 42, 0.96); }
+  100% { background-color: rgba(153, 27, 27, 0.92); } /* Dark crimson fade */
+}
+
+.fall-warning-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 2px solid var(--accent-red);
+  border-radius: 32px;
+  box-shadow: 0 20px 60px rgba(220, 38, 38, 0.4), inset 0 0 30px rgba(220, 38, 38, 0.2);
+  width: 90%;
+  max-width: 440px;
+  animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.siren-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  animation: rotateSiren 0.8s infinite linear;
+}
+
+@keyframes rotateSiren {
+  0% { transform: scale(1) rotate(-10deg); }
+  50% { transform: scale(1.15) rotate(10deg); }
+  100% { transform: scale(1) rotate(-10deg); }
+}
+
+.overlay-title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 15px rgba(220, 38, 38, 0.8);
+}
+
+.overlay-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.countdown-circle {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 4px solid var(--accent-red);
+  box-shadow: 0 0 25px rgba(220, 38, 38, 0.6), inset 0 0 20px rgba(220, 38, 38, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  background: rgba(220, 38, 38, 0.05);
+}
+
+.countdown-number {
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: white;
+  font-family: monospace;
+}
+
+.cancel-sos-btn {
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.cancel-sos-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
+  background: var(--accent-emerald) !important;
+  color: white !important;
+}

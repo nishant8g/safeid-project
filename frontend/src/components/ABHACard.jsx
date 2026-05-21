@@ -1,14 +1,27 @@
 import React from 'react';
-import { Shield, Activity, Fingerprint, QrCode } from 'lucide-react';
+import { Shield, Activity, Fingerprint, QrCode, CheckCircle2 } from 'lucide-react';
 
-export default function ABHACard({ abhaId, fullName, gender, dob }) {
+export default function ABHACard({ abhaId, fullName, gender, dob, verified }) {
+  const cardBorder = verified
+    ? '1px solid rgba(34, 211, 238, 0.6)'
+    : '1px solid rgba(255, 255, 255, 0.1)';
+    
+  const cardShadow = verified
+    ? '0 0 25px rgba(34, 211, 238, 0.3), 0 20px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1)'
+    : '0 10px 20px rgba(0,0,0,0.3)';
+
+  const cardFilter = verified
+    ? 'none'
+    : 'grayscale(0.85) opacity(0.65)';
+
   return (
     <div className="abha-card-container" style={{
       width: '100%',
       maxWidth: '400px',
       height: '240px',
       margin: '0 auto',
-      perspective: '1000px'
+      perspective: '1000px',
+      transition: 'all 0.5s ease'
     }}>
       <div className="abha-card-inner glass-card" style={{
         width: '100%',
@@ -16,13 +29,15 @@ export default function ABHACard({ abhaId, fullName, gender, dob }) {
         position: 'relative',
         borderRadius: '24px',
         background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
+        border: cardBorder,
         padding: '1.5rem',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1)',
-        overflow: 'hidden'
+        boxShadow: cardShadow,
+        filter: cardFilter,
+        overflow: 'hidden',
+        transition: 'all 0.5s ease'
       }}>
         {/* Decorative Background Elements */}
         <div style={{
@@ -31,8 +46,11 @@ export default function ABHACard({ abhaId, fullName, gender, dob }) {
           right: '-10%',
           width: '150px',
           height: '150px',
-          background: 'radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, transparent 70%)',
-          zIndex: 0
+          background: verified 
+            ? 'radial-gradient(circle, rgba(34, 211, 238, 0.25) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%)',
+          zIndex: 0,
+          transition: 'all 0.5s ease'
         }} />
         <div style={{
           position: 'absolute',
@@ -40,29 +58,71 @@ export default function ABHACard({ abhaId, fullName, gender, dob }) {
           left: '-10%',
           width: '150px',
           height: '150px',
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%)',
-          zIndex: 0
+          background: verified
+            ? 'radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%)',
+          zIndex: 0,
+          transition: 'all 0.5s ease'
         }} />
 
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ 
-              background: 'var(--accent-cyan)', 
+              background: verified ? 'var(--accent-cyan)' : 'rgba(255,255,255,0.2)', 
               padding: '6px', 
               borderRadius: '8px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              transition: 'all 0.5s ease'
             }}>
               <Shield size={18} color="#0f172a" />
             </div>
             <div>
               <h2 style={{ fontSize: '0.9rem', fontWeight: '900', margin: 0, color: 'var(--text-primary)', letterSpacing: '0.05em' }}>ABHA</h2>
-              <p style={{ fontSize: '0.6rem', margin: 0, color: 'var(--accent-cyan)', fontWeight: '700', textTransform: 'uppercase' }}>Health ID Architecture</p>
+              <p style={{ fontSize: '0.6rem', margin: 0, color: verified ? 'var(--accent-cyan)' : 'var(--text-muted)', fontWeight: '700', textTransform: 'uppercase', transition: 'all 0.5s ease' }}>Health ID Architecture</p>
             </div>
           </div>
-          <Activity size={20} className="text-cyan-400 opacity-50" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {verified ? (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: 'rgba(34, 211, 238, 0.15)',
+                border: '1px solid rgba(34, 211, 238, 0.3)',
+                padding: '4px 8px',
+                borderRadius: '999px',
+                fontSize: '0.6rem',
+                fontWeight: '800',
+                color: 'var(--accent-cyan)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                boxShadow: '0 0 8px rgba(34, 211, 238, 0.2)'
+              }}>
+                <CheckCircle2 size={10} /> Verified
+              </div>
+            ) : (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                padding: '4px 8px',
+                borderRadius: '999px',
+                fontSize: '0.6rem',
+                fontWeight: '600',
+                color: 'var(--text-muted)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                Unlinked
+              </div>
+            )}
+            <Activity size={20} className={verified ? "text-cyan-400 animate-pulse" : "text-cyan-400 opacity-50"} />
+          </div>
         </div>
 
         {/* Center Content */}

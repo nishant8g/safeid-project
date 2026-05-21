@@ -48,3 +48,20 @@ def get_db():
 def init_db():
     """Create all tables."""
     Base.metadata.create_all(bind=engine)
+    
+    # Check and dynamically add missing columns (specifically abha_verified)
+    from sqlalchemy import text
+    try:
+        # Check if abha_verified exists
+        with engine.connect() as conn:
+            conn.execute(text("SELECT abha_verified FROM medical_info LIMIT 1;"))
+    except Exception:
+        # If it throws, the column does not exist
+        try:
+            print("🚀 Dynamically adding column 'abha_verified' to 'medical_info' table...")
+            with engine.begin() as conn:
+                # DEFAULT 0 is safe for SQLite (0) and Postgres (FALSE)
+                conn.execute(text("ALTER TABLE medical_info ADD COLUMN abha_verified BOOLEAN DEFAULT 0;"))
+            print("✅ Successfully added 'abha_verified' column.")
+        except Exception as e:
+            print(f"⚠️ Failed to dynamically add 'abha_verified' column: {e}")

@@ -4,8 +4,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { userAPI, qrAPI, aiAPI } from '../api/client';
+import { userAPI, qrAPI, aiAPI, alertAPI } from '../api/client';
 import AnalyticsDashboard from '../components/AnalyticsDashboard';
+import GuardianMode from '../components/GuardianMode';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -14,12 +15,40 @@ export default function Dashboard() {
   const [qrInfo, setQrInfo] = useState(null);
   const [risks, setRisks] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sosSent, setSosSent] = useState(false);
 
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = async () => {
+    // 1. Initial load from localStorage for quick offline/cached view
+    const cachedMedical = localStorage.getItem('resq_cache_medical');
+    const cachedContacts = localStorage.getItem('resq_cache_contacts');
+    const cachedQr = localStorage.getItem('resq_cache_qr');
+    const cachedRisks = localStorage.getItem('resq_cache_risks');
+
+    let hasCache = false;
+    if (cachedMedical) {
+      setMedical(JSON.parse(cachedMedical));
+      hasCache = true;
+    }
+    if (cachedContacts) {
+      setContacts(JSON.parse(cachedContacts));
+      hasCache = true;
+    }
+    if (cachedQr) {
+      setQrInfo(JSON.parse(cachedQr));
+      hasCache = true;
+    }
+    if (cachedRisks) {
+      setRisks(JSON.parse(cachedRisks));
+    }
+
+    if (hasCache) {
+      setLoading(false);
+    }
+
     try {
       const [medRes, contactsRes, qrRes] = await Promise.allSettled([
         userAPI.getMedical(),
@@ -27,14 +56,27 @@ export default function Dashboard() {
         qrAPI.getInfo(),
       ]);
 
-      if (medRes.status === 'fulfilled') setMedical(medRes.value.data);
-      if (contactsRes.status === 'fulfilled') setContacts(contactsRes.value.data);
-      if (qrRes.status === 'fulfilled') setQrInfo(qrRes.value.data);
+      if (medRes.status === 'fulfilled') {
+        const medicalData = medRes.value.data;
+        setMedical(medicalData);
+        localStorage.setItem('resq_cache_medical', JSON.stringify(medicalData));
+      }
+      if (contactsRes.status === 'fulfilled') {
+        const contactsData = contactsRes.value.data;
+        setContacts(contactsData);
+        localStorage.setItem('resq_cache_contacts', JSON.stringify(contactsData));
+      }
+      if (qrRes.status === 'fulfilled') {
+        const qrData = qrRes.value.data;
+        setQrInfo(qrData);
+        localStorage.setItem('resq_cache_qr', JSON.stringify(qrData));
+      }
 
       // Try AI risk prediction
       try {
         const riskRes = await aiAPI.getRiskPrediction();
         setRisks(riskRes.data);
+        localStorage.setItem('resq_cache_risks', JSON.stringify(riskRes.data));
       } catch (err) {
         console.warn('AI Risk prediction failed:', err);
       }
@@ -42,6 +84,24 @@ export default function Dashboard() {
       console.error('Dashboard load error:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFallTriggered = async (location) => {
+    try {
+      const payload = {
+        user_id: user.id,
+        triggered_by: "auto",
+        latitude: location?.lat || 0,
+        longitude: location?.lng || 0,
+        severity: "critical"
+      };
+      await alertAPI.trigger(payload);
+      setSosSent(true);
+      setTimeout(() => setSosSent(false), 10000); // Clear alert badge after 10s
+    } catch (err) {
+      console.error('Automated fall trigger API failed:', err);
+      alert("🚨 Fall detected, but unable to broadcast SOS automatically. Please check network.");
     }
   };
 
@@ -59,6 +119,22 @@ export default function Dashboard() {
 
   return (
     <div className="page-container animate-fade-in">
+      {/* SOS Success Banner */}
+      {sosSent && (
+        <div className="alert alert-error animate-pulse" style={{ background: 'linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%)', border: '2px solid var(--accent-red)', padding: '1.25rem', borderRadius: '16px', marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 10px 30px rgba(220,38,38,0.4)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <span style={{ fontSize: '1.75rem' }}>🚑</span>
+            <div>
+              <h4 style={{ margin: 0, fontWeight: '900', color: 'white' }}>AUTOMATED SOS BROADCASTED!</h4>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)' }}>
+                Your safety contacts have been notified with your live location.
+              </p>
+            </div>
+          </div>
+          <button onClick={() => setSosSent(false)} style={{ background: 'transparent', border: 'none', color: 'white', fontWeight: '900', fontSize: '1.2rem', cursor: 'pointer' }}>×</button>
+        </div>
+      )}
+
       {/* Welcome Header */}
       <div className="section-header" style={{ marginBottom: '3rem' }}>
         <div className="section-tag" style={{ background: 'rgba(34, 211, 238, 0.1)', color: 'var(--accent-cyan)', fontWeight: '700' }}>Overview</div>
@@ -121,6 +197,9 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
+        {/* Guardian Mode Card */}
+        <GuardianMode userId={user?.id} onTrigger={handleFallTriggered} />
 
         <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', padding: '1.5rem' }}>
           <div style={{ fontSize: '2rem' }}>🩹</div>
