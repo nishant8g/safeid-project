@@ -70,14 +70,7 @@ app = FastAPI(
     root_path="/api" if os.environ.get("VERCEL") else "",
 )
 
-@app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    error_msg = f"GLOBAL CRASH: {str(exc)}\n{traceback.format_exc()}"
-    logger.error(error_msg)
-    return JSONResponse(
-        status_code=500,
-        content={"detail": f"INTERNAL SERVER ERROR: {str(exc)}", "trace": traceback.format_exc()},
-    )
+
 
 # Secure Docs Routes
 @app.get("/docs", include_in_schema=False)
