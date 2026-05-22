@@ -324,18 +324,18 @@ export default function GuardianMode({ userId, onTrigger, onCancel }) {
             <span className="countdown-number">{countdown}</span>
           </div>
 
-          <div className="overlay-actions w-full flex flex-col gap-3" style={{ maxWidth: '340px' }}>
+          <div className="overlay-actions" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%', maxWidth: '340px', padding: '0 1rem' }}>
             <button 
               onClick={handleCancelAlert}
-              className="btn btn-emerald btn-lg w-full cancel-sos-btn"
-              style={{ padding: '1.25rem', fontSize: '1.2rem', fontWeight: '900', borderRadius: '16px' }}
+              className="btn btn-emerald btn-lg cancel-sos-btn"
+              style={{ width: '100%', padding: '1.25rem', fontSize: '1.2rem', fontWeight: '900', borderRadius: '16px' }}
             >
               🟢 I'M OK — CANCEL SOS
             </button>
             <button 
               onClick={dispatchSOS}
-              className="btn btn-danger btn-sm text-center"
-              style={{ background: 'transparent', border: '1px solid rgba(220,38,38,0.4)', color: 'var(--accent-red)', fontSize: '0.8rem', marginTop: '1rem' }}
+              className="btn btn-danger btn-sm"
+              style={{ width: '100%', background: 'transparent', border: '1px solid rgba(220,38,38,0.4)', color: 'var(--accent-red)', fontSize: '0.8rem', marginTop: '0.5rem', textAlign: 'center' }}
             >
               Alert Family Immediately
             </button>

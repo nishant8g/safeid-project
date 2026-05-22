@@ -1098,6 +1098,72 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
 
 @media (max-width: 768px) {
   .dashboard-grid { grid-template-columns: 1fr; }
+
+  /* ── Map & Chart containers ── */
+  .glass-card {
+    padding: var(--space-lg) !important;
+  }
+
+  /* ── Page container mobile padding ── */
+  .page-container {
+    padding: 1rem 0.75rem !important;
+  }
+
+  /* ── SOS Fall Warning Overlay – mobile fixes ── */
+  .fall-warning-overlay {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 10vh;
+  }
+
+  .fall-warning-content {
+    padding: 2rem 1.25rem;
+    border-radius: 24px;
+    width: 95%;
+    max-width: 360px;
+  }
+
+  .siren-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .overlay-title {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .overlay-desc {
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+  }
+
+  .countdown-circle {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1.5rem;
+  }
+
+  .countdown-number {
+    font-size: 3rem;
+  }
+
+  .cancel-sos-btn {
+    padding: 1rem !important;
+    font-size: 1rem !important;
+  }
+
+  /* ── Analytics chart height on mobile ── */
+  .analytics-container .glass-card {
+    height: auto !important;
+    min-height: 300px;
+  }
+
+  /* ── Section header mobile ── */
+  .section-header h2 {
+    font-size: 1.75rem !important;
+  }
 }
 
 /* ──── Contact Card ──── */

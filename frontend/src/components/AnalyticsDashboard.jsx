@@ -91,7 +91,7 @@ export default function AnalyticsDashboard({ completionPercent }) {
     <div className="analytics-container animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       
       {/* Visual KPI Row */}
-      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+      <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
         
         {/* Profile Health Radial */}
         <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', padding: '1.5rem', border: '1px solid rgba(6, 182, 212, 0.1)' }}>
@@ -151,7 +151,7 @@ export default function AnalyticsDashboard({ completionPercent }) {
 
       </div>
 
-      <div className="dashboard-grid" style={{ gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
+      <div className="dashboard-grid" style={{ gap: '2rem' }}>
         
         {/* Main Velocity Area Chart */}
         <div className="glass-card" style={{ padding: '2rem', height: '400px', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
@@ -193,7 +193,7 @@ export default function AnalyticsDashboard({ completionPercent }) {
         </div>
 
         {/* SOS Spatial Distribution */}
-        <div className="glass-card" style={{ padding: 0, height: '400px', overflow: 'hidden', position: 'relative' }}>
+        <div className="glass-card" style={{ padding: 0, minHeight: '350px', height: '400px', overflow: 'hidden', position: 'relative' }}>
           <div style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', zIndex: 1000, background: 'rgba(15, 23, 42, 0.8)', backdropFilter: 'blur(12px)', padding: '0.75rem 1.25rem', borderRadius: '14px', border: '1px solid var(--border-subtle)', boxShadow: '0 4px 20px rgba(0,0,0,0.4)' }}>
             <h3 style={{ fontSize: '0.85rem', margin: 0, color: 'var(--text-primary)', fontWeight: '800', letterSpacing: '0.05em' }}>📍 GEOSPATIAL LOOPS</h3>
           </div>
