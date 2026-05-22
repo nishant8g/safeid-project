@@ -4,10 +4,13 @@
  */
 import axios from 'axios';
 
-// Dynamically detect the backend URL based on how the user accessed the frontend.
-// If accessed via phone (LAN IP), API calls also go to LAN IP, not localhost.
-// When deployed on Vercel, it always uses /api (relative path) to avoid cross-origin and misconfiguration issues.
-const API_BASE = import.meta.env.PROD ? "/api" : (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000`);
+// Dynamically detect the backend URL.
+// On Vercel (HTTPS), always use relative /api path. Locally (HTTP), use dev server.
+// We check window.location.protocol instead of import.meta.env.PROD because
+// Vercel's @vercel/static-build does not always set PROD=true correctly.
+const API_BASE = (typeof window !== 'undefined' && window.location.protocol === 'https:')
+  ? '/api'
+  : (import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000`);
 
 const api = axios.create({
   baseURL: API_BASE,
