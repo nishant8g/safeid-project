@@ -9,6 +9,7 @@ export default function GuardianMode({ userId, onTrigger, onCancel }) {
   const [permissionState, setPermissionState] = useState('unknown');
   const [monitoring, setMonitoring] = useState(false);
   const [isAlerting, setIsAlerting] = useState(false);
+  const isAlertingRef = useRef(false);
   const [countdown, setCountdown] = useState(15);
   const [gpsLocation, setGpsLocation] = useState(null);
   const [sensorData, setSensorData] = useState({ x: 0, y: 0, z: 0, total: 0 });
@@ -96,6 +97,7 @@ export default function GuardianMode({ userId, onTrigger, onCancel }) {
     await requestWakeLock();
     setMonitoring(true);
     setIsAlerting(false);
+    isAlertingRef.current = false;
     setCountdown(15);
     accelerationBuffer.current = [];
     stabilizationEndTimeRef.current = Date.now() + 1500; // 1.5s stabilization window
@@ -178,9 +180,10 @@ export default function GuardianMode({ userId, onTrigger, onCancel }) {
 
   // Trigger local warning alert sequence
   const triggerAlarmWarning = () => {
-    if (isAlerting) return;
+    if (isAlertingRef.current) return;
     
     setIsAlerting(true);
+    isAlertingRef.current = true;
     stopMonitoring();
     startAlarmSound();
 
@@ -226,6 +229,7 @@ export default function GuardianMode({ userId, onTrigger, onCancel }) {
     clearInterval(countdownIntervalRef.current);
     stopAlarmSound();
     setIsAlerting(false);
+    isAlertingRef.current = false;
     onCancel?.();
     startMonitoring(); // Resume monitoring
   };
