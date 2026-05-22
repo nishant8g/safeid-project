@@ -3,6 +3,7 @@
  * Uses DeviceMotion API, Web Audio API, and Wake Lock API.
  */
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 
 export default function GuardianMode({ userId, onTrigger, onCancel }) {
   const [permissionState, setPermissionState] = useState('unknown');
@@ -311,7 +312,7 @@ export default function GuardianMode({ userId, onTrigger, onCancel }) {
 
   // Warning Overlay State (Alarm Triggered)
   if (isAlerting) {
-    return (
+    return createPortal(
       <div className="fall-warning-overlay">
         <div className="fall-warning-content animate-pulse">
           <div className="siren-icon">🚨</div>
@@ -341,7 +342,8 @@ export default function GuardianMode({ userId, onTrigger, onCancel }) {
             </button>
           </div>
         </div>
-      </div>
+      </div>,
+      document.body
     );
   }
 
