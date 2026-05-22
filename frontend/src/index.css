@@ -1112,8 +1112,7 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
   /* ── SOS Fall Warning Overlay – mobile fixes ── */
   .fall-warning-overlay {
     padding: 1rem;
-    align-items: flex-start;
-    padding-top: 10vh;
+    align-items: center; /* Center vertically so it's easy to reach with thumb */
   }
 
   .fall-warning-content {
